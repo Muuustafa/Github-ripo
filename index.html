@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Python - Licence 2</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Configuration du quiz - 50 QUESTIONS
+        const QUIZ_CONFIG = {
+          title: "Quiz Python - Licence 2",
+          duration: 3600,
+          penaltyPerWarning: 2,
+          questions: [
+            // ===== QUESTIONS FACILES (1 POINT) - 10 questions =====
+            { id: 1, code: `x = 5\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["x", "5", "Erreur", "None"], correct: 1, points: 1, difficulty: "Facile" },
+            { id: 2, code: `y = 10\ny = y + 5\nprint(y)`, question: "Quelle est la sortie de ce code ?", options: ["10", "5", "15", "Erreur"], correct: 2, points: 1, difficulty: "Facile" },
+            { id: 3, code: `print(3 + 2 * 2)`, question: "Quelle est la sortie de ce code ?", options: ["10", "7", "8", "6"], correct: 1, points: 1, difficulty: "Facile" },
+            { id: 4, code: `x = "Hello"\nprint(type(x))`, question: "Quelle est la sortie de ce code ?", options: ["<class 'int'>", "<class 'str'>", "Hello", "Erreur"], correct: 1, points: 1, difficulty: "Facile" },
+            { id: 5, code: `liste = [1, 2, 3]\nprint(liste[0])`, question: "Quelle est la sortie de ce code ?", options: ["0", "2", "[1]", "1"], correct: 3, points: 1, difficulty: "Facile" },
+            { id: 6, code: `x = 4\nif x > 2:\n    print("Oui")`, question: "Quelle est la sortie de ce code ?", options: ["Non", "4", "Oui", "Rien"], correct: 2, points: 1, difficulty: "Facile" },
+            { id: 7, code: `print(10 - 3)`, question: "Quelle est la sortie de ce code ?", options: ["13", "3", "10", "7"], correct: 3, points: 1, difficulty: "Facile" },
+            { id: 8, code: `x = 2 * 3\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["5", "23", "6", "Erreur"], correct: 2, points: 1, difficulty: "Facile" },
+            { id: 9, code: `x = True\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["1", "True", "true", "Erreur"], correct: 1, points: 1, difficulty: "Facile" },
+            { id: 10, code: `liste = [10, 20, 30]\nprint(len(liste))`, question: "Quelle est la sortie de ce code ?", options: ["60", "10", "3", "Erreur"], correct: 2, points: 1, difficulty: "Facile" },
+
+            // ===== QUESTIONS ASSEZ FACILES (1.25 POINTS) - 10 questions =====
+            { id: 11, code: `x = 7\nprint(x % 2)`, question: "Quelle est la sortie de ce code ?", options: ["0", "1", "3.5", "7"], correct: 1, points: 1.25, difficulty: "Assez Facile" },
+            { id: 12, code: `x = "A"\ny = "B"\nprint(x + y)`, question: "Quelle est la sortie de ce code ?", options: ["A B", "AB", "Erreur", "BA"], correct: 1, points: 1.25, difficulty: "Assez Facile" },
+            { id: 13, code: `for i in range(3):\n    print(i, end="")`, question: "Quelle est la sortie de ce code ?", options: ["123", "012", "0 1 2", "321"], correct: 1, points: 1.25, difficulty: "Assez Facile" },
+            { id: 14, code: `x = 8\nprint(x // 3)`, question: "Quelle est la sortie de ce code ?", options: ["2.67", "3", "2", "8"], correct: 2, points: 1.25, difficulty: "Assez Facile" },
+            { id: 15, code: `x = 15\nif x > 20:\n    print("Grand")\nelse:\n    print("Petit")`, question: "Quelle est la sortie de ce code ?", options: ["Grand", "15", "Petit", "Rien"], correct: 2, points: 1.25, difficulty: "Assez Facile" },
+            { id: 16, code: `liste = [5, 10, 15]\nprint(liste[2])`, question: "Quelle est la sortie de ce code ?", options: ["10", "2", "5", "15"], correct: 3, points: 1.25, difficulty: "Assez Facile" },
+            { id: 17, code: `x = 5\ny = 10\nprint(x < y)`, question: "Quelle est la sortie de ce code ?", options: ["False", "5", "True", "10"], correct: 2, points: 1.25, difficulty: "Assez Facile" },
+            { id: 18, code: `i = 0\nwhile i < 2:\n    i += 1\nprint(i)`, question: "Quelle est la sortie de ce code ?", options: ["0", "1", "2", "3"], correct: 2, points: 1.25, difficulty: "Assez Facile" },
+            { id: 19, code: `x = "Python"\nprint(len(x))`, question: "Quelle est la sortie de ce code ?", options: ["5", "7", "6", "Erreur"], correct: 2, points: 1.25, difficulty: "Assez Facile" },
+            { id: 20, code: `x = 10\nx += 5\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["10", "5", "105", "15"], correct: 3, points: 1.25, difficulty: "Assez Facile" },
+
+            // ===== QUESTIONS MOYENNES (1.5 POINTS) - 10 questions =====
+            { id: 21, code: `liste = [1, 2, 3, 4, 5]\nprint(liste[1:4])`, question: "Quelle est la sortie de ce code ?", options: ["[1, 2, 3]", "[2, 3, 4]", "[1, 2, 3, 4]", "[2, 3]"], correct: 1, points: 1.5, difficulty: "Moyen" },
+            { id: 22, code: `x = "Python"\nprint(x[0] + x[-1])`, question: "Quelle est la sortie de ce code ?", options: ["Py", "Pn", "Python", "Erreur"], correct: 1, points: 1.5, difficulty: "Moyen" },
+            { id: 23, code: `x = 5\ny = 2\nprint(x ** y)`, question: "Quelle est la sortie de ce code ?", options: ["10", "7", "52", "25"], correct: 3, points: 1.5, difficulty: "Moyen" },
+            { id: 24, code: `for i in range(5):\n    if i == 2:\n        continue\n    print(i, end=" ")`, question: "Quelle est la sortie de ce code ?", options: ["0 1 2 3 4", "0 1 3 4", "1 3 4", "0 1 2"], correct: 1, points: 1.5, difficulty: "Moyen" },
+            { id: 25, code: `liste = [10, 20, 30]\nliste.append(40)\nprint(len(liste))`, question: "Quelle est la sortie de ce code ?", options: ["3", "40", "4", "100"], correct: 2, points: 1.5, difficulty: "Moyen" },
+            { id: 26, code: `x = 10\nif x > 5 and x < 15:\n    print("OK")\nelse:\n    print("NON")`, question: "Quelle est la sortie de ce code ?", options: ["NON", "True", "OK", "10"], correct: 2, points: 1.5, difficulty: "Moyen" },
+            { id: 27, code: `x = "bonjour"\nprint(x.upper())`, question: "Quelle est la sortie de ce code ?", options: ["bonjour", "Bonjour", "BONJOUR", "Erreur"], correct: 2, points: 1.5, difficulty: "Moyen" },
+            { id: 28, code: `x = [1, 2, 3]\nx[1] = 10\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["[1, 10, 3]", "[10, 2, 3]", "[1, 2, 10]", "Erreur"], correct: 0, points: 1.5, difficulty: "Moyen" },
+            { id: 29, code: `def somme(a, b):\n    return a + b\nprint(somme(3, 4))`, question: "Quelle est la sortie de ce code ?", options: ["34", "7", "None", "Erreur"], correct: 1, points: 1.5, difficulty: "Moyen" },
+            { id: 30, code: `x = 7\nresultat = "Pair" if x % 2 == 0 else "Impair"\nprint(resultat)`, question: "Quelle est la sortie de ce code ?", options: ["Pair", "Impair", "7", "Erreur"], correct: 1, points: 1.5, difficulty: "Moyen" },
+
+            // ===== QUESTIONS ASSEZ DIFFICILES (1.75 POINTS) - 10 questions =====
+            { id: 31, code: `liste = [1, 2, 3]\nliste.extend([4, 5])\nprint(len(liste))`, question: "Quelle est la sortie de ce code ?", options: ["3", "2", "5", "Erreur"], correct: 2, points: 1.75, difficulty: "Assez Difficile" },
+            { id: 32, code: `x = "123"\nprint(x * 2)`, question: "Quelle est la sortie de ce code ?", options: ["246", "123123", "Erreur", "6"], correct: 1, points: 1.75, difficulty: "Assez Difficile" },
+            { id: 33, code: `x = 5\nfor i in range(3):\n    x += i\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["5", "6", "8", "11"], correct: 2, points: 1.75, difficulty: "Assez Difficile" },
+            { id: 34, code: `liste = [1, 2, 3, 2, 1]\nprint(liste.count(2))`, question: "Quelle est la sortie de ce code ?", options: ["1", "2", "3", "5"], correct: 1, points: 1.75, difficulty: "Assez Difficile" },
+            { id: 35, code: `x = 10\nwhile x > 0:\n    x -= 3\n    if x == 4:\n        break\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["7", "1", "4", "0"], correct: 2, points: 1.75, difficulty: "Assez Difficile" },
+            { id: 36, code: `def test(n):\n    if n > 0:\n        return n\n    return 0\nprint(test(-5))`, question: "Quelle est la sortie de ce code ?", options: ["-5", "5", "None", "0"], correct: 3, points: 1.75, difficulty: "Assez Difficile" },
+            { id: 37, code: `x = [1, 2]\ny = [3, 4]\nz = x + y\nprint(len(z))`, question: "Quelle est la sortie de ce code ?", options: ["2", "3", "4", "Erreur"], correct: 2, points: 1.75, difficulty: "Assez Difficile" },
+            { id: 38, code: `x = "abc"\ny = x.replace("b", "X")\nprint(y)`, question: "Quelle est la sortie de ce code ?", options: ["abc", "aXc", "Xbc", "abX"], correct: 1, points: 1.75, difficulty: "Assez Difficile" },
+            { id: 39, code: `liste = [5, 2, 8, 1]\nprint(max(liste))`, question: "Quelle est la sortie de ce code ?", options: ["5", "1", "8", "2"], correct: 2, points: 1.75, difficulty: "Assez Difficile" },
+            { id: 40, code: `x = 3\ny = 5\nx, y = y, x\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["3", "8", "5", "Erreur"], correct: 2, points: 1.75, difficulty: "Assez Difficile" },
+
+            // ===== QUESTIONS TRÈS DIFFICILES (2 POINTS) - 10 questions avec PIÈGES =====
+            { id: 41, code: `x = "Python"\nprint(x[::-1])`, question: "Quelle est la sortie de ce code ?", options: ["Python", "nohtyP", "Pyth", "Erreur"], correct: 1, points: 2, difficulty: "Très Difficile" },
+            { id: 42, code: `def mystere(n):\n    if n <= 1:\n        return 1\n    return n * mystere(n - 1)\nprint(mystere(4))`, question: "Quelle est la sortie de ce code ?", options: ["4", "10", "24", "Erreur"], correct: 2, points: 2, difficulty: "Très Difficile" },
+            { id: 43, code: `liste = [1, 2, 3, 4, 5]\nresultat = [x * 2 for x in liste if x % 2 == 0]\nprint(resultat)`, question: "Quelle est la sortie de ce code ?", options: ["[2, 4, 6, 8, 10]", "[4, 8]", "[2, 4]", "[1, 2, 3, 4, 5]"], correct: 1, points: 2, difficulty: "Très Difficile" },
+            { id: 44, code: `x = [1, 2, 3]\ny = x\ny.append(4)\nprint(len(x))`, question: "Quelle est la sortie de ce code ? (PIÈGE!)", options: ["3", "4", "Erreur", "7"], correct: 1, points: 2, difficulty: "Très Difficile" },
+            { id: 45, code: `def func(a, b=5, c=10):\n    return a + b + c\nprint(func(1, c=3))`, question: "Quelle est la sortie de ce code ?", options: ["14", "19", "9", "Erreur"], correct: 2, points: 2, difficulty: "Très Difficile" },
+            { id: 46, code: `liste = [1, [2, 3], 4]\nprint(liste[1][1])`, question: "Quelle est la sortie de ce code ?", options: ["2", "[2, 3]", "3", "Erreur"], correct: 2, points: 2, difficulty: "Très Difficile" },
+            { id: 47, code: `x = 10\nwhile x > 0:\n    if x == 5:\n        break\n    x -= 2\nprint(x)`, question: "Quelle est la sortie de ce code ? (Attention au piège!)", options: ["5", "4", "6", "0"], correct: 2, points: 2, difficulty: "Très Difficile" },
+            { id: 48, code: `def modifier(liste):\n    liste.append(100)\n\nma_liste = [1, 2]\nmodifier(ma_liste)\nprint(len(ma_liste))`, question: "Quelle est la sortie de ce code ?", options: ["2", "100", "3", "Erreur"], correct: 2, points: 2, difficulty: "Très Difficile" },
+            { id: 49, code: `x = "123"\ny = int(x) + 7\nprint(y)`, question: "Quelle est la sortie de ce code ?", options: ["1237", "130", "123", "Erreur"], correct: 1, points: 2, difficulty: "Très Difficile" },
+            { id: 50, code: `liste = [3, 1, 4, 1, 5]\nliste.sort()\nprint(liste[2])`, question: "Quelle est la sortie de ce code ? (Réfléchissez!)", options: ["4", "1", "3", "5"], correct: 2, points: 2, difficulty: "Très Difficile" }
+          ]
+        };
+
+        function PythonQuizApp() {
+          const [screen, setScreen] = useState('start');
+          const [studentInfo, setStudentInfo] = useState({ nom: '', prenom: '', classe: '' });
+          const [currentQuestion, setCurrentQuestion] = useState(0);
+          const [answers, setAnswers] = useState({});
+          const [timeLeft, setTimeLeft] = useState(QUIZ_CONFIG.duration);
+          const [tabSwitches, setTabSwitches] = useState(0);
+          const [warnings, setWarnings] = useState([]);
+          const [showNotification, setShowNotification] = useState(false);
+
+          useEffect(() => {
+            if (screen === 'quiz' && timeLeft > 0) {
+              const timer = setInterval(() => {
+                setTimeLeft(prev => {
+                  if (prev <= 1) {
+                    handleSubmitQuiz();
+                    return 0;
+                  }
+                  return prev - 1;
+                });
+              }, 1000);
+              return () => clearInterval(timer);
+            }
+          }, [screen, timeLeft]);
+
+          useEffect(() => {
+            if (screen === 'quiz') {
+              const handleVisibilityChange = () => {
+                if (document.hidden) {
+                  const newCount = tabSwitches + 1;
+                  setTabSwitches(newCount);
+                  const warning = `Changement d'onglet à ${formatTime(QUIZ_CONFIG.duration - timeLeft)}`;
+                  setWarnings(prev => [...prev, warning]);
+                  setShowNotification(true);
+                  setTimeout(() => setShowNotification(false), 5000);
+                }
+              };
+
+              const handleBlur = () => {
+                if (screen === 'quiz') {
+                  const warning = `Perte de focus à ${formatTime(QUIZ_CONFIG.duration - timeLeft)}`;
+                  setWarnings(prev => [...prev, warning]);
+                }
+              };
+
+              document.addEventListener('visibilitychange', handleVisibilityChange);
+              window.addEventListener('blur', handleBlur);
+
+              return () => {
+                document.removeEventListener('visibilitychange', handleVisibilityChange);
+                window.removeEventListener('blur', handleBlur);
+              };
+            }
+          }, [screen, tabSwitches, timeLeft]);
+
+          const formatTime = (seconds) => {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+          };
+
+          const normalizeString = (str) => {
+            return str.toLowerCase().trim().replace(/\s+/g, ' ');
+          };
+
+          const checkIfAlreadyTaken = (nom, prenom, classe) => {
+            const allResults = JSON.parse(localStorage.getItem('quizResults') || '[]');
+            const normalizedNom = normalizeString(nom);
+            const normalizedPrenom = normalizeString(prenom);
+            const normalizedClasse = normalizeString(classe);
+
+            return allResults.some(result => {
+              const resultParts = result.etudiant.split(' ');
+              const resultPrenom = normalizeString(resultParts[0] || '');
+              const resultNom = normalizeString(resultParts.slice(1).join(' ') || '');
+              const resultClasse = normalizeString(result.classe);
+
+              return resultNom === normalizedNom && 
+                     resultPrenom === normalizedPrenom && 
+                     resultClasse === normalizedClasse;
+            });
+          };
+
+          const handleStartQuiz = async () => {
+            if (!studentInfo.nom || !studentInfo.prenom || !studentInfo.classe) {
+              Swal.fire({
+                icon: 'warning',
+                title: 'Informations manquantes',
+                text: 'Veuillez remplir tous les champs obligatoires (nom, prénom et classe).',
+                confirmButtonColor: '#4F46E5'
+              });
+              return;
+            }
+
+            // Vérifier si l'étudiant a déjà fait le test
+            const alreadyTaken = checkIfAlreadyTaken(studentInfo.nom, studentInfo.prenom, studentInfo.classe);
+            
+            if (alreadyTaken) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Test déjà effectué !',
+                html: `<p><strong>${studentInfo.prenom} ${studentInfo.nom}</strong> de la classe <strong>${studentInfo.classe}</strong></p><p>Vous avez déjà passé ce test. Vous ne pouvez le passer qu'une seule fois.</p><p class="text-sm text-gray-600 mt-2">Si vous pensez qu'il s'agit d'une erreur, contactez votre enseignant.</p>`,
+                confirmButtonColor: '#DC2626',
+                confirmButtonText: 'Compris'
+              });
+              return;
+            }
+
+            // Confirmation avant de commencer
+            const result = await Swal.fire({
+              icon: 'info',
+              title: 'Prêt à commencer ?',
+              html: `
+                <div class="text-left">
+                  <p class="mb-3"><strong>Nom :</strong> ${studentInfo.nom}</p>
+                  <p class="mb-3"><strong>Prénom :</strong> ${studentInfo.prenom}</p>
+                  <p class="mb-4"><strong>Classe :</strong> ${studentInfo.classe}</p>
+                  <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 text-sm">
+                    <p class="font-semibold text-yellow-800">⚠️ Rappels importants :</p>
+                    <ul class="list-disc list-inside mt-2 text-yellow-700">
+                      <li>Durée : 60 minutes</li>
+                      <li>50 questions</li>
+                      <li>Ne changez pas d'onglet (-2 points/changement)</li>
+                    </ul>
+                  </div>
+                </div>
+              `,
+              showCancelButton: true,
+              confirmButtonColor: '#4F46E5',
+              cancelButtonColor: '#6B7280',
+              confirmButtonText: 'Commencer le quiz',
+              cancelButtonText: 'Annuler'
+            });
+
+            if (result.isConfirmed) {
+              setScreen('quiz');
+              if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(() => {});
+              }
+              
+              // Toast de bienvenue
+              const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+              });
+              
+              Toast.fire({
+                icon: 'success',
+                title: `Bonne chance ${studentInfo.prenom} !`
+              });
+            }
+          };
+
+          const handleAnswer = (questionId, answerIndex) => {
+            setAnswers(prev => ({ ...prev, [questionId]: answerIndex }));
+          };
+
+          const calculateScore = () => {
+            let totalPoints = 0;
+            let maxPoints = 0;
+            
+            QUIZ_CONFIG.questions.forEach(q => {
+              maxPoints += q.points;
+              if (answers[q.id] === q.correct) {
+                totalPoints += q.points;
+              }
+            });
+
+            let noteSur20 = (totalPoints / maxPoints) * 20;
+            const penalty = tabSwitches * QUIZ_CONFIG.penaltyPerWarning;
+            noteSur20 = Math.max(0, noteSur20 - penalty);
+
+            let correct = 0;
+            QUIZ_CONFIG.questions.forEach(q => {
+              if (answers[q.id] === q.correct) {
+                correct++;
+              }
+            });
+
+            return {
+              correct,
+              total: QUIZ_CONFIG.questions.length,
+              totalPoints: totalPoints.toFixed(2),
+              maxPoints: maxPoints,
+              noteSur20: noteSur20.toFixed(2),
+              penalty: penalty,
+              percentage: ((correct / QUIZ_CONFIG.questions.length) * 100).toFixed(2)
+            };
+          };
+
+          const handleSubmitQuiz = () => {
+            setScreen('results');
+            if (document.exitFullscreen && document.fullscreenElement) {
+              document.exitFullscreen();
+            }
+
+            const results = calculateScore();
+            const exportData = {
+              etudiant: `${studentInfo.prenom} ${studentInfo.nom}`,
+              classe: studentInfo.classe,
+              note: results.noteSur20,
+              pourcentage: results.percentage,
+              correct: results.correct,
+              total: results.total,
+              points: results.totalPoints,
+              maxPoints: results.maxPoints,
+              tentativesTriche: tabSwitches,
+              penalite: results.penalty,
+              dateTest: new Date().toLocaleString('fr-FR'),
+              duree: formatTime(QUIZ_CONFIG.duration - timeLeft),
+              avertissements: warnings,
+              detailsReponses: QUIZ_CONFIG.questions.map(q => ({
+                question: q.id,
+                reponse: answers[q.id] !== undefined ? answers[q.id] : -1,
+                correct: q.correct,
+                estCorrecte: answers[q.id] === q.correct,
+                points: answers[q.id] === q.correct ? q.points : 0,
+                difficulte: q.difficulty
+              }))
+            };
+
+            const allResults = JSON.parse(localStorage.getItem('quizResults') || '[]');
+            allResults.push(exportData);
+            localStorage.setItem('quizResults', JSON.stringify(allResults));
+
+            // Notification de fin
+            setTimeout(() => {
+              const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true
+              });
+              
+              Toast.fire({
+                icon: results.noteSur20 >= 10 ? 'success' : 'info',
+                title: 'Quiz terminé et enregistré !'
+              });
+            }, 500);
+          };
+
+          if (screen === 'start') {
+            return (
+              <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+                <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+                  <div className="text-center mb-6">
+                    <svg className="w-16 h-16 text-indigo-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                    <h1 className="text-3xl font-bold text-gray-800 mb-2">{QUIZ_CONFIG.title}</h1>
+                    <p className="text-gray-600">Évaluation - 50 Questions</p>
+                  </div>
+
+                  <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                    <div className="flex">
+                      <svg className="h-5 w-5 text-yellow-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      <div className="text-sm text-yellow-700">
+                        <p className="font-semibold mb-2">Règles importantes :</p>
+                        <ul className="list-disc list-inside space-y-1">
+                          <li>Durée : {QUIZ_CONFIG.duration / 60} minutes</li>
+                          <li>50 questions (faciles à très difficiles)</li>
+                          <li>Note finale sur 20 points</li>
+                          <li>⚠️ Pénalité : -2 points par changement d'onglet</li>
+                          <li>Restez concentré sur votre test</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Prénom *</label>
+                      <input
+                        type="text"
+                        value={studentInfo.prenom}
+                        onChange={(e) => setStudentInfo(prev => ({ ...prev, prenom: e.target.value }))}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        placeholder="Votre prénom"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Nom *</label>
+                      <input
+                        type="text"
+                        value={studentInfo.nom}
+                        onChange={(e) => setStudentInfo(prev => ({ ...prev, nom: e.target.value }))}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        placeholder="Votre nom"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Classe *</label>
+                      <select
+                        value={studentInfo.classe}
+                        onChange={(e) => setStudentInfo(prev => ({ ...prev, classe: e.target.value }))}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      >
+                        <option value="">Sélectionnez votre classe</option>
+                        <option value="L2-IAGE">Licence 2 - IAGE</option>
+                        <option value="L2-GL">Licence 2 - GL</option>
+                      </select>
+                    </div>
+
+                    <button
+                      onClick={handleStartQuiz}
+                      className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors shadow-lg"
+                    >
+                      Commencer le Quiz
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          if (screen === 'quiz') {
+            const question = QUIZ_CONFIG.questions[currentQuestion];
+            const progress = ((currentQuestion + 1) / QUIZ_CONFIG.questions.length) * 100;
+
+            return (
+              <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+                {showNotification && (
+                  <div className="fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-2xl z-50 animate-pulse">
+                    <div className="flex items-center gap-3">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                      </svg>
+                      <div>
+                        <p className="font-bold">⚠️ Avertissement détecté !</p>
+                        <p className="text-sm">Pénalité : -{QUIZ_CONFIG.penaltyPerWarning} points</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="max-w-4xl mx-auto">
+                  <div className="bg-white rounded-lg shadow-lg p-4 mb-4">
+                    <div className="flex justify-between items-center mb-4">
+                      <div>
+                        <h2 className="text-xl font-bold text-gray-800">{studentInfo.prenom} {studentInfo.nom}</h2>
+                        <p className="text-sm text-gray-600">{studentInfo.classe}</p>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        {tabSwitches > 0 && (
+                          <div className="flex items-center text-red-600 bg-red-50 px-3 py-1 rounded-full">
+                            <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <span className="font-semibold">{tabSwitches} × (-{QUIZ_CONFIG.penaltyPerWarning}pts)</span>
+                          </div>
+                        )}
+                        <div className={`flex items-center ${timeLeft < 60 ? 'text-red-600 animate-pulse' : 'text-indigo-600'}`}>
+                          <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span className="text-2xl font-bold">{formatTime(timeLeft)}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="bg-indigo-600 h-2 rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
+                    </div>
+                    <div className="flex justify-between items-center mt-2">
+                      <p className="text-sm text-gray-600">Question {currentQuestion + 1} sur {QUIZ_CONFIG.questions.length}</p>
+                      <p className="text-sm font-semibold text-indigo-600">{question.points} point{question.points > 1 ? 's' : ''} - {question.difficulty}</p>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-lg shadow-lg p-6">
+                    <div className="mb-6">
+                      <h3 className="text-lg font-semibold text-gray-800 mb-4">{question.question}</h3>
+                      <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto mb-6">
+                        <pre>{question.code}</pre>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      {question.options.map((option, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleAnswer(question.id, index)}
+                          className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                            answers[question.id] === index ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'
+                          }`}
+                        >
+                          <span className="font-semibold text-gray-700">{String.fromCharCode(65 + index)}.</span>{' '}
+                          <span className="text-gray-800 font-mono">{option}</span>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="flex justify-between mt-6">
+                      <button
+                        onClick={() => setCurrentQuestion(prev => Math.max(0, prev - 1))}
+                        disabled={currentQuestion === 0}
+                        className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      >
+                        Précédent
+                      </button>
+
+                      {currentQuestion < QUIZ_CONFIG.questions.length - 1 ? (
+                        <button
+                          onClick={() => setCurrentQuestion(prev => prev + 1)}
+                          className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                        >
+                          Suivant
+                        </button>
+                      ) : (
+                        <button
+                          onClick={handleSubmitQuiz}
+                          className="px-6 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                        >
+                          Terminer le Quiz
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          if (screen === 'results') {
+            const score = calculateScore();
+
+            return (
+              <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+                <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full">
+                  <div className="text-center mb-8">
+                    {score.noteSur20 >= 10 ? (
+                      <svg className="w-20 h-20 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    ) : (
+                      <svg className="w-20 h-20 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    )}
+                    <h1 className="text-3xl font-bold text-gray-800 mb-2">Quiz Terminé !</h1>
+                    <p className="text-gray-600">{studentInfo.prenom} {studentInfo.nom} - {studentInfo.classe}</p>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl p-6 mb-6">
+                    <div className="text-center">
+                      <p className="text-sm opacity-90 mb-2">Note Finale</p>
+                      <p className="text-6xl font-bold mb-2">{score.noteSur20}/20</p>
+                      <p className="text-sm opacity-90">{score.correct} bonnes réponses sur {score.total}</p>
+                      {score.penalty > 0 && (
+                        <p className="text-sm mt-2 bg-red-500 bg-opacity-30 py-2 px-4 rounded">
+                          Pénalité appliquée : -{score.penalty} points
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <p className="text-sm text-gray-600">Points obtenus</p>
+                      <p className="text-2xl font-bold text-blue-600">{score.totalPoints}/{score.maxPoints}</p>
+                    </div>
+                    <div className="bg-red-50 p-4 rounded-lg">
+                      <p className="text-sm text-gray-600">Avertissements</p>
+                      <p className="text-2xl font-bold text-red-600">{tabSwitches}</p>
+                    </div>
+                  </div>
+
+                  {tabSwitches > 0 && (
+                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                      <p className="text-sm text-yellow-700 font-semibold mb-2">⚠️ Avertissements enregistrés :</p>
+                      <ul className="text-xs text-yellow-600 space-y-1 max-h-32 overflow-y-auto">
+                        {warnings.map((warning, idx) => (
+                          <li key={idx}>• {warning}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                  >
+                    Retour à l'accueil
+                  </button>
+                </div>
+              </div>
+            );
+          }
+
+          return null;
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<PythonQuizApp />);
+    </script>
+</body>
+</html>
