@@ -9,12 +9,34 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <div id="root"></div>
     
     <script type="text/babel">
         const { useState, useEffect } = React;
+
+        // ========================================
+        // 🔥 CONFIGURATION FIREBASE - À MODIFIER
+        // ========================================
+        // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCYjXM6YrfB862p48g6_mYX66C_La0ZsI0",
+        authDomain: "quiz-python-isikm.firebaseapp.com",
+        projectId: "quiz-python-isikm",
+        storageBucket: "quiz-python-isikm.firebasestorage.app",
+        messagingSenderId: "559369640769",
+        appId: "1:559369640769:web:1ad8cb3d771f134f4d5fc0"
+      };
+        // Initialiser Firebase
+        if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
 
         const ADMIN_CREDENTIALS = {
           login: 'mustafa',
@@ -29,17 +51,29 @@
           const [selectedStudent, setSelectedStudent] = useState(null);
           const [filter, setFilter] = useState('all');
           const [classFilter, setClassFilter] = useState('all');
+          const [loading, setLoading] = useState(false);
 
+          // 🔥 ÉCOUTER LES RÉSULTATS EN TEMPS RÉEL
           useEffect(() => {
             if (isAuthenticated) {
-              loadResults();
+              setLoading(true);
+              const unsubscribe = db.collection('results')
+                .orderBy('timestamp', 'desc')
+                .onSnapshot((snapshot) => {
+                  const resultsData = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                  }));
+                  setResults(resultsData);
+                  setLoading(false);
+                }, (error) => {
+                  console.error('Erreur Firebase:', error);
+                  setLoading(false);
+                });
+
+              return () => unsubscribe();
             }
           }, [isAuthenticated]);
-
-          const loadResults = () => {
-            const allResults = JSON.parse(localStorage.getItem('quizResults') || '[]');
-            setResults(allResults);
-          };
 
           const handleLogin = () => {
             if (loginInput === ADMIN_CREDENTIALS.login && passwordInput === ADMIN_CREDENTIALS.password) {
@@ -47,7 +81,6 @@
               setLoginInput('');
               setPasswordInput('');
               
-              // Toast de succès
               const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -115,16 +148,30 @@
             });
 
             if (result.isConfirmed) {
-              localStorage.removeItem('quizResults');
-              setResults([]);
-              setSelectedStudent(null);
-              
-              Swal.fire({
-                icon: 'success',
-                title: 'Supprimé !',
-                text: 'Tous les résultats ont été supprimés.',
-                confirmButtonColor: '#10B981'
-              });
+              try {
+                const batch = db.batch();
+                const snapshot = await db.collection('results').get();
+                snapshot.docs.forEach(doc => {
+                  batch.delete(doc.ref);
+                });
+                await batch.commit();
+                
+                setSelectedStudent(null);
+                
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Supprimé !',
+                  text: 'Tous les résultats ont été supprimés.',
+                  confirmButtonColor: '#10B981'
+                });
+              } catch (error) {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Erreur',
+                  text: 'Impossible de supprimer les résultats.',
+                  confirmButtonColor: '#DC2626'
+                });
+              }
             }
           };
 
@@ -261,12 +308,10 @@ Rapport généré le ${new Date().toLocaleString('fr-FR')}
           const filterResults = () => {
             let filtered = results;
             
-            // Filtre par statut
             if (filter === 'passed') filtered = filtered.filter(r => parseFloat(r.note) >= 10);
             else if (filter === 'failed') filtered = filtered.filter(r => parseFloat(r.note) < 10);
             else if (filter === 'cheating') filtered = filtered.filter(r => r.tentativesTriche > 0);
             
-            // Filtre par classe
             if (classFilter !== 'all') {
               filtered = filtered.filter(r => r.classe === classFilter);
             }
@@ -333,7 +378,7 @@ Rapport généré le ${new Date().toLocaleString('fr-FR')}
                   <div className="flex justify-between items-center">
                     <div>
                       <h1 className="text-3xl font-bold text-gray-800">Tableau de Bord Administrateur</h1>
-                      <p className="text-gray-600">Quiz Python - Licence 2</p>
+                      <p className="text-gray-600">Quiz Python - Licence 2 {loading && <span className="text-green-600">🔄 Synchronisation en temps réel...</span>}</p>
                     </div>
                     <button
                       onClick={handleLogout}
@@ -390,7 +435,6 @@ Rapport généré le ${new Date().toLocaleString('fr-FR')}
 
                 <div className="bg-white rounded-lg shadow-md p-6 mb-6">
                   <div className="space-y-4">
-                    {/* Filtres par statut */}
                     <div>
                       <h3 className="text-sm font-semibold text-gray-700 mb-3">Filtrer par statut :</h3>
                       <div className="flex flex-wrap gap-2">
@@ -409,7 +453,6 @@ Rapport généré le ${new Date().toLocaleString('fr-FR')}
                       </div>
                     </div>
 
-                    {/* Filtres par classe */}
                     <div>
                       <h3 className="text-sm font-semibold text-gray-700 mb-3">Filtrer par classe :</h3>
                       <div className="flex flex-wrap gap-2">
@@ -425,7 +468,6 @@ Rapport généré le ${new Date().toLocaleString('fr-FR')}
                       </div>
                     </div>
 
-                    {/* Actions */}
                     <div className="flex justify-end gap-2 pt-2 border-t">
                       <button onClick={exportToCSV} className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -443,7 +485,7 @@ Rapport généré le ${new Date().toLocaleString('fr-FR')}
                 {filteredResults.length === 0 ? (
                   <div className="bg-white rounded-lg shadow-md p-12 text-center">
                     <p className="text-xl text-gray-600">Aucun résultat disponible</p>
-                    <p className="text-gray-500 mt-2">Les résultats des étudiants apparaîtront ici</p>
+                    <p className="text-gray-500 mt-2">Les résultats des étudiants apparaîtront ici en temps réel</p>
                   </div>
                 ) : (
                   <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -462,7 +504,7 @@ Rapport généré le ${new Date().toLocaleString('fr-FR')}
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
                           {filteredResults.map((result, index) => (
-                            <tr key={index} className="hover:bg-gray-50">
+                            <tr key={result.id || index} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm font-medium text-gray-900">{result.etudiant}</div>
                               </td>
