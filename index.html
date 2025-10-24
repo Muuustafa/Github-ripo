@@ -9,6 +9,10 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <div id="root"></div>
@@ -16,13 +20,28 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
+        // ========================================
+        // 🔥 CONFIGURATION FIREBASE - À MODIFIER
+        // ========================================
+        // Your web app's Firebase configuration
+          const firebaseConfig = {
+            apiKey: "AIzaSyCYjXM6YrfB862p48g6_mYX66C_La0ZsI0",
+            authDomain: "quiz-python-isikm.firebaseapp.com",
+            projectId: "quiz-python-isikm",
+            storageBucket: "quiz-python-isikm.firebasestorage.app",
+            messagingSenderId: "559369640769",
+            appId: "1:559369640769:web:1ad8cb3d771f134f4d5fc0"
+          };
+        
+          // Initialize FirebfirebaseConfigase
+          const db = initializeApp();
+
         // Configuration du quiz - 50 QUESTIONS
         const QUIZ_CONFIG = {
           title: "Quiz Python - Licence 2",
           duration: 3600,
           penaltyPerWarning: 2,
           questions: [
-            // ===== QUESTIONS FACILES (1 POINT) - 10 questions =====
             { id: 1, code: `x = 5\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["x", "5", "Erreur", "None"], correct: 1, points: 1, difficulty: "Facile" },
             { id: 2, code: `y = 10\ny = y + 5\nprint(y)`, question: "Quelle est la sortie de ce code ?", options: ["10", "5", "15", "Erreur"], correct: 2, points: 1, difficulty: "Facile" },
             { id: 3, code: `print(3 + 2 * 2)`, question: "Quelle est la sortie de ce code ?", options: ["10", "7", "8", "6"], correct: 1, points: 1, difficulty: "Facile" },
@@ -33,8 +52,6 @@
             { id: 8, code: `x = 2 * 3\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["5", "23", "6", "Erreur"], correct: 2, points: 1, difficulty: "Facile" },
             { id: 9, code: `x = True\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["1", "True", "true", "Erreur"], correct: 1, points: 1, difficulty: "Facile" },
             { id: 10, code: `liste = [10, 20, 30]\nprint(len(liste))`, question: "Quelle est la sortie de ce code ?", options: ["60", "10", "3", "Erreur"], correct: 2, points: 1, difficulty: "Facile" },
-
-            // ===== QUESTIONS ASSEZ FACILES (1.25 POINTS) - 10 questions =====
             { id: 11, code: `x = 7\nprint(x % 2)`, question: "Quelle est la sortie de ce code ?", options: ["0", "1", "3.5", "7"], correct: 1, points: 1.25, difficulty: "Assez Facile" },
             { id: 12, code: `x = "A"\ny = "B"\nprint(x + y)`, question: "Quelle est la sortie de ce code ?", options: ["A B", "AB", "Erreur", "BA"], correct: 1, points: 1.25, difficulty: "Assez Facile" },
             { id: 13, code: `for i in range(3):\n    print(i, end="")`, question: "Quelle est la sortie de ce code ?", options: ["123", "012", "0 1 2", "321"], correct: 1, points: 1.25, difficulty: "Assez Facile" },
@@ -45,8 +62,6 @@
             { id: 18, code: `i = 0\nwhile i < 2:\n    i += 1\nprint(i)`, question: "Quelle est la sortie de ce code ?", options: ["0", "1", "2", "3"], correct: 2, points: 1.25, difficulty: "Assez Facile" },
             { id: 19, code: `x = "Python"\nprint(len(x))`, question: "Quelle est la sortie de ce code ?", options: ["5", "7", "6", "Erreur"], correct: 2, points: 1.25, difficulty: "Assez Facile" },
             { id: 20, code: `x = 10\nx += 5\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["10", "5", "105", "15"], correct: 3, points: 1.25, difficulty: "Assez Facile" },
-
-            // ===== QUESTIONS MOYENNES (1.5 POINTS) - 10 questions =====
             { id: 21, code: `liste = [1, 2, 3, 4, 5]\nprint(liste[1:4])`, question: "Quelle est la sortie de ce code ?", options: ["[1, 2, 3]", "[2, 3, 4]", "[1, 2, 3, 4]", "[2, 3]"], correct: 1, points: 1.5, difficulty: "Moyen" },
             { id: 22, code: `x = "Python"\nprint(x[0] + x[-1])`, question: "Quelle est la sortie de ce code ?", options: ["Py", "Pn", "Python", "Erreur"], correct: 1, points: 1.5, difficulty: "Moyen" },
             { id: 23, code: `x = 5\ny = 2\nprint(x ** y)`, question: "Quelle est la sortie de ce code ?", options: ["10", "7", "52", "25"], correct: 3, points: 1.5, difficulty: "Moyen" },
@@ -57,8 +72,6 @@
             { id: 28, code: `x = [1, 2, 3]\nx[1] = 10\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["[1, 10, 3]", "[10, 2, 3]", "[1, 2, 10]", "Erreur"], correct: 0, points: 1.5, difficulty: "Moyen" },
             { id: 29, code: `def somme(a, b):\n    return a + b\nprint(somme(3, 4))`, question: "Quelle est la sortie de ce code ?", options: ["34", "7", "None", "Erreur"], correct: 1, points: 1.5, difficulty: "Moyen" },
             { id: 30, code: `x = 7\nresultat = "Pair" if x % 2 == 0 else "Impair"\nprint(resultat)`, question: "Quelle est la sortie de ce code ?", options: ["Pair", "Impair", "7", "Erreur"], correct: 1, points: 1.5, difficulty: "Moyen" },
-
-            // ===== QUESTIONS ASSEZ DIFFICILES (1.75 POINTS) - 10 questions =====
             { id: 31, code: `liste = [1, 2, 3]\nliste.extend([4, 5])\nprint(len(liste))`, question: "Quelle est la sortie de ce code ?", options: ["3", "2", "5", "Erreur"], correct: 2, points: 1.75, difficulty: "Assez Difficile" },
             { id: 32, code: `x = "123"\nprint(x * 2)`, question: "Quelle est la sortie de ce code ?", options: ["246", "123123", "Erreur", "6"], correct: 1, points: 1.75, difficulty: "Assez Difficile" },
             { id: 33, code: `x = 5\nfor i in range(3):\n    x += i\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["5", "6", "8", "11"], correct: 2, points: 1.75, difficulty: "Assez Difficile" },
@@ -69,8 +82,6 @@
             { id: 38, code: `x = "abc"\ny = x.replace("b", "X")\nprint(y)`, question: "Quelle est la sortie de ce code ?", options: ["abc", "aXc", "Xbc", "abX"], correct: 1, points: 1.75, difficulty: "Assez Difficile" },
             { id: 39, code: `liste = [5, 2, 8, 1]\nprint(max(liste))`, question: "Quelle est la sortie de ce code ?", options: ["5", "1", "8", "2"], correct: 2, points: 1.75, difficulty: "Assez Difficile" },
             { id: 40, code: `x = 3\ny = 5\nx, y = y, x\nprint(x)`, question: "Quelle est la sortie de ce code ?", options: ["3", "8", "5", "Erreur"], correct: 2, points: 1.75, difficulty: "Assez Difficile" },
-
-            // ===== QUESTIONS TRÈS DIFFICILES (2 POINTS) - 10 questions avec PIÈGES =====
             { id: 41, code: `x = "Python"\nprint(x[::-1])`, question: "Quelle est la sortie de ce code ?", options: ["Python", "nohtyP", "Pyth", "Erreur"], correct: 1, points: 2, difficulty: "Très Difficile" },
             { id: 42, code: `def mystere(n):\n    if n <= 1:\n        return 1\n    return n * mystere(n - 1)\nprint(mystere(4))`, question: "Quelle est la sortie de ce code ?", options: ["4", "10", "24", "Erreur"], correct: 2, points: 2, difficulty: "Très Difficile" },
             { id: 43, code: `liste = [1, 2, 3, 4, 5]\nresultat = [x * 2 for x in liste if x % 2 == 0]\nprint(resultat)`, question: "Quelle est la sortie de ce code ?", options: ["[2, 4, 6, 8, 10]", "[4, 8]", "[2, 4]", "[1, 2, 3, 4, 5]"], correct: 1, points: 2, difficulty: "Très Difficile" },
@@ -149,22 +160,28 @@
             return str.toLowerCase().trim().replace(/\s+/g, ' ');
           };
 
-          const checkIfAlreadyTaken = (nom, prenom, classe) => {
-            const allResults = JSON.parse(localStorage.getItem('quizResults') || '[]');
+          const checkIfAlreadyTaken = async (nom, prenom, classe) => {
             const normalizedNom = normalizeString(nom);
             const normalizedPrenom = normalizeString(prenom);
             const normalizedClasse = normalizeString(classe);
 
-            return allResults.some(result => {
-              const resultParts = result.etudiant.split(' ');
-              const resultPrenom = normalizeString(resultParts[0] || '');
-              const resultNom = normalizeString(resultParts.slice(1).join(' ') || '');
-              const resultClasse = normalizeString(result.classe);
+            try {
+              const snapshot = await db.collection('results').get();
+              return snapshot.docs.some(doc => {
+                const result = doc.data();
+                const resultParts = result.etudiant.split(' ');
+                const resultPrenom = normalizeString(resultParts[0] || '');
+                const resultNom = normalizeString(resultParts.slice(1).join(' ') || '');
+                const resultClasse = normalizeString(result.classe);
 
-              return resultNom === normalizedNom && 
-                     resultPrenom === normalizedPrenom && 
-                     resultClasse === normalizedClasse;
-            });
+                return resultNom === normalizedNom && 
+                       resultPrenom === normalizedPrenom && 
+                       resultClasse === normalizedClasse;
+              });
+            } catch (error) {
+              console.error("Erreur vérification doublon:", error);
+              return false;
+            }
           };
 
           const handleStartQuiz = async () => {
@@ -178,8 +195,7 @@
               return;
             }
 
-            // Vérifier si l'étudiant a déjà fait le test
-            const alreadyTaken = checkIfAlreadyTaken(studentInfo.nom, studentInfo.prenom, studentInfo.classe);
+            const alreadyTaken = await checkIfAlreadyTaken(studentInfo.nom, studentInfo.prenom, studentInfo.classe);
             
             if (alreadyTaken) {
               Swal.fire({
@@ -192,7 +208,6 @@
               return;
             }
 
-            // Confirmation avant de commencer
             const result = await Swal.fire({
               icon: 'info',
               title: 'Prêt à commencer ?',
@@ -224,7 +239,6 @@
                 document.documentElement.requestFullscreen().catch(() => {});
               }
               
-              // Toast de bienvenue
               const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -277,7 +291,7 @@
             };
           };
 
-          const handleSubmitQuiz = () => {
+          const handleSubmitQuiz = async () => {
             setScreen('results');
             if (document.exitFullscreen && document.fullscreenElement) {
               document.exitFullscreen();
@@ -296,6 +310,7 @@
               tentativesTriche: tabSwitches,
               penalite: results.penalty,
               dateTest: new Date().toLocaleString('fr-FR'),
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
               duree: formatTime(QUIZ_CONFIG.duration - timeLeft),
               avertissements: warnings,
               detailsReponses: QUIZ_CONFIG.questions.map(q => ({
@@ -308,11 +323,14 @@
               }))
             };
 
-            const allResults = JSON.parse(localStorage.getItem('quizResults') || '[]');
-            allResults.push(exportData);
-            localStorage.setItem('quizResults', JSON.stringify(allResults));
+            // 🔥 ENVOYER À FIREBASE
+            try {
+              await db.collection('results').add(exportData);
+              console.log('✅ Résultats envoyés à Firebase');
+            } catch (error) {
+              console.error('❌ Erreur Firebase:', error);
+            }
 
-            // Notification de fin
             setTimeout(() => {
               const Toast = Swal.mixin({
                 toast: true,
