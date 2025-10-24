@@ -23,15 +23,15 @@
         // ========================================
         // 🔥 CONFIGURATION FIREBASE - À MODIFIER
         // ========================================
-        // Your web app's Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyCYjXM6YrfB862p48g6_mYX66C_La0ZsI0",
-        authDomain: "quiz-python-isikm.firebaseapp.com",
-        projectId: "quiz-python-isikm",
-        storageBucket: "quiz-python-isikm.firebasestorage.app",
-        messagingSenderId: "559369640769",
-        appId: "1:559369640769:web:1ad8cb3d771f134f4d5fc0"
-      };
+        const firebaseConfig = {
+          apiKey: "VOTRE_API_KEY",
+          authDomain: "VOTRE_PROJECT.firebaseapp.com",
+          projectId: "VOTRE_PROJECT_ID",
+          storageBucket: "VOTRE_PROJECT.appspot.com",
+          messagingSenderId: "VOTRE_SENDER_ID",
+          appId: "VOTRE_APP_ID"
+        };
+
         // Initialiser Firebase
         if (!firebase.apps.length) {
           firebase.initializeApp(firebaseConfig);
@@ -44,7 +44,10 @@
         };
 
         function AdminDashboard() {
-          const [isAuthenticated, setIsAuthenticated] = useState(false);
+          const [isAuthenticated, setIsAuthenticated] = useState(() => {
+            // Vérifier si l'admin est déjà connecté
+            return localStorage.getItem('adminAuthenticated') === 'true';
+          });
           const [loginInput, setLoginInput] = useState('');
           const [passwordInput, setPasswordInput] = useState('');
           const [results, setResults] = useState([]);
@@ -78,6 +81,7 @@
           const handleLogin = () => {
             if (loginInput === ADMIN_CREDENTIALS.login && passwordInput === ADMIN_CREDENTIALS.password) {
               setIsAuthenticated(true);
+              localStorage.setItem('adminAuthenticated', 'true'); // Sauvegarder la session
               setLoginInput('');
               setPasswordInput('');
               
@@ -118,6 +122,7 @@
 
             if (result.isConfirmed) {
               setIsAuthenticated(false);
+              localStorage.removeItem('adminAuthenticated'); // Supprimer la session
               setSelectedStudent(null);
               
               const Toast = Swal.mixin({
