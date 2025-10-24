@@ -32,9 +32,13 @@
             messagingSenderId: "559369640769",
             appId: "1:559369640769:web:1ad8cb3d771f134f4d5fc0"
           };
-        
+
+            // Initialiser Firebase
+            if (!firebase.apps.length) {
+              firebase.initializeApp(firebaseConfig);
+            }    
           // Initialize FirebfirebaseConfigase
-          const db = initializeApp();
+          const db = firebase.firestore();
 
         // Configuration du quiz - 50 QUESTIONS
         const QUIZ_CONFIG = {
@@ -618,3 +622,4 @@
     </script>
 </body>
 </html>
+
