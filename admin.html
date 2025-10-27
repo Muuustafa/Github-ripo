@@ -31,7 +31,7 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // ðŸ”¥ CONFIGURATION FIREBASE
+        // 🔥 CONFIGURATION FIREBASE
         const firebaseConfig = {
           apiKey: "AIzaSyCYjXM6YrfB862p48g6_mYX66C_La0ZsI0",
           authDomain: "quiz-python-isikm.firebaseapp.com",
@@ -122,7 +122,7 @@
           const [showSessions, setShowSessions] = useState(false);
           const [showDetailedAnswers, setShowDetailedAnswers] = useState(false);
 
-          // ðŸ”¥ Ã‰COUTER LES RÃ‰SULTATS FINAUX
+          // 🔥 ÉCOUTER LES RÉSULTATS FINAUX
           useEffect(() => {
             if (isAuthenticated) {
               setLoading(true);
@@ -144,7 +144,7 @@
             }
           }, [isAuthenticated]);
 
-          // ðŸ”¥ Ã‰COUTER LES SESSIONS ACTIVES EN TEMPS RÃ‰EL
+          // 🔥 ÉCOUTER LES SESSIONS ACTIVES EN TEMPS RÉEL
           useEffect(() => {
             if (isAuthenticated) {
               const unsubscribe = db.collection('quiz_sessions')
@@ -156,7 +156,7 @@
                     const session = { id: change.doc.id, ...change.doc.data() };
                     
                     if (change.type === 'added') {
-                      // ðŸŽ‰ NOUVEAU QUIZ COMMENCÃ‰
+                      // 🎓 NOUVEAU QUIZ COMMENCÉ
                       const Toast = Swal.mixin({
                         toast: true,
                         position: 'top-end',
@@ -167,13 +167,13 @@
                       
                       Toast.fire({
                         icon: 'info',
-                        title: 'ðŸŽ“ Quiz commencÃ©',
+                        title: '🎓 Quiz commencé',
                         html: `<strong>${session.etudiant}</strong><br/>${session.classe}`
                       });
                     }
                     
                     if (change.type === 'modified') {
-                      // ðŸš¨ CHANGEMENT D'ONGLET DÃ‰TECTÃ‰
+                      // 🚨 CHANGEMENT D'ONGLET DÉTECTÉ
                       if (session.tabSwitches > 0 && session.lastWarning) {
                         const Toast = Swal.mixin({
                           toast: true,
@@ -185,7 +185,7 @@
                         
                         Toast.fire({
                           icon: 'warning',
-                          title: 'âš ï¸ TRICHE DÃ‰TECTÃ‰E',
+                          title: '⚠️ TRICHE DÉTECTÉE',
                           html: `
                             <div class="text-left">
                               <p><strong>${session.etudiant}</strong></p>
@@ -199,7 +199,7 @@
                     }
                   });
 
-                  // Mettre Ã  jour la liste des sessions actives
+                  // Mettre à jour la liste des sessions actives
                   const currentSessions = snapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
@@ -230,13 +230,13 @@
               
               Toast.fire({
                 icon: 'success',
-                title: 'Connexion rÃ©ussie !',
-                text: 'Surveillance en temps rÃ©el activÃ©e'
+                title: 'Connexion réussie !',
+                text: 'Surveillance en temps réel activée'
               });
             } else {
               Swal.fire({
                 icon: 'error',
-                title: 'Ã‰chec de connexion',
+                title: 'Échec de connexion',
                 text: 'Identifiant ou mot de passe incorrect.',
                 confirmButtonColor: '#DC2626'
               });
@@ -246,12 +246,12 @@
           const handleLogout = async () => {
             const result = await Swal.fire({
               icon: 'question',
-              title: 'DÃ©connexion',
-              text: 'Voulez-vous vraiment vous dÃ©connecter ?',
+              title: 'Déconnexion',
+              text: 'Voulez-vous vraiment vous déconnecter ?',
               showCancelButton: true,
               confirmButtonColor: '#DC2626',
               cancelButtonColor: '#6B7280',
-              confirmButtonText: 'Oui, dÃ©connecter',
+              confirmButtonText: 'Oui, déconnecter',
               cancelButtonText: 'Annuler'
             });
 
@@ -270,7 +270,7 @@
               
               Toast.fire({
                 icon: 'info',
-                title: 'DÃ©connectÃ© avec succÃ¨s'
+                title: 'Déconnecté avec succès'
               });
             }
           };
@@ -278,8 +278,8 @@
           const clearAllResults = async () => {
             const result = await Swal.fire({
               icon: 'warning',
-              title: 'ÃŠtes-vous sÃ»r ?',
-              html: '<p>Supprimer <strong>TOUS</strong> les rÃ©sultats ?</p><p class="text-red-600 font-semibold mt-2">Action IRRÃ‰VERSIBLE !</p>',
+              title: 'Êtes-vous sûr ?',
+              html: '<p>Supprimer <strong>TOUS</strong> les résultats ?</p><p class="text-red-600 font-semibold mt-2">Action IRRÉVERSIBLE !</p>',
               showCancelButton: true,
               confirmButtonColor: '#DC2626',
               cancelButtonColor: '#6B7280',
@@ -300,15 +300,15 @@
                 
                 Swal.fire({
                   icon: 'success',
-                  title: 'SupprimÃ© !',
-                  text: 'Tous les rÃ©sultats ont Ã©tÃ© supprimÃ©s.',
+                  title: 'Supprimé !',
+                  text: 'Tous les résultats ont été supprimés.',
                   confirmButtonColor: '#10B981'
                 });
               } catch (error) {
                 Swal.fire({
                   icon: 'error',
                   title: 'Erreur',
-                  text: 'Impossible de supprimer les rÃ©sultats.',
+                  text: 'Impossible de supprimer les résultats.',
                   confirmButtonColor: '#DC2626'
                 });
               }
@@ -319,15 +319,15 @@
             if (results.length === 0) {
               Swal.fire({
                 icon: 'info',
-                title: 'Aucun rÃ©sultat',
-                text: 'Il n\'y a aucun rÃ©sultat Ã  exporter.',
+                title: 'Aucun résultat',
+                text: 'Il n\'y a aucun résultat à exporter.',
                 confirmButtonColor: '#4F46E5'
               });
               return;
             }
 
             const csv = [
-              ['Nom Complet', 'Classe', 'Note/20', 'Pourcentage', 'Bonnes RÃ©ponses', 'Total Questions', 'Points Obtenus', 'Points Max', 'Tentatives Triche', 'PÃ©nalitÃ©', 'Date', 'DurÃ©e'],
+              ['Nom Complet', 'Classe', 'Note/20', 'Pourcentage', 'Bonnes Réponses', 'Total Questions', 'Points Obtenus', 'Points Max', 'Tentatives Triche', 'Pénalité', 'Date', 'Durée'],
               ...results.map(r => [
                 r.etudiant,
                 r.classe,
@@ -360,46 +360,46 @@
             
             Toast.fire({
               icon: 'success',
-              title: `${results.length} rÃ©sultat(s) exportÃ©(s) !`
+              title: `${results.length} résultat(s) exporté(s) !`
             });
           };
 
           const exportDetailedReport = (student) => {
             const report = `
 ==============================================
-RAPPORT DÃ‰TAILLÃ‰ - QUIZ PYTHON
+RAPPORT DÉTAILLÉ - QUIZ PYTHON
 ==============================================
 
-INFORMATIONS Ã‰TUDIANT
+INFORMATIONS ÉTUDIANT
 ------------------------------
 Nom complet : ${student.etudiant}
 Classe : ${student.classe}
 Date du test : ${student.dateTest}
-DurÃ©e du test : ${student.duree}
+Durée du test : ${student.duree}
 
-RÃ‰SULTATS
+RÉSULTATS
 ------------------------------
 Note finale : ${student.note}/20
-Pourcentage de rÃ©ussite : ${student.pourcentage}%
-RÃ©ponses correctes : ${student.correct}/${student.total}
+Pourcentage de réussite : ${student.pourcentage}%
+Réponses correctes : ${student.correct}/${student.total}
 Points obtenus : ${student.points}/${student.maxPoints}
 
-SYSTÃˆME ANTI-TRICHE
+SYSTÈME ANTI-TRICHE
 ------------------------------
-Tentatives dÃ©tectÃ©es : ${student.tentativesTriche}
-PÃ©nalitÃ© appliquÃ©e : -${student.penalite} points
+Tentatives détectées : ${student.tentativesTriche}
+Pénalité appliquée : -${student.penalite} points
 
-${student.tentativesTriche > 0 ? `AVERTISSEMENTS ENREGISTRÃ‰S :
-${student.avertissements.map((w, i) => `${i + 1}. ${w}`).join('\n')}` : 'Aucun avertissement - Test effectuÃ© correctement'}
+${student.tentativesTriche > 0 ? `AVERTISSEMENTS ENREGISTRÉS :
+${student.avertissements.map((w, i) => `${i + 1}. ${w}`).join('\n')}` : 'Aucun avertissement - Test effectué correctement'}
 
-DÃ‰TAIL DES RÃ‰PONSES
+DÉTAIL DES RÉPONSES
 ------------------------------
 ${student.detailsReponses ? student.detailsReponses.map((d) => 
-  `Question ${d.question} (${d.difficulte}) : ${d.estCorrecte ? 'âœ“ CORRECT' : 'âœ— INCORRECT'} - ${d.points} pts`
-).join('\n') : 'DÃ©tails non disponibles'}
+  `Question ${d.question} (${d.difficulte}) : ${d.estCorrecte ? '✅ CORRECT' : '❌ INCORRECT'} - ${d.points} pts`
+).join('\n') : 'Détails non disponibles'}
 
 ==============================================
-Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
+Rapport généré le ${new Date().toLocaleString('fr-FR')}
 ==============================================
             `.trim();
 
@@ -419,7 +419,7 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
             
             Toast.fire({
               icon: 'success',
-              title: 'Rapport tÃ©lÃ©chargÃ© !'
+              title: 'Rapport téléchargé !'
             });
           };
 
@@ -521,7 +521,7 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                       <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Tableau de Bord Admin</h1>
                       <p className="text-sm sm:text-base text-gray-600 flex items-center gap-2">
                         Quiz Python - L2 
-                        {loading && <span className="text-green-600 text-xs">ðŸ”„ Synchro...</span>}
+                        {loading && <span className="text-green-600 text-xs">🔄 Synchro...</span>}
                       </p>
                     </div>
                     <div className="flex gap-2 w-full sm:w-auto">
@@ -534,13 +534,13 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                             {activeSessions.length}
                           </span>
                         )}
-                        ðŸŽ“ En cours
+                        🎓 En cours
                       </button>
                       <button
                         onClick={handleLogout}
                         className="flex-1 sm:flex-none px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm sm:text-base"
                       >
-                        DÃ©connexion
+                        Déconnexion
                       </button>
                     </div>
                   </div>
@@ -564,7 +564,7 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                             </span>
                             {session.tabSwitches > 0 && (
                               <span className="text-red-600 font-bold">
-                                âš ï¸ {session.tabSwitches}
+                                ⚠️ {session.tabSwitches}
                               </span>
                             )}
                           </div>
@@ -602,7 +602,7 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                       <p className="text-xl sm:text-2xl font-bold text-orange-600">{stats.noteMin}/20</p>
                     </div>
                     <div className="bg-white p-3 sm:p-4 rounded-lg shadow">
-                      <p className="text-xs sm:text-sm text-gray-600">RÃ©ussite</p>
+                      <p className="text-xs sm:text-sm text-gray-600">Réussite</p>
                       <p className="text-xl sm:text-2xl font-bold text-emerald-600">{stats.tauxReussite}%</p>
                     </div>
                     <div className="bg-white p-3 sm:p-4 rounded-lg shadow">
@@ -625,7 +625,7 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                           Admis ({results.filter(r => parseFloat(r.note) >= 10).length})
                         </button>
                         <button onClick={() => setFilter('failed')} className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm ${filter === 'failed' ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-700'}`}>
-                          Ã‰chec ({results.filter(r => parseFloat(r.note) < 10).length})
+                          Échec ({results.filter(r => parseFloat(r.note) < 10).length})
                         </button>
                         <button onClick={() => setFilter('cheating')} className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm ${filter === 'cheating' ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700'}`}>
                           Triche ({results.filter(r => r.tentativesTriche > 0).length})
@@ -662,11 +662,11 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                   </div>
                 </div>
 
-                {/* Liste des rÃ©sultats - Version mobile simplifiÃ©e */}
+                {/* Liste des résultats - Version mobile simplifiée */}
                 {filteredResults.length === 0 ? (
                   <div className="bg-white rounded-lg shadow-md p-8 sm:p-12 text-center">
-                    <p className="text-lg sm:text-xl text-gray-600">Aucun rÃ©sultat</p>
-                    <p className="text-sm sm:text-base text-gray-500 mt-2">Les rÃ©sultats apparaÃ®tront ici en temps rÃ©el</p>
+                    <p className="text-lg sm:text-xl text-gray-600">Aucun résultat</p>
+                    <p className="text-sm sm:text-base text-gray-500 mt-2">Les résultats apparaîtront ici en temps réel</p>
                   </div>
                 ) : (
                   <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -685,25 +685,25 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                           </div>
                           <div className="flex justify-between items-center">
                             <span className={`px-3 py-1 text-xs rounded-full ${parseFloat(result.note) >= 10 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                              {parseFloat(result.note) >= 10 ? 'Admis' : 'Ã‰chec'}
+                              {parseFloat(result.note) >= 10 ? 'Admis' : 'Échec'}
                             </span>
                             <button onClick={() => setSelectedStudent(result)} className="text-indigo-600 text-sm font-medium">
-                              DÃ©tails â†’
+                              Détails →
                             </button>
                           </div>
                         </div>
                       ))}
                     </div>
 
-                    {/* Vue desktop - tableau complet gardÃ© tel quel */}
+                    {/* Vue desktop - tableau complet gardé tel quel */}
                     <div className="hidden sm:block overflow-x-auto">
                       <table className="w-full">
                         <thead className="bg-gray-50">
                           <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ã‰tudiant</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Étudiant</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Classe</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Note</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">RÃ©ussite</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Réussite</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Triche</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
@@ -726,7 +726,7 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${parseFloat(result.note) >= 10 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                                  {parseFloat(result.note) >= 10 ? 'Admis' : 'Ã‰chec'}
+                                  {parseFloat(result.note) >= 10 ? 'Admis' : 'Échec'}
                                 </span>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
@@ -738,7 +738,7 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                                     <span className="font-semibold">{result.tentativesTriche}</span>
                                   </div>
                                 ) : (
-                                  <span className="text-green-600">âœ“</span>
+                                  <span className="text-green-600">✅</span>
                                 )}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{result.dateTest}</td>
@@ -748,7 +748,7 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                   </svg>
-                                  DÃ©tails
+                                  Détails
                                 </button>
                               </td>
                             </tr>
@@ -759,7 +759,7 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                   </div>
                 )}
 
-                {/* Modal dÃ©tails - adaptÃ© responsive - gardÃ© tel quel mais avec classes responsive */}
+                {/* Modal détails - adapté responsive - gardé tel quel mais avec classes responsive */}
                 {selectedStudent && (
                   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                     <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -785,10 +785,10 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                           <div className="text-center">
                             <p className="text-sm opacity-90 mb-2">Note Finale</p>
                             <p className="text-5xl sm:text-6xl font-bold mb-2">{selectedStudent.note}/20</p>
-                            <p className="text-sm opacity-90">{selectedStudent.correct}/{selectedStudent.total} bonnes rÃ©ponses</p>
+                            <p className="text-sm opacity-90">{selectedStudent.correct}/{selectedStudent.total} bonnes réponses</p>
                             {selectedStudent.penalite > 0 && (
                               <p className="text-sm mt-2 bg-red-500 bg-opacity-30 py-2 px-4 rounded">
-                                PÃ©nalitÃ© : -{selectedStudent.penalite} points
+                                Pénalité : -{selectedStudent.penalite} points
                               </p>
                             )}
                           </div>
@@ -804,7 +804,7 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                             <p className="text-lg sm:text-xl font-bold text-green-600">{selectedStudent.pourcentage}%</p>
                           </div>
                           <div className="bg-purple-50 p-4 rounded-lg">
-                            <p className="text-xs sm:text-sm text-gray-600">DurÃ©e</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Durée</p>
                             <p className="text-lg sm:text-xl font-bold text-purple-600">{selectedStudent.duree}</p>
                           </div>
                           <div className="bg-red-50 p-4 rounded-lg">
@@ -823,7 +823,7 @@ Rapport gÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}
                             </p>
                             <ul className="text-xs sm:text-sm text-yellow-600 space-y-1">
                               {selectedStudent.avertissements.map((warning, idx) => (
-                                <li key={idx}>â€¢ {warning}</li>
+                                <li key={idx}>• {warning}</li>
                               ))}
                             </ul>
                           </div>
