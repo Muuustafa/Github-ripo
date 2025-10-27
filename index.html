@@ -38,7 +38,7 @@
 
         // 🔐 CODE D'ACCÈS QUIZ
         const ACCESS_CODE = "QZ2025PYTH";
-        const RECOVERY_CODE = "QZ2025PYTH";
+        const RECOVERY_CODE = "QZ2025PYTH"; // Même code pour la reprise
 
         // Configuration du quiz - 50 QUESTIONS
         const QUIZ_CONFIG = {
@@ -100,7 +100,7 @@
         };
 
         function PythonQuizApp() {
-          const [screen, setScreen] = useState('access'); // access, start, quiz, results, blocked
+          const [screen, setScreen] = useState('access');
           const [accessCodeInput, setAccessCodeInput] = useState('');
           const [studentInfo, setStudentInfo] = useState({ nom: '', prenom: '', classe: '' });
           const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -111,8 +111,8 @@
           const [showNotification, setShowNotification] = useState(false);
           const [sessionId, setSessionId] = useState(null);
           const [isBlocked, setIsBlocked] = useState(false);
+          const [showDetailedResults, setShowDetailedResults] = useState(false);
 
-          // Gestion du chronomètre
           useEffect(() => {
             if (screen === 'quiz' && timeLeft > 0 && !isBlocked) {
               const timer = setInterval(() => {
@@ -128,7 +128,6 @@
             }
           }, [screen, timeLeft, isBlocked]);
 
-          // Détection anti-triche RENFORCÉE
           useEffect(() => {
             if (screen === 'quiz' && !isBlocked) {
               const handleVisibilityChange = async () => {
@@ -138,7 +137,6 @@
                   const warning = `Changement d'onglet à ${formatTime(QUIZ_CONFIG.duration - timeLeft)}`;
                   setWarnings(prev => [...prev, warning]);
                   
-                  // 🔥 Notifier Firebase en temps réel
                   if (sessionId) {
                     await db.collection('quiz_sessions').doc(sessionId).update({
                       tabSwitches: newCount,
@@ -148,10 +146,8 @@
                     });
                   }
 
-                  // BLOQUER le quiz
                   setIsBlocked(true);
                   
-                  // Demander le code de reprise
                   const { value: code } = await Swal.fire({
                     icon: 'error',
                     title: '⚠️ QUIZ BLOQUÉ !',
@@ -174,7 +170,6 @@
                     }
                   });
 
-                  // Vérifier le code
                   if (code === RECOVERY_CODE) {
                     setIsBlocked(false);
                     Swal.fire({
@@ -185,7 +180,6 @@
                       showConfirmButton: false
                     });
                   } else {
-                    // Code incorrect, redemander
                     setIsBlocked(true);
                     Swal.fire({
                       icon: 'error',
@@ -193,7 +187,6 @@
                       text: 'Demandez le bon code à votre enseignant.',
                       allowOutsideClick: false
                     }).then(() => {
-                      // Recharger la page pour redemander le code
                       window.location.reload();
                     });
                   }
@@ -311,7 +304,6 @@
             });
 
             if (result.isConfirmed) {
-              // 🔥 Créer une session en temps réel dans Firebase
               try {
                 const sessionRef = await db.collection('quiz_sessions').add({
                   etudiant: `${studentInfo.prenom} ${studentInfo.nom}`,
@@ -337,7 +329,6 @@
           const handleAnswer = async (questionId, answerIndex) => {
             setAnswers(prev => ({ ...prev, [questionId]: answerIndex }));
             
-            // Mettre à jour la progression en temps réel
             if (sessionId) {
               await db.collection('quiz_sessions').doc(sessionId).update({
                 currentQuestion: currentQuestion + 1,
@@ -415,7 +406,6 @@
             try {
               await db.collection('results').add(exportData);
               
-              // Mettre à jour la session
               if (sessionId) {
                 await db.collection('quiz_sessions').doc(sessionId).update({
                   status: 'completed',
@@ -437,7 +427,6 @@
             }, 500);
           };
 
-          // Écran de code d'accès
           if (screen === 'access') {
             return (
               <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center p-4">
@@ -480,7 +469,6 @@
             );
           }
 
-          // Écran de démarrage (identique mais responsive)
           if (screen === 'start') {
             return (
               <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
@@ -568,9 +556,6 @@
               </div>
             );
           }
-
-          // [Écrans quiz et results - gardés identiques mais avec responsive classes ajoutées]
-          // Je vais les omettre ici pour économiser de l'espace, mais ils sont identiques avec sm:, md:, lg: ajoutés
           
           if (screen === 'quiz') {
             const question = QUIZ_CONFIG.questions[currentQuestion];
@@ -665,54 +650,195 @@
 
           if (screen === 'results') {
             const score = calculateScore();
+            const correctQuestions = QUIZ_CONFIG.questions.filter(q => answers[q.id] === q.correct);
+            const incorrectQuestions = QUIZ_CONFIG.questions.filter(q => answers[q.id] !== q.correct && answers[q.id] !== undefined);
+            const unansweredQuestions = QUIZ_CONFIG.questions.filter(q => answers[q.id] === undefined);
 
             return (
-              <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-                <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-2xl w-full">
-                  <div className="text-center mb-6 sm:mb-8">
-                    {score.noteSur20 >= 10 ? (
-                      <svg className="w-16 h-16 sm:w-20 sm:h-20 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+                <div className="max-w-4xl mx-auto">
+                  <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 mb-6">
+                    <div className="text-center mb-6 sm:mb-8">
+                      {score.noteSur20 >= 10 ? (
+                        <svg className="w-16 h-16 sm:w-20 sm:h-20 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-16 h-16 sm:w-20 sm:h-20 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      )}
+                      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Quiz Terminé !</h1>
+                      <p className="text-sm sm:text-base text-gray-600">{studentInfo.prenom} {studentInfo.nom} - {studentInfo.classe}</p>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl p-6 mb-6">
+                      <div className="text-center">
+                        <p className="text-sm opacity-90 mb-2">Note Finale</p>
+                        <p className="text-5xl sm:text-6xl font-bold mb-2">{score.noteSur20}/20</p>
+                        <p className="text-sm opacity-90">{score.correct} bonnes réponses sur {score.total}</p>
+                        {score.penalty > 0 && (
+                          <p className="text-sm mt-2 bg-red-500 bg-opacity-30 py-2 px-4 rounded">
+                            Pénalité : -{score.penalty} points
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                      <div className="bg-green-50 p-4 rounded-lg">
+                        <p className="text-xs sm:text-sm text-gray-600">Correctes</p>
+                        <p className="text-xl sm:text-2xl font-bold text-green-600">{correctQuestions.length}</p>
+                      </div>
+                      <div className="bg-red-50 p-4 rounded-lg">
+                        <p className="text-xs sm:text-sm text-gray-600">Incorrectes</p>
+                        <p className="text-xl sm:text-2xl font-bold text-red-600">{incorrectQuestions.length}</p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <p className="text-xs sm:text-sm text-gray-600">Non répondues</p>
+                        <p className="text-xl sm:text-2xl font-bold text-gray-600">{unansweredQuestions.length}</p>
+                      </div>
+                      <div className="bg-blue-50 p-4 rounded-lg">
+                        <p className="text-xs sm:text-sm text-gray-600">Points</p>
+                        <p className="text-xl sm:text-2xl font-bold text-blue-600">{score.totalPoints}/{score.maxPoints}</p>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => setShowDetailedResults(!showDetailedResults)}
+                      className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors mb-4 flex items-center justify-center gap-2"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
-                    ) : (
-                      <svg className="w-16 h-16 sm:w-20 sm:h-20 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    )}
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Quiz Terminé !</h1>
-                    <p className="text-sm sm:text-base text-gray-600">{studentInfo.prenom} {studentInfo.nom} - {studentInfo.classe}</p>
+                      {showDetailedResults ? 'Masquer' : 'Voir'} les détails des réponses
+                    </button>
+
+                    <button
+                      onClick={() => window.location.reload()}
+                      className="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
+                    >
+                      Retour à l'accueil
+                    </button>
                   </div>
 
-                  <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl p-6 mb-6">
-                    <div className="text-center">
-                      <p className="text-sm opacity-90 mb-2">Note Finale</p>
-                      <p className="text-5xl sm:text-6xl font-bold mb-2">{score.noteSur20}/20</p>
-                      <p className="text-sm opacity-90">{score.correct} bonnes réponses sur {score.total}</p>
-                      {score.penalty > 0 && (
-                        <p className="text-sm mt-2 bg-red-500 bg-opacity-30 py-2 px-4 rounded">
-                          Pénalité : -{score.penalty} points
-                        </p>
+                  {showDetailedResults && (
+                    <div className="space-y-4">
+                      {/* Questions correctes */}
+                      {correctQuestions.length > 0 && (
+                        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+                          <h3 className="text-lg sm:text-xl font-bold text-green-600 mb-4 flex items-center gap-2">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Réponses Correctes ({correctQuestions.length})
+                          </h3>
+                          <div className="space-y-3">
+                            {correctQuestions.map((q) => (
+                              <div key={q.id} className="border-l-4 border-green-500 bg-green-50 p-3 sm:p-4 rounded">
+                                <div className="flex justify-between items-start mb-2">
+                                  <p className="font-semibold text-gray-800 text-sm sm:text-base">Question {q.id}</p>
+                                  <span className="text-xs bg-green-600 text-white px-2 py-1 rounded">{q.points} pts</span>
+                                </div>
+                                <p className="text-xs sm:text-sm text-gray-700 mb-2">{q.question}</p>
+                                <div className="bg-gray-900 text-green-400 p-2 rounded font-mono text-xs overflow-x-auto mb-2">
+                                  <pre>{q.code}</pre>
+                                </div>
+                                <div className="flex items-center gap-2 text-green-700 text-sm">
+                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                  <span className="font-semibold">{q.options[q.correct]}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Questions incorrectes */}
+                      {incorrectQuestions.length > 0 && (
+                        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+                          <h3 className="text-lg sm:text-xl font-bold text-red-600 mb-4 flex items-center gap-2">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Réponses Incorrectes ({incorrectQuestions.length})
+                          </h3>
+                          <div className="space-y-3">
+                            {incorrectQuestions.map((q) => (
+                              <div key={q.id} className="border-l-4 border-red-500 bg-red-50 p-3 sm:p-4 rounded">
+                                <div className="flex justify-between items-start mb-2">
+                                  <p className="font-semibold text-gray-800 text-sm sm:text-base">Question {q.id}</p>
+                                  <span className="text-xs bg-red-600 text-white px-2 py-1 rounded">0 / {q.points} pts</span>
+                                </div>
+                                <p className="text-xs sm:text-sm text-gray-700 mb-2">{q.question}</p>
+                                <div className="bg-gray-900 text-green-400 p-2 rounded font-mono text-xs overflow-x-auto mb-2">
+                                  <pre>{q.code}</pre>
+                                </div>
+                                <div className="space-y-2">
+                                  <div className="flex items-center gap-2 text-red-700 text-sm">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    <div>
+                                      <span className="font-semibold">Votre réponse : </span>
+                                      <span>{q.options[answers[q.id]]}</span>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center gap-2 text-green-700 text-sm">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <div>
+                                      <span className="font-semibold">Bonne réponse : </span>
+                                      <span>{q.options[q.correct]}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Questions non répondues */}
+                      {unansweredQuestions.length > 0 && (
+                        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+                          <h3 className="text-lg sm:text-xl font-bold text-gray-600 mb-4 flex items-center gap-2">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Questions Non Répondues ({unansweredQuestions.length})
+                          </h3>
+                          <div className="space-y-3">
+                            {unansweredQuestions.map((q) => (
+                              <div key={q.id} className="border-l-4 border-gray-400 bg-gray-50 p-3 sm:p-4 rounded">
+                                <div className="flex justify-between items-start mb-2">
+                                  <p className="font-semibold text-gray-800 text-sm sm:text-base">Question {q.id}</p>
+                                  <span className="text-xs bg-gray-600 text-white px-2 py-1 rounded">0 / {q.points} pts</span>
+                                </div>
+                                <p className="text-xs sm:text-sm text-gray-700 mb-2">{q.question}</p>
+                                <div className="bg-gray-900 text-green-400 p-2 rounded font-mono text-xs overflow-x-auto mb-2">
+                                  <pre>{q.code}</pre>
+                                </div>
+                                <div className="flex items-center gap-2 text-green-700 text-sm">
+                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                  <div>
+                                    <span className="font-semibold">Bonne réponse : </span>
+                                    <span>{q.options[q.correct]}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       )}
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="text-xs sm:text-sm text-gray-600">Points obtenus</p>
-                      <p className="text-xl sm:text-2xl font-bold text-blue-600">{score.totalPoints}/{score.maxPoints}</p>
-                    </div>
-                    <div className="bg-red-50 p-4 rounded-lg">
-                      <p className="text-xs sm:text-sm text-gray-600">Avertissements</p>
-                      <p className="text-xl sm:text-2xl font-bold text-red-600">{tabSwitches}</p>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
-                  >
-                    Retour à l'accueil
-                  </button>
+                  )}
                 </div>
               </div>
             );
