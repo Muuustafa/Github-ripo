@@ -192,13 +192,13 @@
             penaltyPerWarning: 2,
             questions: [
                 // ── TYPES & VARIABLES (Q1-Q12) ──────────────────────────────────────
-                { id:1, code:`x = 10\nprint(type(x))`, question:"Quel est le type de x ?", options:["<class 'float'>","<class 'int'>","<class 'str'>","<class 'bool'>"], correct:1, points:1, difficulty:"Facile" },
-                { id:2, code:`x = 3.14\nprint(type(x))`, question:"Quel est le type de x ?", options:["<class 'int'>","<class 'str'>","<class 'float'>","<class 'number'>"], correct:2, points:1, difficulty:"Facile" },
-                { id:3, code:`x = True\nprint(type(x))`, question:"Quel est le type de x ?", options:["<class 'int'>","<class 'bool'>","<class 'str'>","<class 'NoneType'>"], correct:1, points:1, difficulty:"Facile" },
+                { id:1, code:`x = 10\nprint(type(x))`, question:"Quelle est la sortie ?", options:["<class 'float'>","<class 'int'>","<class 'str'>","<class 'bool'>"], correct:1, points:1, difficulty:"Facile" },
+                { id:2, code:`x = 3.14\nprint(type(x))`, question:"Quelle est la sortie ?", options:["<class 'int'>","<class 'str'>","<class 'float'>","<class 'number'>"], correct:2, points:1, difficulty:"Facile" },
+                { id:3, code:`x = True\nprint(type(x))`, question:"Quelle est la sortie ?", options:["<class 'int'>","<class 'bool'>","<class 'str'>","<class 'NoneType'>"], correct:1, points:1, difficulty:"Facile" },
                 { id:4, code:`x = "Bonjour"\nprint(len(x))`, question:"Quelle est la sortie ?", options:["6","7","8","Erreur"], correct:1, points:1, difficulty:"Facile" },
                 { id:5, code:`x = int(3.9)\nprint(x)`, question:"Quelle est la sortie ?", options:["3.9","4","3","Erreur"], correct:2, points:1, difficulty:"Facile" },
                 { id:6, code:`x = float("7")\nprint(x)`, question:"Quelle est la sortie ?", options:["7","7.0","\"7\"","Erreur"], correct:1, points:1, difficulty:"Facile" },
-                { id:7, code:`x = str(42)\nprint(type(x))`, question:"Quel est le type de x ?", options:["<class 'int'>","<class 'float'>","<class 'str'>","<class 'number'>"], correct:2, points:1, difficulty:"Facile" },
+                { id:7, code:`x = str(42)\nprint(type(x))`, question:"Quelle est la sortie ?", options:["<class 'int'>","<class 'float'>","<class 'str'>","<class 'number'>"], correct:2, points:1, difficulty:"Facile" },
                 { id:8, code:`x = bool(0)\nprint(x)`, question:"Quelle est la sortie ?", options:["True","False","0","Erreur"], correct:1, points:1, difficulty:"Facile" },
                 { id:9, code:`a = 5\nb = a\nb = 10\nprint(a)`, question:"Quelle est la valeur de a ?", options:["10","5","Erreur","None"], correct:1, points:1.25, difficulty:"Assez Facile" },
                 { id:10, code:`x = 2 ** 8\nprint(x)`, question:"Quelle est la sortie ?", options:["16","64","256","128"], correct:2, points:1.25, difficulty:"Assez Facile" },
@@ -219,15 +219,15 @@
 
                 // ── BOUCLES FOR (Q23-Q32) ────────────────────────────────────────────
                 { id:23, code:`for i in range(4):\n    print(i, end=" ")`, question:"Quelle est la sortie ?", options:["1 2 3 4","0 1 2 3","0 1 2 3 4","1 2 3"], correct:1, points:1, difficulty:"Facile" },
-                { id:24, code:`s = 0\nfor i in range(1, 6):\n    s += i\nprint(s)`, question:"Quelle est la valeur finale de s ?", options:["10","15","21","5"], correct:1, points:1.25, difficulty:"Assez Facile" },
-                { id:25, code:`for i in range(2, 10, 3):\n    print(i, end=" ")`, question:"Quelle est la sortie ?", options:["2 5 8","2 4 6 8","3 6 9","2 5 8 11"], correct:0, points:1.5, difficulty:"Moyen" },
+                { id:24, code:`s = 0\nfor i in range(1, 6):\n    s += i\nprint(s)`, question:"Quelle est la sortie?", options:["10","15","21","5"], correct:1, points:1.25, difficulty:"Assez Facile" },
+                { id:25, code:`for i in range(2, 10, 3):\n    print(i, end=" ")`, question:"Quelle est la sortie?", options:["2 5 8","2 4 6 8","3 6 9","2 5 8 11"], correct:0, points:1.5, difficulty:"Moyen" },
                 { id:26, code:`for i in range(5):\n    if i == 3:\n        break\n    print(i, end=" ")`, question:"Quelle est la sortie ?", options:["0 1 2 3","0 1 2","1 2 3","0 1 2 3 4"], correct:1, points:1.5, difficulty:"Moyen" },
                 { id:27, code:`for i in range(5):\n    if i % 2 == 0:\n        continue\n    print(i, end=" ")`, question:"Quelle est la sortie ?", options:["0 2 4","1 3","0 1 2 3 4","1 3 5"], correct:1, points:1.5, difficulty:"Moyen" },
-                { id:28, code:`r = 1\nfor i in range(1, 5):\n    r *= i\nprint(r)`, question:"Quelle est la sortie ? (factorielle 4)", options:["10","24","12","120"], correct:1, points:1.75, difficulty:"Assez Difficile" },
-                { id:29, code:`c = 0\nfor i in range(1, 11):\n    if i % 2 == 0:\n        c += 1\nprint(c)`, question:"Combien de nombres pairs entre 1 et 10 ?", options:["4","5","6","3"], correct:1, points:1.5, difficulty:"Moyen" },
+                { id:28, code:`r = 1\nfor i in range(1, 5):\n    r *= i\nprint(r)`, question:"Quelle est la sortie ?", options:["10","24","12","120"], correct:1, points:1.75, difficulty:"Assez Difficile" },
+                { id:29, code:`c = 0\nfor i in range(1, 11):\n    if i % 2 == 0:\n        c += 1\nprint(c)`, question:"Quelle est la sortie?", options:["4","5","6","3"], correct:1, points:1.5, difficulty:"Moyen" },
                 { id:30, code:`for i in range(3):\n    for j in range(2):\n        print(i+j, end=" ")`, question:"Quelle est la sortie ?", options:["0 1 1 2 2 3","0 1 2 0 1 2","0 1 2 3 4 5","1 2 3 4"], correct:0, points:2, difficulty:"Difficile" },
                 { id:31, code:`total = 0\nfor i in range(10, 0, -2):\n    total += i\nprint(total)`, question:"Quelle est la sortie ?", options:["25","30","20","35"], correct:1, points:1.75, difficulty:"Assez Difficile" },
-                { id:32, code:`mots = ["chat","chien","oiseau"]\nfor m in mots:\n    print(m[0], end="")`, question:"Quelle est la sortie ?", options:["cco","cco","cho","ccc"], correct:0, points:1.75, difficulty:"Assez Difficile" },
+                { id:32, code:`mots = ["chat","chien","oiseau"]\nfor m in mots:\n    print(m[0], end="")`, question:"Quelle est la sortie ?", options:["cco","coc","cho","ccc"], correct:0, points:1.75, difficulty:"Assez Difficile" },
 
                 // ── SLICING (Q33-Q38) ────────────────────────────────────────────────
                 { id:33, code:`x = [10, 20, 30, 40, 50]\nprint(x[1:4])`, question:"Quelle est la sortie ?", options:["[10, 20, 30]","[20, 30, 40]","[20, 30, 40, 50]","[10, 20, 30, 40]"], correct:1, points:1.25, difficulty:"Assez Facile" },
@@ -238,9 +238,9 @@
                 { id:38, code:`x = [10, 20, 30, 40, 50]\nprint(x[1::2])`, question:"Quelle est la sortie ?", options:["[10,30,50]","[20,40]","[20,30,40]","[10,20]"], correct:1, points:2, difficulty:"Difficile" },
 
                 // ── LISTES (Q39-Q44) ─────────────────────────────────────────────────
-                { id:39, code:`lst = [3, 1, 4, 1, 5]\nlst.append(9)\nprint(len(lst))`, question:"Quelle est la longueur finale ?", options:["5","6","7","4"], correct:1, points:1, difficulty:"Facile" },
+                { id:39, code:`lst = [3, 1, 4, 1, 5]\nlst.append(9)\nprint(len(lst))`, question:"Quelle est la sortie?", options:["5","6","7","4"], correct:1, points:1, difficulty:"Facile" },
                 { id:40, code:`lst = [10, 20, 30]\nlst[1] = 99\nprint(lst)`, question:"Quelle est la sortie ?", options:["[10, 99, 30]","[99, 20, 30]","[10, 20, 99]","Erreur"], correct:0, points:1.25, difficulty:"Assez Facile" },
-                { id:41, code:`a = [1, 2, 3]\nb = a\nb.append(4)\nprint(len(a))`, question:"Quelle est la longueur de a ? (PIÈGE)", options:["3","4","7","Erreur"], correct:1, points:2, difficulty:"Difficile" },
+                { id:41, code:`a = [1, 2, 3]\nb = a\nb.append(4)\nprint(len(a))`, question:"Quelle est la sortie? (PIÈGE)", options:["3","4","7","Erreur"], correct:1, points:2, difficulty:"Difficile" },
                 { id:42, code:`lst = [5, 3, 8, 1]\nlst.sort()\nprint(lst[0], lst[-1])`, question:"Quelle est la sortie ?", options:["5 1","1 8","8 1","3 5"], correct:1, points:1.5, difficulty:"Moyen" },
                 { id:43, code:`lst = [2, 4, 6, 8]\nprint(sum(lst), max(lst), min(lst))`, question:"Quelle est la sortie ?", options:["20 8 2","16 6 2","20 6 2","16 8 2"], correct:0, points:1.5, difficulty:"Moyen" },
                 { id:44, code:`a = [1, 2]\nb = [3, 4]\nc = a + b\nprint(c)`, question:"Quelle est la sortie ?", options:["[1,2,3,4]","[4,6]","[1,2],[3,4]","Erreur"], correct:0, points:1.25, difficulty:"Assez Facile" },
@@ -669,7 +669,7 @@
                         </div>
 
                         {/* Contenu principal */}
-                        <div className="flex flex-col lg:flex-row max-w-7xl mx-auto px-4 py-8">
+                        <div className="flex flex-col lg:flex-row max-w-7xl mx-auto px-4 pt-24 pb-8">
                             <div className="flex-1 lg:pr-8">
                                 <div className="slide-in bg-white bg-opacity-95 backdrop-blur-xl rounded-3xl shadow-2xl p-6 md:p-10">
                                     <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8">
