@@ -189,71 +189,1130 @@
 
         const QUIZ_CONFIG = {
             title: "Quiz Python - ISI Keur Massar",
-            duration: 2400, // 40 minutes
+            duration: 3600, // 1 heure // 40 minutes
             penaltyPerWarning: 2,
             questions: [
-                // ── TYPES & VARIABLES ────────────────────────────────────────
-                { id:1, code:`x = 5\ny = 2\nprint(x / y)`, question:"Quelle est la sortie ?", options:["2.5","2","3","Erreur"], correct:0, points:1, difficulty:"Facile" },
-                { id:2, code:`x = "12"\ny = int(x) + 3\nprint(y)`, question:"Quelle est la sortie ?", options:["123","15","16","Erreur"], correct:1, points:1, difficulty:"Facile" },
-                { id:3, code:`x = 3.0\nprint(type(x))`, question:"Quelle est la sortie ?", options:["<class 'int'>","<class 'float'>","<class 'str'>","<class 'bool'>"], correct:1, points:1, difficulty:"Facile" },
-                { id:4, code:`x = True\ny = False\nprint(x + y)`, question:"Quelle est la sortie ?", options:["True","False","1","0"], correct:2, points:1, difficulty:"Facile" },
-                { id:5, code:`x = "Python"\nprint(x[0])`, question:"Quelle est la sortie ?", options:["P","y","t","h"], correct:0, points:1, difficulty:"Facile" },
-                { id:6, code:`x = int(7.99)\nprint(x)`, question:"Quelle est la sortie ?", options:["7","8","7.99","Erreur"], correct:0, points:1, difficulty:"Facile" },
-                { id:7, code:`x = float("3.14")\nprint(type(x))`, question:"Quelle est la sortie ?", options:["<class 'int'>","<class 'str'>","<class 'float'>","<class 'bool'>"], correct:2, points:1, difficulty:"Facile" },
-                { id:8, code:`x = bool("False")\nprint(x)`, question:"Quelle est la sortie ?", options:["True","False","0","Erreur"], correct:0, points:1.25, difficulty:"Assez Facile" },
-                { id:9, code:`a = 5\nb = a\na = 10\nprint(b)`, question:"Quelle est la valeur de b ?", options:["10","5","Erreur","None"], correct:1, points:1.25, difficulty:"Assez Facile" },
-                { id:10, code:`x = 3 ** 4\nprint(x)`, question:"Quelle est la sortie ?", options:["12","81","64","27"], correct:1, points:1.25, difficulty:"Assez Facile" },
-                { id:11, code:`x = 23\nprint(x // 7, x % 7)`, question:"Quelle est la sortie ?", options:["3 2","3 5","4 3","2 3"], correct:0, points:1.25, difficulty:"Assez Facile" },
-                { id:12, code:`x = "5"\ny = x * 3\nprint(y)`, question:"Quelle est la sortie ?", options:["15","555","5 5 5","Erreur"], correct:1, points:1.25, difficulty:"Assez Facile" },
-
-                // ── STRUCTURES CONDITIONNELLES ────────────────────────────────
-                { id:13, code:`x = 15\nif x > 10:\n    print("A")\nelse:\n    print("B")`, question:"Quelle est la sortie ?", options:["A","B","AB","Erreur"], correct:0, points:1, difficulty:"Facile" },
-                { id:14, code:`x = 4\nif x % 2 == 0:\n    print("Pair")\nelse:\n    print("Impair")`, question:"Quelle est la sortie ?", options:["Pair","Impair","4","Erreur"], correct:0, points:1, difficulty:"Facile" },
-                { id:15, code:`n = 8\nif n >= 5 and n < 10:\n    print("OK")\nelse:\n    print("NON")`, question:"Quelle est la sortie ?", options:["NON","OK","True","8"], correct:1, points:1.25, difficulty:"Assez Facile" },
-                { id:16, code:`note = 11\nif note >= 14:\n    m = "B"\nelif note >= 12:\n    m = "AB"\nelif note >= 10:\n    m = "P"\nelse:\n    m = "E"\nprint(m)`, question:"Quelle est la sortie ?", options:["B","AB","P","E"], correct:2, points:1.5, difficulty:"Moyen" },
-                { id:17, code:`x = 3\nresultat = "Grand" if x > 5 else "Petit"\nprint(resultat)`, question:"Quelle est la sortie ?", options:["Grand","Petit","3","Erreur"], correct:1, points:1.25, difficulty:"Assez Facile" },
-                { id:18, code:`a = 7\nb = 7\nif a > b:\n    print(a)\nelif b > a:\n    print(b)\nelse:\n    print("Egal")`, question:"Quelle est la sortie ?", options:["7","Egal","Erreur","None"], correct:1, points:1.25, difficulty:"Assez Facile" },
-                { id:19, code:`x = -5\nif x:\n    print("Vrai")\nelse:\n    print("Faux")`, question:"Quelle est la sortie ?", options:["Vrai","Faux","-5","None"], correct:0, points:1.25, difficulty:"Assez Facile" },
-                { id:20, code:`x = 18\nif x > 15:\n    if x > 20:\n        print("Très grand")\n    else:\n        print("Grand")\nelse:\n    print("Petit")`, question:"Quelle est la sortie ?", options:["Très grand","Grand","Petit","Erreur"], correct:1, points:1.75, difficulty:"Assez Difficile" },
-                { id:21, code:`age = 20\nif age >= 18:\n    print("Majeur")\nelif age >= 13:\n    print("Adolescent")\nelse:\n    print("Enfant")`, question:"Quelle est la sortie ?", options:["Majeur","Adolescent","Enfant","Erreur"], correct:0, points:1.25, difficulty:"Assez Facile" },
-                { id:22, code:`x = 0\ny = -1\nif x > 0 or y > 0:\n    print("OUI")\nelse:\n    print("NON")`, question:"Quelle est la sortie ?", options:["OUI","NON","True","False"], correct:1, points:1.5, difficulty:"Moyen" },
-
-                // ── BOUCLES FOR ───────────────────────────────────────────────
-                { id:23, code:`for i in range(3):\n    print(i, end=" ")`, question:"Quelle est la sortie ?", options:["0 1 2","1 2 3","0 1 2 3","1 2"], correct:0, points:1, difficulty:"Facile" },
-                { id:24, code:`s = 0\nfor i in range(2, 7):\n    s += i\nprint(s)`, question:"Quelle est la sortie?", options:["15","20","14","21"], correct:1, points:1.25, difficulty:"Assez Facile" },
-                { id:25, code:`for i in range(1, 8, 2):\n    print(i, end=" ")`, question:"Quelle est la sortie?", options:["1 3 5 7","1 3 5 7 9","1 2 3 4","3 5 7"], correct:0, points:1.5, difficulty:"Moyen" },
-                { id:26, code:`for i in range(4):\n    if i == 2:\n        break\n    print(i, end=" ")`, question:"Quelle est la sortie ?", options:["0 1 2","0 1","1 2","0 1 2 3"], correct:1, points:1.5, difficulty:"Moyen" },
-                { id:27, code:`for i in range(6):\n    if i % 3 == 0:\n        continue\n    print(i, end=" ")`, question:"Quelle est la sortie ?", options:["0 3","1 2 4 5","0 1 2 3 4 5","1 2 3 4 5"], correct:1, points:1.5, difficulty:"Moyen" },
-                { id:28, code:`r = 1\nfor i in range(1, 6):\n    r *= i\nprint(r)`, question:"Quelle est la sortie ?", options:["24","120","60","30"], correct:1, points:1.75, difficulty:"Assez Difficile" },
-                { id:29, code:`c = 0\nfor i in range(1, 12):\n    if i % 3 == 0:\n        c += 1\nprint(c)`, question:"Quelle est la sortie?", options:["3","4","5","6"], correct:0, points:1.5, difficulty:"Moyen" },
-                { id:30, code:`for i in range(2):\n    for j in range(3):\n        print(i*j, end=" ")`, question:"Quelle est la sortie ?", options:["0 0 0 0 1 2","0 1 2 0 1 2","0 0 0 1 2 3","0 1 2 3 4 5"], correct:0, points:2, difficulty:"Difficile" },
-                { id:31, code:`total = 0\nfor i in range(8, 0, -3):\n    total += i\nprint(total)`, question:"Quelle est la sortie ?", options:["12","15","18","10"], correct:1, points:1.75, difficulty:"Assez Difficile" },
-                { id:32, code:`mots = ["chat", "chien", "oiseau"]\nfor m in mots:\n    print(len(m), end="")`, question:"Quelle est la sortie ?", options:["456","445","545","654"], correct:0, points:1.75, difficulty:"Assez Difficile" },
-
-                // ── SLICING ──────────────────────────────────────────────────
-                { id:33, code:`x = [5, 10, 15, 20, 25]\nprint(x[1:3])`, question:"Quelle est la sortie ?", options:["[5, 10]","[10, 15]","[10, 15, 20]","[5, 10, 15]"], correct:1, points:1.25, difficulty:"Assez Facile" },
-                { id:34, code:`x = "Algorithmique"\nprint(x[4:8])`, question:"Quelle est la sortie ?", options:["rith","ithm","gori","algo"], correct:0, points:1.5, difficulty:"Moyen" },
-                { id:35, code:`x = [1, 2, 3, 4, 5]\nprint(x[-2::-1])`, question:"Quelle est la sortie ?", options:["[4, 3, 2, 1]","[5, 4, 3, 2]","[4, 3, 2, 1, 0]","[5, 4, 3, 2, 1]"], correct:0, points:1.75, difficulty:"Assez Difficile" },
-                { id:36, code:`x = [0, 1, 2, 3, 4, 5, 6]\nprint(x[1::2])`, question:"Quelle est la sortie ?", options:["[1, 3, 5]","[0, 2, 4, 6]","[1, 2, 3]","[1, 3, 5, 7]"], correct:0, points:1.5, difficulty:"Moyen" },
-                { id:37, code:`s = "Programmation"\nprint(s[-5:])`, question:"Quelle est la sortie ?", options:["ation","ation","tion","mmation"], correct:0, points:1.5, difficulty:"Moyen" },
-                { id:38, code:`x = [10, 20, 30, 40, 50, 60]\nprint(x[::3])`, question:"Quelle est la sortie ?", options:["[10, 40]","[20, 50]","[10, 20, 30]","[10, 40, 60]"], correct:0, points:2, difficulty:"Difficile" },
-
-                // ── LISTES ────────────────────────────────────────────────────
-                { id:39, code:`lst = [1, 2, 3, 4]\nlst.append(5)\nprint(len(lst))`, question:"Quelle est la sortie?", options:["4","5","6","3"], correct:1, points:1, difficulty:"Facile" },
-                { id:40, code:`lst = [5, 10, 15]\nlst[0] = 99\nprint(lst)`, question:"Quelle est la sortie ?", options:["[99, 10, 15]","[5, 99, 15]","[5, 10, 99]","Erreur"], correct:0, points:1.25, difficulty:"Assez Facile" },
-                { id:41, code:`a = [7, 8]\nb = a\nb[0] = 5\nprint(a)`, question:"Quelle est la sortie? (PIÈGE)", options:["[7, 8]","[5, 8]","[7, 5]","Erreur"], correct:1, points:2, difficulty:"Difficile" },
-                { id:42, code:`lst = [9, 2, 7, 4]\nlst.sort()\nprint(lst[-1], lst[0])`, question:"Quelle est la sortie ?", options:["9 2","2 9","9 4","4 2"], correct:0, points:1.5, difficulty:"Moyen" },
-                { id:43, code:`lst = [1, 3, 5, 7]\nprint(sum(lst), max(lst), min(lst))`, question:"Quelle est la sortie ?", options:["16 7 1","12 5 1","20 7 1","16 7 3"], correct:0, points:1.5, difficulty:"Moyen" },
-                { id:44, code:`a = ["a", "b"]\nb = ["c", "d"]\nc = a + b\nprint(c[1])`, question:"Quelle est la sortie ?", options:["a","b","c","d"], correct:1, points:1.25, difficulty:"Assez Facile" },
-
-                // ── CHAÎNES & MÉTHODES ──────────────────────────────────────
-                { id:45, code:`s = "python est génial"\nprint(s.title())`, question:"Quelle est la sortie ?", options:["Python Est Génial","python est génial","Python Est Genial","Erreur"], correct:0, points:1, difficulty:"Facile" },
-                { id:46, code:`s = "  Python  "\nprint(len(s.strip()))`, question:"Quelle est la sortie ?", options:["8","6","7","9"], correct:1, points:1.5, difficulty:"Moyen" },
-                { id:47, code:`s = "x-y-z"\nparties = s.split('-')\nprint(parties[1])`, question:"Quelle est la sortie ?", options:["x","y","z","x-y"], correct:1, points:1.25, difficulty:"Assez Facile" },
-                { id:48, code:`mots = ["Python", "est", "puissant"]\nprint(" ".join(mots))`, question:"Quelle est la sortie ?", options:["Pythonestpuissant","Python-est-puissant","Python est puissant","Erreur"], correct:2, points:1.25, difficulty:"Assez Facile" },
-                { id:49, code:`s = "Bonjour le monde"\nprint(s.replace("o", "0"))`, question:"Quelle est la sortie ?", options:["B0nj0ur le m0nde","B0njour le monde","Bonjour le m0nde","Bonj0ur le m0nde"], correct:0, points:1.5, difficulty:"Moyen" },
-                { id:50, code:`s = "Python123"\nprint(s.isdigit())`, question:"Quelle est la sortie ?", options:["True","False","python123","Erreur"], correct:1, points:1.75, difficulty:"Assez Difficile" },
-            ]
+                {
+                                "id": 1,
+                                "code": "x = 10\ny = \"20\"\nprint(str(x) + y)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "1020",
+                                                "30",
+                                                "Erreur",
+                                                "10 20"
+                                ],
+                                "correct": 0,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 2,
+                                "code": "a = 5\nb = 2\nprint(a // b)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "2.5",
+                                                "2",
+                                                "3",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 3,
+                                "code": "val = True\nprint(int(val))",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "True",
+                                                "1",
+                                                "0",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 4,
+                                "code": "s = \"Python\"\nprint(len(s))",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "5",
+                                                "6",
+                                                "7",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 5,
+                                "code": "f = 3.14\ni = int(f)\nprint(type(i))",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "<class 'float'>",
+                                                "<class 'int'>",
+                                                "<class 'str'>",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 6,
+                                "code": "x = 7\ny = \"7\"\nprint(x == y)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "True",
+                                                "False",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 7,
+                                "code": "a = [1, 2, 3]\nb = a\nb.append(4)\nprint(a)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "[1, 2, 3]",
+                                                "[1, 2, 3, 4]",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 8,
+                                "code": "x = 10\ny = 3\nprint(x % y)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "3",
+                                                "1",
+                                                "0",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 9,
+                                "code": "print(type(None))",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "<class 'NoneType'>",
+                                                "<class 'null'>",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 10,
+                                "code": "x = \"5\"\ny = int(x) + 2\nz = float(y)\nprint(z)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "7",
+                                                "7.0",
+                                                "5.0",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 11,
+                                "code": "s = \"Hello\"\nprint(s[1])",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "H",
+                                                "e",
+                                                "l",
+                                                "o"
+                                ],
+                                "correct": 1,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 12,
+                                "code": "l = [1, 2, 3, 4]\nprint(l[0:2])",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "[1, 2]",
+                                                "[1, 2, 3]",
+                                                "[2, 3]",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 13,
+                                "code": "s = \"Python\"\nprint(s.upper())",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Python",
+                                                "python",
+                                                "PYTHON",
+                                                "Erreur"
+                                ],
+                                "correct": 2,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 14,
+                                "code": "l = [\"a\", \"b\", \"c\"]\nl.append(\"d\")\nprint(l)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "['a', 'b', 'c']",
+                                                "['a', 'b', 'c', 'd']",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 15,
+                                "code": "s = \"Bonjour le monde\"\nprint(s.split(\" \"))",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "['Bonjour', 'le', 'monde']",
+                                                "['Bonjour le monde']",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 16,
+                                "code": "l = [10, 20, 30]\nl.insert(1, 15)\nprint(l)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "[10, 20, 15, 30]",
+                                                "[10, 15, 20, 30]",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 17,
+                                "code": "s = \"Hello World\"\nprint(s[::-1])",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "dlroW olleH",
+                                                "Hello World",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 18,
+                                "code": "l = [1, 2, 3, 4, 5]\nprint(l[1::2])",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "[2, 4]",
+                                                "[1, 3, 5]",
+                                                "[2, 3, 4]",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 19,
+                                "code": "s = \"Python est génial\"\nprint(s.replace(\"génial\", \"super\"))",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Python est génial",
+                                                "Python est super",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 20,
+                                "code": "l = [1, 2, 3]\nl.pop()\nprint(l)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "[1, 2, 3]",
+                                                "[1, 2]",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 21,
+                                "code": "s = \"abcde\"\nprint(s[1:4:2])",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "bd",
+                                                "ace",
+                                                "bce",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 22,
+                                "code": "l = [\"pomme\", \"banane\", \"cerise\"]\nl.remove(\"banane\")\nprint(l)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "['pomme', 'cerise']",
+                                                "['pomme', 'banane']",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 23,
+                                "code": "s = \"  Python  \"\nprint(s.strip())",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Python",
+                                                "  Python",
+                                                "Python  ",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 24,
+                                "code": "l = [[1, 2], [3, 4]]\nprint(l[0][1])",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "1",
+                                                "2",
+                                                "3",
+                                                "4"
+                                ],
+                                "correct": 1,
+                                "points": 2,
+                                "difficulty": "Difficile"
+                },
+                {
+                                "id": 25,
+                                "code": "s = \"hello\"\nprint(s.find(\"l\"))",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "0",
+                                                "1",
+                                                "2",
+                                                "-1"
+                                ],
+                                "correct": 2,
+                                "points": 2,
+                                "difficulty": "Difficile"
+                },
+                {
+                                "id": 26,
+                                "code": "x = 10\nif x > 5:\n    print(\"Grand\")\nelse:\n    print(\"Petit\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Grand",
+                                                "Petit",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 27,
+                                "code": "age = 18\nif age >= 18:\n    print(\"Majeur\")\nelse:\n    print(\"Mineur\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Majeur",
+                                                "Mineur",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 28,
+                                "code": "temp = 25\nif temp > 30:\n    print(\"Chaud\")\nelif temp < 20:\n    print(\"Froid\")\nelse:\n    print(\"Modéré\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Chaud",
+                                                "Froid",
+                                                "Modéré",
+                                                "Erreur"
+                                ],
+                                "correct": 2,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 29,
+                                "code": "a = 5\nb = 10\nif a > 0 and b > 0:\n    print(\"Positif\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Positif",
+                                                "Erreur",
+                                                "None",
+                                                "Rien"
+                                ],
+                                "correct": 0,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 30,
+                                "code": "x = 0\nif x:\n    print(\"Vrai\")\nelse:\n    print(\"Faux\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Vrai",
+                                                "Faux",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 31,
+                                "code": "s = \"Python\"\nif \"y\" in s:\n    print(\"Trouvé\")\nelse:\n    print(\"Non trouvé\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Trouvé",
+                                                "Non trouvé",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 32,
+                                "code": "num = 7\nresult = \"Pair\" if num % 2 == 0 else \"Impair\"\nprint(result)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Pair",
+                                                "Impair",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 33,
+                                "code": "x = 10\ny = 20\nif x > y:\n    print(\"X est plus grand\")\nelif y > x:\n    print(\"Y est plus grand\")\nelse:\n    print(\"Égal\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "X est plus grand",
+                                                "Y est plus grand",
+                                                "Égal",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 34,
+                                "code": "a = 1\nb = 2\nc = 3\nif a > b or b > c:\n    print(\"OK\")\nelse:\n    print(\"KO\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "OK",
+                                                "KO",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 35,
+                                "code": "score = 85\nif score >= 90:\n    grade = \"A\"\nelif score >= 80:\n    grade = \"B\"\nelif score >= 70:\n    grade = \"C\"\nelse:\n    grade = \"D\"\nprint(grade)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "A",
+                                                "B",
+                                                "C",
+                                                "D"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 36,
+                                "code": "x = 5\nif x > 3:\n    if x < 7:\n        print(\"Entre 3 et 7\")\n    else:\n        print(\"Plus grand que 7\")\nelse:\n    print(\"Plus petit que 3\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Entre 3 et 7",
+                                                "Plus grand que 7",
+                                                "Plus petit que 3",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 37,
+                                "code": "val = [1, 2]\nif val:\n    print(\"Liste non vide\")\nelse:\n    print(\"Liste vide\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Liste non vide",
+                                                "Liste vide",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 38,
+                                "code": "s = \"\"\nif not s:\n    print(\"Chaîne vide\")\nelse:\n    print(\"Chaîne non vide\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Chaîne vide",
+                                                "Chaîne non vide",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 39,
+                                "code": "x = 10\ny = 5\nz = 15\nif x > y and x < z:\n    print(\"Condition 1\")\nelif x == 10 or y == 5:\n    print(\"Condition 2\")\nelse:\n    print(\"Condition 3\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Condition 1",
+                                                "Condition 2",
+                                                "Condition 3",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 2,
+                                "difficulty": "Difficile"
+                },
+                {
+                                "id": 40,
+                                "code": "d = {\"a\": 1}\nif \"b\" in d:\n    print(\"Clé trouvée\")\nelse:\n    print(\"Clé non trouvée\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Clé trouvée",
+                                                "Clé non trouvée",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 2,
+                                "difficulty": "Difficile"
+                },
+                {
+                                "id": 41,
+                                "code": "for i in range(3):\n    print(i)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "0\n1\n2",
+                                                "1\n2\n3",
+                                                "0\n1\n2\n3",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 42,
+                                "code": "s = 0\nfor i in [1, 2, 3]:\n    s += i\nprint(s)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "3",
+                                                "6",
+                                                "0",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 43,
+                                "code": "for char in \"abc\":\n    print(char, end=\"\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "abc",
+                                                "a b c",
+                                                "a\nb\nc",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 44,
+                                "code": "count = 0\nfor i in range(1, 5):\n    if i % 2 == 0:\n        count += 1\nprint(count)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "1",
+                                                "2",
+                                                "3",
+                                                "4"
+                                ],
+                                "correct": 1,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 45,
+                                "code": "l = [10, 20, 30]\nfor x in l:\n    print(x // 10, end=\"\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "123",
+                                                "1 2 3",
+                                                "102030",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 46,
+                                "code": "for i in range(5, 0, -1):\n    print(i, end=\" \")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "5 4 3 2 1",
+                                                "1 2 3 4 5",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 47,
+                                "code": "result = 1\nfor i in range(1, 4):\n    result *= i\nprint(result)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "3",
+                                                "6",
+                                                "9",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 48,
+                                "code": "words = [\"apple\", \"banana\"]\nlengths = []\nfor w in words:\n    lengths.append(len(w))\nprint(lengths)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "[5, 6]",
+                                                "['apple', 'banana']",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 49,
+                                "code": "count = 0\nfor _ in range(4):\n    count += 1\nprint(count)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "3",
+                                                "4",
+                                                "0",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 50,
+                                "code": "for i in range(2):\n    for j in range(2):\n        print(i, j)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "0 0\n0 1\n1 0\n1 1",
+                                                "0 0\n1 1",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 51,
+                                "code": "list1 = [1, 2]\nlist2 = [3, 4]\nfor x in list1:\n    for y in list2:\n        print(x + y)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "4\n5\n5\n6",
+                                                "4\n6",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 52,
+                                "code": "s = \"programming\"\nvowels = \"aeiou\"\ncount = 0\nfor char in s:\n    if char in vowels:\n        count += 1\nprint(count)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "3",
+                                                "4",
+                                                "5",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 53,
+                                "code": "data = {\"a\": 1, \"b\": 2}\nfor key, value in data.items():\n    print(key, value)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "a 1\nb 2",
+                                                "a\nb",
+                                                "1\n2",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 54,
+                                "code": "nums = [1, 2, 3, 4, 5]\nsum_even = 0\nfor n in nums:\n    if n % 2 == 0:\n        sum_even += n\nprint(sum_even)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "6",
+                                                "9",
+                                                "15",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 55,
+                                "code": "matrix = [[1, 2], [3, 4]]\nflat_list = []\nfor row in matrix:\n    for item in row:\n        flat_list.append(item)\nprint(flat_list)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "[1, 2, 3, 4]",
+                                                "[[1, 2], [3, 4]]",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 2,
+                                "difficulty": "Difficile"
+                },
+                {
+                                "id": 56,
+                                "code": "text = \"level\"\nis_palindrome = True\nfor i in range(len(text) // 2):\n    if text[i] != text[len(text) - 1 - i]:\n        is_palindrome = False\n        break\nprint(is_palindrome)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "True",
+                                                "False",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 2,
+                                "difficulty": "Difficile"
+                },
+                {
+                                "id": 57,
+                                "code": "numbers = [1, 2, 3, 4, 5]\nnew_numbers = [n * 2 for n in numbers if n % 2 == 0]\nprint(new_numbers)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "[2, 4, 6, 8, 10]",
+                                                "[4, 8]",
+                                                "[2, 6, 10]",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 2,
+                                "difficulty": "Difficile"
+                },
+                {
+                                "id": 58,
+                                "code": "count = 0\nfor i in range(3):\n    for j in range(i + 1):\n        count += 1\nprint(count)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "3",
+                                                "6",
+                                                "9",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 2.25,
+                                "difficulty": "Très Difficile"
+                },
+                {
+                                "id": 59,
+                                "code": "data = [1, 2, 3]\nresult = []\nfor x in data:\n    if x == 2:\n        continue\n    result.append(x)\nprint(result)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "[1, 2, 3]",
+                                                "[1, 3]",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 2.25,
+                                "difficulty": "Très Difficile"
+                },
+                {
+                                "id": 60,
+                                "code": "items = [\"a\", \"b\", \"c\"]\nfor index, item in enumerate(items):\n    print(f\"Index {index}: {item}\")",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Index 0: a\nIndex 1: b\nIndex 2: c",
+                                                "a\nb\nc",
+                                                "0: a\n1: b\n2: c",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 2.25,
+                                "difficulty": "Très Difficile"
+                },
+                {
+                                "id": 61,
+                                "code": "i = 0\nwhile i < 3:\n    print(i)\n    i += 1",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "0\n1\n2",
+                                                "1\n2\n3",
+                                                "0\n1\n2\n3",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 62,
+                                "code": "count = 5\nwhile count > 0:\n    print(\"Hello\")\n    count -= 1",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Hello (5 fois)",
+                                                "Hello (4 fois)",
+                                                "Boucle infinie",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 63,
+                                "code": "x = 1\nwhile x < 5:\n    x *= 2\nprint(x)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "4",
+                                                "5",
+                                                "8",
+                                                "Erreur"
+                                ],
+                                "correct": 2,
+                                "points": 1,
+                                "difficulty": "Facile"
+                },
+                {
+                                "id": 64,
+                                "code": "i = 0\nwhile True:\n    print(i)\n    i += 1\n    if i == 2:\n        break",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "0\n1",
+                                                "0\n1\n2",
+                                                "Boucle infinie",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 65,
+                                "code": "num = 10\nsum_val = 0\nwhile num > 0:\n    sum_val += num\n    num -= 2\nprint(sum_val)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "30",
+                                                "25",
+                                                "20",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 66,
+                                "code": "s = \"Python\"\nidx = 0\nwhile idx < len(s):\n    print(s[idx], end=\"\")\n    idx += 1",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "Python",
+                                                "P y t h o n",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.25,
+                                "difficulty": "Assez Facile"
+                },
+                {
+                                "id": 67,
+                                "code": "i = 0\nwhile i < 5:\n    i += 1\n    if i == 3:\n        continue\n    print(i)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "1\n2\n3\n4\n5",
+                                                "1\n2\n4\n5",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 68,
+                                "code": "a = 1\nb = 10\nwhile a < b:\n    a += 1\n    b -= 1\nprint(a, b)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "5 6",
+                                                "6 5",
+                                                "5 5",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 69,
+                                "code": "total = 0\ncount = 0\nwhile count < 3:\n    total += (count + 1)\n    count += 1\nprint(total)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "3",
+                                                "6",
+                                                "10",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 70,
+                                "code": "flag = True\nnum = 0\nwhile flag:\n    num += 1\n    if num > 2:\n        flag = False\nprint(num)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "2",
+                                                "3",
+                                                "4",
+                                                "Erreur"
+                                ],
+                                "correct": 1,
+                                "points": 1.5,
+                                "difficulty": "Moyen"
+                },
+                {
+                                "id": 71,
+                                "code": "x = 10\ny = 0\nwhile x > y:\n    print(x - y)\n    x -= 1\n    y += 1",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "10\n8\n6\n4\n2",
+                                                "10\n8\n6\n4\n2\n0",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 72,
+                                "code": "data = [1, 2, 3, 4]\nidx = 0\nwhile idx < len(data):\n    if data[idx] % 2 == 0:\n        print(data[idx])\n    idx += 1",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "2\n4",
+                                                "1\n3",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 73,
+                                "code": "i = 1\nwhile i * i < 10:\n    print(i * i)\n    i += 1",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "1\n4\n9",
+                                                "1\n4\n9\n16",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 74,
+                                "code": "count = 0\nwhile count < 5:\n    if count == 2:\n        count += 1\n        continue\n    print(count)\n    count += 1",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "0\n1\n2\n3\n4",
+                                                "0\n1\n3\n4",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 1,
+                                "points": 1.75,
+                                "difficulty": "Assez Difficile"
+                },
+                {
+                                "id": 75,
+                                "code": "s = \"abc\"\nidx = 0\nwhile idx < len(s):\n    if s[idx] == \"b\":\n        break\n    print(s[idx])\n    idx += 1",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "a",
+                                                "a\nb",
+                                                "abc",
+                                                "Erreur"
+                                ],
+                                "correct": 0,
+                                "points": 2,
+                                "difficulty": "Difficile"
+                },
+                {
+                                "id": 76,
+                                "code": "x = 1\nwhile x < 10:\n    x += 1\n    if x % 3 == 0:\n        print(x)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "3\n6\n9",
+                                                "3\n6\n9\n12",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 2,
+                                "difficulty": "Difficile"
+                },
+                {
+                                "id": 77,
+                                "code": "i = 0\nj = 5\nwhile i < j:\n    print(i + j)\n    i += 1\n    j -= 1",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "5\n5\n5",
+                                                "5\n6\n7",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 2,
+                                "difficulty": "Difficile"
+                },
+                {
+                                "id": 78,
+                                "code": "n = 4\nfact = 1\nwhile n > 0:\n    fact *= n\n    n -= 1\nprint(fact)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "4",
+                                                "12",
+                                                "24",
+                                                "Erreur"
+                                ],
+                                "correct": 2,
+                                "points": 2.25,
+                                "difficulty": "Très Difficile"
+                },
+                {
+                                "id": 79,
+                                "code": "a = 0\nb = 1\ncount = 0\nwhile count < 5:\n    print(a, end=\" \")\n    next_fib = a + b\n    a = b\n    b = next_fib\n    count += 1",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "0 1 1 2 3",
+                                                "0 1 1 2 3 5",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 2.25,
+                                "difficulty": "Très Difficile"
+                },
+                {
+                                "id": 80,
+                                "code": "x = 10\nwhile x > 0:\n    x -= 3\n    if x < 5 and x > 0:\n        print(x)",
+                                "question": "Quelle est la sortie ?",
+                                "options": [
+                                                "4\n1",
+                                                "7\n4\n1",
+                                                "Erreur",
+                                                "None"
+                                ],
+                                "correct": 0,
+                                "points": 2.25,
+                                "difficulty": "Très Difficile"
+                }
+]
         };
 
         function QuickNavigation({ questions, currentQuestion, answers, onQuestionSelect }) {
@@ -515,9 +1574,9 @@
                                 <div className="flex items-center justify-center space-x-4 text-white text-opacity-70 text-sm">
                                     <div className="flex items-center"><i className="fas fa-shield-alt mr-2"></i><span>Sécurisé</span></div>
                                     <div className="w-1 h-1 bg-white bg-opacity-50 rounded-full"></div>
-                                    <div className="flex items-center"><i className="fas fa-clock mr-2"></i><span>40 min</span></div>
+                                    <div className="flex items-center"><i className="fas fa-clock mr-2"></i><span>1h</span></div>
                                     <div className="w-1 h-1 bg-white bg-opacity-50 rounded-full"></div>
-                                    <div className="flex items-center"><i className="fas fa-question-circle mr-2"></i><span>50 questions</span></div>
+                                    <div className="flex items-center"><i className="fas fa-question-circle mr-2"></i><span>80 questions</span></div>
                                 </div>
                             </div>
                         </div>
@@ -538,8 +1597,8 @@
                                     {QUIZ_CONFIG.title}
                                 </h1>
                                 <p className="text-gray-600 flex items-center justify-center gap-4">
-                                    <span><i className="far fa-clock mr-1"></i>40 minutes</span>
-                                    <span><i className="fas fa-question-circle mr-1"></i>50 questions</span>
+                                    <span><i className="far fa-clock mr-1"></i>1 heure</span>
+                                    <span><i className="fas fa-question-circle mr-1"></i>80 questions</span>
                                 </p>
                             </div>
                             <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-500 rounded-xl p-4 mb-6">
