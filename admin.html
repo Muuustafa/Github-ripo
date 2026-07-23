@@ -161,15 +161,15 @@
                 },
                 {
                                 "id": 9,
-                                "code": "print(type(None))",
+                                "code": "x = 5\ny = 2\nprint(x ** y)",
                                 "question": "Quelle est la sortie ?",
                                 "options": [
-                                                "<class 'NoneType'>",
-                                                "<class 'null'>",
-                                                "Erreur",
-                                                "None"
+                                                "10",
+                                                "25",
+                                                "7",
+                                                "Erreur"
                                 ],
-                                "correct": 0,
+                                "correct": 1,
                                 "points": 1.5,
                                 "difficulty": "Moyen"
                 },
@@ -231,7 +231,7 @@
                 },
                 {
                                 "id": 14,
-                                "code": "l = [\"a\", \"b\", \"c\"]\nl.append(\"d\")\nprint(l)",
+                                "code": "l = ['a', 'b', 'c']\nl.append('d')\nprint(l)",
                                 "question": "Quelle est la sortie ?",
                                 "options": [
                                                 "['a', 'b', 'c']",
@@ -245,7 +245,7 @@
                 },
                 {
                                 "id": 15,
-                                "code": "s = \"Bonjour le monde\"\nprint(s.split(\" \"))",
+                                "code": "s = \"Bonjour le monde\"\nprint(s.split(' '))",
                                 "question": "Quelle est la sortie ?",
                                 "options": [
                                                 "['Bonjour', 'le', 'monde']",
@@ -301,7 +301,7 @@
                 },
                 {
                                 "id": 19,
-                                "code": "s = \"Python est génial\"\nprint(s.replace(\"génial\", \"super\"))",
+                                "code": "s = \"Python est génial\"\nprint(s.replace('génial', 'super'))",
                                 "question": "Quelle est la sortie ?",
                                 "options": [
                                                 "Python est génial",
@@ -343,7 +343,7 @@
                 },
                 {
                                 "id": 22,
-                                "code": "l = [\"pomme\", \"banane\", \"cerise\"]\nl.remove(\"banane\")\nprint(l)",
+                                "code": "l = ['pomme', 'banane', 'cerise']\nl.remove('banane')\nprint(l)",
                                 "question": "Quelle est la sortie ?",
                                 "options": [
                                                 "['pomme', 'cerise']",
@@ -385,7 +385,7 @@
                 },
                 {
                                 "id": 25,
-                                "code": "s = \"hello\"\nprint(s.find(\"l\"))",
+                                "code": "s = \"hello\"\nprint(s.find('l'))",
                                 "question": "Quelle est la sortie ?",
                                 "options": [
                                                 "0",
@@ -469,7 +469,7 @@
                 },
                 {
                                 "id": 31,
-                                "code": "s = \"Python\"\nif \"y\" in s:\n    print(\"Trouvé\")\nelse:\n    print(\"Non trouvé\")",
+                                "code": "s = \"Python\"\nif 'y' in s:\n    print(\"Trouvé\")\nelse:\n    print(\"Non trouvé\")",
                                 "question": "Quelle est la sortie ?",
                                 "options": [
                                                 "Trouvé",
@@ -595,15 +595,15 @@
                 },
                 {
                                 "id": 40,
-                                "code": "d = {\"a\": 1}\nif \"b\" in d:\n    print(\"Clé trouvée\")\nelse:\n    print(\"Clé non trouvée\")",
+                                "code": "l = [1, 2, 3]\nif 2 in l:\n    print(\"Trouvé\")\nelse:\n    print(\"Non trouvé\")",
                                 "question": "Quelle est la sortie ?",
                                 "options": [
-                                                "Clé trouvée",
-                                                "Clé non trouvée",
+                                                "Trouvé",
+                                                "Non trouvé",
                                                 "Erreur",
                                                 "None"
                                 ],
-                                "correct": 1,
+                                "correct": 0,
                                 "points": 2,
                                 "difficulty": "Difficile"
                 },
@@ -707,7 +707,7 @@
                 },
                 {
                                 "id": 48,
-                                "code": "words = [\"apple\", \"banana\"]\nlengths = []\nfor w in words:\n    lengths.append(len(w))\nprint(lengths)",
+                                "code": "words = ['apple', 'banana']\nlengths = []\nfor w in words:\n    lengths.append(len(w))\nprint(lengths)",
                                 "question": "Quelle est la sortie ?",
                                 "options": [
                                                 "[5, 6]",
@@ -777,13 +777,13 @@
                 },
                 {
                                 "id": 53,
-                                "code": "data = {\"a\": 1, \"b\": 2}\nfor key, value in data.items():\n    print(key, value)",
+                                "code": "nums = [1, 2, 3]\nfor i in range(len(nums)):\n    nums[i] *= 2\nprint(nums)",
                                 "question": "Quelle est la sortie ?",
                                 "options": [
-                                                "a 1\nb 2",
-                                                "a\nb",
-                                                "1\n2",
-                                                "Erreur"
+                                                "[2, 4, 6]",
+                                                "[1, 2, 3]",
+                                                "Erreur",
+                                                "None"
                                 ],
                                 "correct": 0,
                                 "points": 1.75,
@@ -875,10 +875,10 @@
                 },
                 {
                                 "id": 60,
-                                "code": "items = [\"a\", \"b\", \"c\"]\nfor index, item in enumerate(items):\n    print(f\"Index {index}: {item}\")",
+                                "code": "items = ['a', 'b', 'c']\nfor i in range(len(items)):\n    print(i, items[i])",
                                 "question": "Quelle est la sortie ?",
                                 "options": [
-                                                "Index 0: a\nIndex 1: b\nIndex 2: c",
+                                                "0 a\n1 b\n2 c",
                                                 "a\nb\nc",
                                                 "0: a\n1: b\n2: c",
                                                 "Erreur"
@@ -1085,7 +1085,7 @@
                 },
                 {
                                 "id": 75,
-                                "code": "s = \"abc\"\nidx = 0\nwhile idx < len(s):\n    if s[idx] == \"b\":\n        break\n    print(s[idx])\n    idx += 1",
+                                "code": "s = \"abc\"\nidx = 0\nwhile idx < len(s):\n    if s[idx] == 'b':\n        break\n    print(s[idx])\n    idx += 1",
                                 "question": "Quelle est la sortie ?",
                                 "options": [
                                                 "a",
