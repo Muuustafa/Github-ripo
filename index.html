@@ -393,7 +393,7 @@ const CATEGORY_FILE = {
 
 const QUIZ_CONFIG = {
     title: "Quiz Python - ISI Keur Massar",
-    duration: 5400,
+    duration: 3600,
     penaltyPerWarning: 2,
     questions: [
     {
@@ -1540,28 +1540,28 @@ function QuickNavigation({ questions, currentQuestion, answers, onQuestionSelect
                 <h3 className="font-display font-semibold text-sm" style={{color:'var(--text-hi)'}}>
                     <i className="fas fa-list-tree mr-2" style={{color:'var(--py-blue)'}}></i>EXPLORATEUR
                 </h3>
-                <span className="font-mono text-xs" style={{color:'var(--text-dim)'}}>{Object.keys(answers).length}/{questions.length}</span>
+                <div className="flex items-center gap-4 text-[11px] font-mono" style={{color:'var(--text-dim)'}}>
+                    <span className="hide-mobile flex items-center gap-1.5"><span className="minimap-dot" style={{background:'var(--py-blue)'}}></span>Actuelle</span>
+                    <span className="hide-mobile flex items-center gap-1.5"><span className="minimap-dot" style={{background:'#57d38c'}}></span>Répondue</span>
+                    <span className="hide-mobile flex items-center gap-1.5"><span className="minimap-dot" style={{background:'var(--line)'}}></span>Vide</span>
+                    <span>{Object.keys(answers).length}/{questions.length}</span>
+                </div>
             </div>
-            <div className="p-3 grid grid-cols-6 lg:grid-cols-5 gap-1.5 max-h-72 overflow-y-auto">
+            <div className="p-3 flex flex-wrap gap-1.5">
                 {questions.map((q, index) => {
                     const isAnswered = answers[q.id] !== undefined;
                     const isCurrent = index === currentQuestion;
-                    let style = { fontFamily:'var(--font-mono)', fontSize:'11.5px', fontWeight:600 };
-                    let cls = "rounded-md py-1.5 transition-all border ";
-                    if (isCurrent) { cls += ""; style.background='var(--py-blue)'; style.color='#fff'; style.borderColor='#5c96fb'; }
-                    else if (isAnswered) { cls += ""; style.background='rgba(87,211,140,.12)'; style.color='#57d38c'; style.borderColor='#245c3c'; }
-                    else { cls += ""; style.background='var(--ink-900)'; style.color='var(--text-dim)'; style.borderColor='var(--line)'; }
+                    let style = { fontFamily:'var(--font-mono)', fontSize:'11.5px', fontWeight:600, width:'34px', height:'34px' };
+                    let cls = "rounded-md transition-all border flex items-center justify-center flex-shrink-0";
+                    if (isCurrent) { style.background='var(--py-blue)'; style.color='#fff'; style.borderColor='#5c96fb'; }
+                    else if (isAnswered) { style.background='rgba(87,211,140,.12)'; style.color='#57d38c'; style.borderColor='#245c3c'; }
+                    else { style.background='var(--ink-900)'; style.color='var(--text-dim)'; style.borderColor='var(--line)'; }
                     return (
                         <button key={q.id} onClick={() => onQuestionSelect(index)} className={cls} style={style} title={`Q${index+1}${isAnswered?" (répondue)":""}`}>
                             {index + 1}
                         </button>
                     );
                 })}
-            </div>
-            <div className="px-4 pb-4 pt-1 flex items-center justify-center gap-4 text-[11px] font-mono" style={{color:'var(--text-dim)'}}>
-                <span className="flex items-center gap-1.5"><span className="minimap-dot" style={{background:'var(--py-blue)'}}></span>Actuelle</span>
-                <span className="flex items-center gap-1.5"><span className="minimap-dot" style={{background:'#57d38c'}}></span>Répondue</span>
-                <span className="flex items-center gap-1.5"><span className="minimap-dot" style={{background:'var(--line)'}}></span>Vide</span>
             </div>
         </div>
     );
@@ -1705,7 +1705,7 @@ function PythonQuizApp() {
                 <div class="rounded-lg p-4" style="background:#0d1117;border:1px solid #2a3242">
                     <p class="font-semibold mb-2" style="color:#ffc94d">⚠ Règles importantes</p>
                     <ul class="text-sm space-y-1" style="color:#a9b3c4">
-                        <li>• 1h30 — 70 questions</li>
+                        <li>• 1h — 70 questions</li>
                         <li>• Ne pas changer d'onglet</li>
                         <li>• -2 points par tentative de triche</li>
                         <li>• Mode plein écran obligatoire</li>
@@ -1823,7 +1823,7 @@ function PythonQuizApp() {
 
                     <div className="mt-6 flex items-center justify-center gap-5 font-mono text-xs" style={{color:'var(--text-dim)'}}>
                         <span><i className="fas fa-shield-halved mr-1.5" style={{color:'var(--ok)'}}></i>Sécurisé</span>
-                        <span><i className="far fa-clock mr-1.5" style={{color:'var(--py-yellow)'}}></i>1h30</span>
+                        <span><i className="far fa-clock mr-1.5" style={{color:'var(--py-yellow)'}}></i>1h</span>
                         <span><i className="fas fa-code mr-1.5" style={{color:'var(--py-blue)'}}></i>70 questions</span>
                     </div>
                 </div>
@@ -1852,7 +1852,7 @@ function PythonQuizApp() {
                             </div>
                             <h1 className="font-display text-2xl font-bold" style={{color:'var(--text-hi)'}}>{QUIZ_CONFIG.title}</h1>
                             <p className="font-mono text-xs mt-2" style={{color:'var(--text-dim)'}}>
-                                <i className="far fa-clock mr-1"></i>1h30 &nbsp;·&nbsp; <i className="fas fa-code mr-1"></i>70 questions
+                                <i className="far fa-clock mr-1"></i>1h &nbsp;·&nbsp; <i className="fas fa-code mr-1"></i>70 questions
                             </p>
                         </div>
 
@@ -1967,7 +1967,11 @@ function PythonQuizApp() {
                     </div>
                 </div>
 
-                <div className="max-w-7xl mx-auto px-2 md:px-6 mt-5 flex flex-col lg:flex-row gap-5">
+                <div className="max-w-7xl mx-auto px-2 md:px-6 mt-5">
+                    <QuickNavigation questions={questionsToUse} currentQuestion={currentQuestion} answers={answers} onQuestionSelect={i=>setCurrentQuestion(i)} />
+                </div>
+
+                <div className="max-w-7xl mx-auto px-2 md:px-6 mt-5">
                     <div className="flex-1">
                         <div className="ide-card fade-up overflow-hidden">
                             <div className="p-5 md:p-8">
@@ -2005,9 +2009,6 @@ function PythonQuizApp() {
                                 </button>
                             )}
                         </div>
-                    </div>
-                    <div className="lg:w-80">
-                        <QuickNavigation questions={questionsToUse} currentQuestion={currentQuestion} answers={answers} onQuestionSelect={i=>setCurrentQuestion(i)} />
                     </div>
                 </div>
 
