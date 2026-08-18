@@ -1,1624 +1,1575 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administration - Quiz Python ISI Keur Massar</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <style>
-        @keyframes gradientShift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
-        @keyframes float { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-20px)} }
-        @keyframes pulse-glow { 0%,100%{box-shadow:0 0 20px rgba(99,102,241,0.5);transform:scale(1)} 50%{box-shadow:0 0 40px rgba(99,102,241,0.8);transform:scale(1.02)} }
-        @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.5} }
-        .gradient-bg { background:linear-gradient(-45deg,#667eea 0%,#764ba2 25%,#f093fb 50%,#4facfe 75%,#00f2fe 100%); background-size:400% 400%; animation:gradientShift 15s ease infinite; }
-        .float-animation { animation:float 3s ease-in-out infinite; }
-        .pulse-glow { animation:pulse-glow 2s ease-in-out infinite; }
-        .glass-effect { background:rgba(255,255,255,0.1); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2); }
-        .pulse-dot { animation:pulse-dot 1.5s ease-in-out infinite; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administration — Quiz Python ISI Keur Massar</title>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink-950:#0a0d13; --ink-900:#0d1117; --ink-800:#131922; --ink-700:#1a212c; --ink-600:#232b38;
+  --line:#2a3242; --line-soft:#1e2530;
+  --text-hi:#eef2f8; --text-mid:#a9b3c4; --text-dim:#6b7688;
+  --py-blue:#4f8cf7; --py-blue-dim:#335590; --py-yellow:#ffc94d;
+  --ok:#57d38c; --bad:#ff6b6b; --purple:#b39ddb;
+  --font-display:'Space Grotesk',sans-serif; --font-body:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;}
+html,body{background:var(--ink-900);}
+body{font-family:var(--font-body);color:var(--text-hi);-webkit-font-smoothing:antialiased;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:var(--ink-900);}
+::-webkit-scrollbar-thumb{background:var(--ink-600);border-radius:6px;border:2px solid var(--ink-900);}
+.font-display{font-family:var(--font-display);}
+.font-mono{font-family:var(--font-mono);}
+.bg-noise-glow{
+  background: radial-gradient(1000px 500px at 10% -10%, rgba(79,140,247,0.16), transparent 55%), var(--ink-900);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{animation:fadeUp .4s cubic-bezier(.16,.84,.44,1) both;}
+@keyframes pulseDot{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(87,211,140,.5);}50%{opacity:.6;box-shadow:0 0 0 6px rgba(87,211,140,0);}}
+.pulse-dot{animation:pulseDot 1.6s ease-in-out infinite;}
+.ide-card{background:var(--ink-800); border:1px solid var(--line); border-radius:14px;}
+.field{background:var(--ink-900); border:1px solid var(--line); color:var(--text-hi); font-family:var(--font-mono);}
+.field:focus{outline:none;border-color:var(--py-blue);box-shadow:0 0 0 3px rgba(79,140,247,.18);}
+.field::placeholder{color:var(--text-dim);}
+.btn-primary{background:linear-gradient(180deg, var(--py-blue), #3a6fd6); color:#fff;font-weight:600; border:1px solid #5c96fb; box-shadow:0 1px 0 rgba(255,255,255,.15) inset, 0 8px 20px -8px rgba(79,140,247,.7); transition:all .15s ease;}
+.btn-primary:hover{transform:translateY(-2px);filter:brightness(1.08);}
+.btn-ghost{background:var(--ink-700); border:1px solid var(--line); color:var(--text-hi); transition:all .15s ease;}
+.btn-ghost:hover{background:var(--ink-600); border-color:#3a4457;}
+.chip{font-family:var(--font-mono); font-size:11px; padding:3px 9px; border-radius:999px; border:1px solid var(--line);}
+.nav-item{transition:all .15s ease; cursor:pointer;}
+.nav-item:hover{background:var(--ink-700);}
+.nav-item.active{background:rgba(79,140,247,.12); border-left:3px solid var(--py-blue);}
+.traffic{width:10px;height:10px;border-radius:50%;display:inline-block;}
+table.console-table thead th{background:var(--ink-700); color:var(--text-dim); font-family:var(--font-mono); font-size:10.5px; letter-spacing:.04em; text-transform:uppercase; padding:12px 16px; text-align:left; border-bottom:1px solid var(--line);}
+table.console-table tbody td{padding:14px 16px; border-bottom:1px solid var(--line-soft);}
+table.console-table tbody tr{transition:background .12s ease;}
+table.console-table tbody tr:hover{background:var(--ink-700);}
+.progress-track{background:var(--ink-900); border:1px solid var(--line);}
+.assert-ok{border-left:3px solid var(--ok);background:rgba(87,211,140,.06);}
+.assert-fail{border-left:3px solid var(--bad);background:rgba(255,107,107,.06);}
+.assert-skip{border-left:3px solid var(--text-dim);background:rgba(107,118,136,.06);}
+@media(max-width:1024px){ .sidebar-desktop{display:none;} }
+</style>
 </head>
-<body>
-    <div id="root"></div>
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+<body class="bg-noise-glow min-h-screen">
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect } = React;
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCYjXM6YrfB862p48g6_mYX66C_La0ZsI0",
-            authDomain: "quiz-python-isikm.firebaseapp.com",
-            projectId: "quiz-python-isikm",
-            storageBucket: "quiz-python-isikm.firebasestorage.app",
-            messagingSenderId: "559369640769",
-            appId: "1:559369640769:web:1ad8cb3d771f134f4d5fc0"
-        };
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+const firebaseConfig = {
+    apiKey: "AIzaSyCYjXM6YrfB862p48g6_mYX66C_La0ZsI0",
+    authDomain: "quiz-python-isikm.firebaseapp.com",
+    projectId: "quiz-python-isikm",
+    storageBucket: "quiz-python-isikm.firebasestorage.app",
+    messagingSenderId: "559369640769",
+    appId: "1:559369640769:web:1ad8cb3d771f134f4d5fc0"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-        const ADMIN_CREDENTIALS = { username:"mustafa", password:"14051994" };
+const ADMIN_CREDENTIALS = { username:"mustafa", password:"14051994" };
+const CLASSES = ["L1-GL","L1-IAGE","L1-RI","L1-CS","L1-MM","L2-GL","L2-IAGE","L2-CS","L2-RI"];
 
-        const CLASSES = ["L1-GL","L1-IAGE","L1-RI","L1-CS","L1-MM","L2-GL","L2-IAGE","L2-CS","L2-RI"];
+const QUIZ_CONFIG = { questions: [
+    {
+        "code": "x = 5\ny = 2.0\nprint(type(x + y))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "<class 'int'>",
+            "<class 'float'>",
+            "<class 'str'>",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Types",
+        "id": 1
+    },
+    {
+        "code": "a = \"10\"\nb = int(a) + 5\nprint(b)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "105",
+            "15",
+            "Erreur",
+            "10.5"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Types",
+        "id": 2
+    },
+    {
+        "code": "x = 3\ny = str(x)\nprint(y + \"0\")",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "30",
+            "3.0",
+            "Erreur",
+            "'30'"
+        ],
+        "correct": 0,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Types",
+        "id": 3
+    },
+    {
+        "code": "print(type([]))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "<class 'list'>",
+            "<class 'tuple'>",
+            "<class 'dict'>",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Types",
+        "id": 4
+    },
+    {
+        "code": "x = True\ny = False\nprint(x + y)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "TrueFalse",
+            "1",
+            "0",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Types",
+        "id": 5
+    },
+    {
+        "code": "x = 9\ny = 3.0\nprint(x / y)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "3",
+            "3.0",
+            "3.5",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Types",
+        "id": 6
+    },
+    {
+        "code": "print(bool(0))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "True",
+            "False",
+            "0",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Types",
+        "id": 7
+    },
+    {
+        "code": "print(bool(\"\"))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "True",
+            "False",
+            "None",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Types",
+        "id": 8
+    },
+    {
+        "code": "x = 5\nprint(str(x) * 3)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "15",
+            "555",
+            "5*3",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Types",
+        "id": 9
+    },
+    {
+        "code": "a = 1\nb = 2\na, b = b, a\nprint(a, b)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "1 2",
+            "2 1",
+            "Erreur",
+            "None None"
+        ],
+        "correct": 1,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Types",
+        "id": 10
+    },
+    {
+        "code": "print(type(3 // 2))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "<class 'float'>",
+            "<class 'int'>",
+            "<class 'str'>",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Types",
+        "id": 11
+    },
+    {
+        "code": "print(float(\"3.5\") + 1)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "4.5",
+            "3.51",
+            "Erreur",
+            "'4.5'"
+        ],
+        "correct": 0,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Types",
+        "id": 12
+    },
+    {
+        "code": "s = \"Hello\"\nprint(s.lower())",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "Hello",
+            "hello",
+            "HELLO",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Chaînes",
+        "id": 13
+    },
+    {
+        "code": "s = \"hello\"\nprint(s.capitalize())",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "hello",
+            "Hello",
+            "HELLO",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Chaînes",
+        "id": 14
+    },
+    {
+        "code": "s = \"banana\"\nprint(s.count(\"a\"))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "2",
+            "3",
+            "4",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Chaînes",
+        "id": 15
+    },
+    {
+        "code": "s = \"  data  \"\nprint(len(s.strip()))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "4",
+            "6",
+            "8",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Chaînes",
+        "id": 16
+    },
+    {
+        "code": "s = \"Hello,World,Python\"\nprint(s.split(\",\"))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "['Hello', 'World', 'Python']",
+            "['Hello,World,Python']",
+            "Erreur",
+            "None"
+        ],
+        "correct": 0,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Chaînes",
+        "id": 17
+    },
+    {
+        "code": "s = \"-\"\nprint(s.join([\"a\", \"b\", \"c\"]))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "a-b-c",
+            "abc",
+            "a-b-c-",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Chaînes",
+        "id": 18
+    },
+    {
+        "code": "s = \"python\"\nprint(s.startswith(\"py\"))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "True",
+            "False",
+            "Erreur",
+            "None"
+        ],
+        "correct": 0,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Chaînes",
+        "id": 19
+    },
+    {
+        "code": "s = \"python\"\nprint(s.endswith(\"on\"))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "True",
+            "False",
+            "Erreur",
+            "None"
+        ],
+        "correct": 0,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Chaînes",
+        "id": 20
+    },
+    {
+        "code": "s = \"Hello\"\nprint(s.replace(\"l\", \"L\"))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "Hello",
+            "HeLLo",
+            "HELLo",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Chaînes",
+        "id": 21
+    },
+    {
+        "code": "s = \"abc\"\nprint(s + s)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "abc",
+            "abcabc",
+            "aabbcc",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Chaînes",
+        "id": 22
+    },
+    {
+        "code": "s = \"Data123\"\nprint(s.isalpha())",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "True",
+            "False",
+            "Erreur",
+            "None"
+        ],
+        "correct": 1,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Chaînes",
+        "id": 23
+    },
+    {
+        "code": "s = \"12345\"\nprint(s.isdigit())",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "True",
+            "False",
+            "Erreur",
+            "None"
+        ],
+        "correct": 0,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Chaînes",
+        "id": 24
+    },
+    {
+        "code": "s = \"Bonjour\"\nprint(s[2:5])",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "njo",
+            "onj",
+            "njou",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.75,
+        "difficulty": "Assez Difficile",
+        "category": "Chaînes",
+        "id": 25
+    },
+    {
+        "code": "s = \"Python\"\nprint(s.index(\"t\"))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "1",
+            "2",
+            "3",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.75,
+        "difficulty": "Assez Difficile",
+        "category": "Chaînes",
+        "id": 26
+    },
+    {
+        "code": "s = \"  Python  \"\nprint(s.strip().upper())",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "PYTHON",
+            "  PYTHON  ",
+            "Python",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.75,
+        "difficulty": "Assez Difficile",
+        "category": "Chaînes",
+        "id": 27
+    },
+    {
+        "code": "s = \"apple,banana\"\nprint(len(s.split(\",\")))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "1",
+            "2",
+            "12",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Chaînes",
+        "id": 28
+    },
+    {
+        "code": "l = [1, 2, 3]\nl.extend([4, 5])\nprint(l)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[1, 2, 3, [4, 5]]",
+            "[1, 2, 3, 4, 5]",
+            "Erreur",
+            "None"
+        ],
+        "correct": 1,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Listes",
+        "id": 29
+    },
+    {
+        "code": "l = [3, 1, 2]\nl.sort()\nprint(l)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[3, 1, 2]",
+            "[1, 2, 3]",
+            "[3, 2, 1]",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Listes",
+        "id": 30
+    },
+    {
+        "code": "l = [1, 2, 3]\nl.reverse()\nprint(l)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[1, 2, 3]",
+            "[3, 2, 1]",
+            "Erreur",
+            "None"
+        ],
+        "correct": 1,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Listes",
+        "id": 31
+    },
+    {
+        "code": "l = [1, 2, 3, 2]\nprint(l.count(2))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "1",
+            "2",
+            "3",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Listes",
+        "id": 32
+    },
+    {
+        "code": "l = [10, 20, 30]\nprint(l.index(20))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "0",
+            "1",
+            "2",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Listes",
+        "id": 33
+    },
+    {
+        "code": "l = [1, 2] + [3, 4]\nprint(l)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[1, 2, 3, 4]",
+            "[[1, 2], [3, 4]]",
+            "Erreur",
+            "[4, 6]"
+        ],
+        "correct": 0,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Listes",
+        "id": 34
+    },
+    {
+        "code": "l = [1, 2, 3]\nprint(max(l))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "1",
+            "2",
+            "3",
+            "Erreur"
+        ],
+        "correct": 2,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Listes",
+        "id": 35
+    },
+    {
+        "code": "l = [1, 2, 3]\nprint(min(l))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "1",
+            "2",
+            "3",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Listes",
+        "id": 36
+    },
+    {
+        "code": "l = [1, 2, 3]\nprint(sum(l))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "3",
+            "6",
+            "0",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Listes",
+        "id": 37
+    },
+    {
+        "code": "l = ['a', 'b', 'c']\nprint(len(l))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "2",
+            "3",
+            "4",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Listes",
+        "id": 38
+    },
+    {
+        "code": "l = [1, 2, 3]\nl[1] = 20\nprint(l)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[1, 2, 3]",
+            "[1, 20, 3]",
+            "Erreur",
+            "None"
+        ],
+        "correct": 1,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Listes",
+        "id": 39
+    },
+    {
+        "code": "l = []\nl.append(1)\nl.append(2)\nprint(l)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[]",
+            "[1, 2]",
+            "[2, 1]",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Listes",
+        "id": 40
+    },
+    {
+        "code": "l = [1, [2, 3], 4]\nprint(len(l))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "2",
+            "3",
+            "4",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.75,
+        "difficulty": "Assez Difficile",
+        "category": "Listes",
+        "id": 41
+    },
+    {
+        "code": "l = [5, 3, 8, 1]\nl.sort(reverse=True)\nprint(l)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[1, 3, 5, 8]",
+            "[8, 5, 3, 1]",
+            "Erreur",
+            "None"
+        ],
+        "correct": 1,
+        "points": 1.75,
+        "difficulty": "Assez Difficile",
+        "category": "Listes",
+        "id": 42
+    },
+    {
+        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[2:5])",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[2, 3, 4]",
+            "[2, 3, 4, 5]",
+            "[1, 2, 3]",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Slicing",
+        "id": 43
+    },
+    {
+        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[:3])",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[0, 1, 2]",
+            "[0, 1, 2, 3]",
+            "[1, 2, 3]",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Slicing",
+        "id": 44
+    },
+    {
+        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[3:])",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[3, 4, 5]",
+            "[3, 4]",
+            "[0, 1, 2]",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Slicing",
+        "id": 45
+    },
+    {
+        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[:])",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[]",
+            "[0, 1, 2, 3, 4, 5]",
+            "None",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Slicing",
+        "id": 46
+    },
+    {
+        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[-2:])",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[4, 5]",
+            "[5]",
+            "[0, 1]",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Slicing",
+        "id": 47
+    },
+    {
+        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[:-2])",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[0, 1, 2, 3]",
+            "[4, 5]",
+            "[0, 1, 2]",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Slicing",
+        "id": 48
+    },
+    {
+        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[::2])",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[0, 2, 4]",
+            "[1, 3, 5]",
+            "[0, 1, 2]",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.75,
+        "difficulty": "Assez Difficile",
+        "category": "Slicing",
+        "id": 49
+    },
+    {
+        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[::-1])",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[0, 1, 2, 3, 4, 5]",
+            "[5, 4, 3, 2, 1, 0]",
+            "Erreur",
+            "None"
+        ],
+        "correct": 1,
+        "points": 1.75,
+        "difficulty": "Assez Difficile",
+        "category": "Slicing",
+        "id": 50
+    },
+    {
+        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[1:5:2])",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[1, 3]",
+            "[1, 2, 3, 4]",
+            "[1, 3, 5]",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 2,
+        "difficulty": "Difficile",
+        "category": "Slicing",
+        "id": 51
+    },
+    {
+        "code": "l = [10, 20, 30, 40, 50]\nprint(l[-3:-1])",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "[30, 40]",
+            "[20, 30, 40]",
+            "[40, 50]",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 2,
+        "difficulty": "Difficile",
+        "category": "Slicing",
+        "id": 52
+    },
+    {
+        "code": "for i in range(4):\n    print(i, end=\" \")",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "0 1 2 3",
+            "1 2 3 4",
+            "0 1 2 3 4",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Boucle for",
+        "id": 53
+    },
+    {
+        "code": "total = 0\nfor i in range(1, 6):\n    total += i\nprint(total)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "10",
+            "15",
+            "21",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Boucle for",
+        "id": 54
+    },
+    {
+        "code": "for i in range(2, 10, 3):\n    print(i)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "2\n5\n8",
+            "2\n4\n6\n8",
+            "2\n5\n8\n11",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.75,
+        "difficulty": "Assez Difficile",
+        "category": "Boucle for",
+        "id": 55
+    },
+    {
+        "code": "l = ['x', 'y', 'z']\nfor i, v in enumerate(l):\n    print(i, v)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "0 x\n1 y\n2 z",
+            "x\ny\nz",
+            "1 x\n2 y\n3 z",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 2,
+        "difficulty": "Difficile",
+        "category": "Boucle for",
+        "id": 56
+    },
+    {
+        "code": "s = \"abc\"\nfor c in s:\n    print(c.upper(), end=\"\")",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "abc",
+            "ABC",
+            "A B C",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Boucle for",
+        "id": 57
+    },
+    {
+        "code": "count = 0\nfor i in range(10):\n    if i % 3 == 0:\n        count += 1\nprint(count)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "3",
+            "4",
+            "10",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.75,
+        "difficulty": "Assez Difficile",
+        "category": "Boucle for",
+        "id": 58
+    },
+    {
+        "code": "l = [1, 2, 3]\nfor x in l:\n    print(x * x, end=\" \")",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "1 2 3",
+            "1 4 9",
+            "2 4 6",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Boucle for",
+        "id": 59
+    },
+    {
+        "code": "for i in range(3):\n    print(\"Python\")",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "Python",
+            "Python\nPython",
+            "Python\nPython\nPython",
+            "Erreur"
+        ],
+        "correct": 2,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Boucle for",
+        "id": 60
+    },
+    {
+        "code": "words = [\"cat\", \"dog\", \"bird\"]\nfor w in words:\n    print(len(w), end=\" \")",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "3 3 4",
+            "3 3 3",
+            "cat dog bird",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Boucle for",
+        "id": 61
+    },
+    {
+        "code": "total = 1\nfor i in range(1, 5):\n    total *= i\nprint(total)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "10",
+            "24",
+            "20",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.75,
+        "difficulty": "Assez Difficile",
+        "category": "Boucle for",
+        "id": 62
+    },
+    {
+        "code": "i = 1\nwhile i <= 5:\n    print(i, end=\" \")\n    i += 1",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "1 2 3 4",
+            "1 2 3 4 5",
+            "0 1 2 3 4",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Boucle while",
+        "id": 63
+    },
+    {
+        "code": "n = 20\ncount = 0\nwhile n > 0:\n    n = n // 2\n    count += 1\nprint(count)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "4",
+            "5",
+            "6",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 2,
+        "difficulty": "Difficile",
+        "category": "Boucle while",
+        "id": 64
+    },
+    {
+        "code": "i = 0\ns = 0\nwhile i < 5:\n    s += i\n    i += 1\nprint(s)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "10",
+            "15",
+            "5",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Boucle while",
+        "id": 65
+    },
+    {
+        "code": "x = 100\nwhile x > 1:\n    x -= 10\nprint(x)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "0",
+            "1",
+            "10",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.75,
+        "difficulty": "Assez Difficile",
+        "category": "Boucle while",
+        "id": 66
+    },
+    {
+        "code": "i = 1\nwhile i < 20:\n    i *= 3\nprint(i)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "9",
+            "27",
+            "18",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 1.75,
+        "difficulty": "Assez Difficile",
+        "category": "Boucle while",
+        "id": 67
+    },
+    {
+        "code": "count = 0\ni = 10\nwhile i >= 0:\n    if i % 2 == 0:\n        count += 1\n    i -= 1\nprint(count)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "5",
+            "6",
+            "10",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 2,
+        "difficulty": "Difficile",
+        "category": "Boucle while",
+        "id": 68
+    },
+    {
+        "code": "s = \"\"\ni = 0\nwhile i < 4:\n    s += str(i)\n    i += 1\nprint(s)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "0123",
+            "01234",
+            "0 1 2 3",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Boucle while",
+        "id": 69
+    },
+    {
+        "code": "x = 1\ny = 1\nwhile x < 50:\n    x = x + y\n    y += 1\nprint(x)",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "46",
+            "56",
+            "50",
+            "Erreur"
+        ],
+        "correct": 1,
+        "points": 2,
+        "difficulty": "Difficile",
+        "category": "Boucle while",
+        "id": 70
+    }
+] };
 
-        // Même liste de questions que dans index.html
-        const QUIZ_CONFIG = {
-            questions: [
-                {
-                                "id": 1,
-                                "code": "x = 10\ny = \"20\"\nprint(str(x) + y)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "1020",
-                                                "30",
-                                                "Erreur",
-                                                "10 20"
-                                ],
-                                "correct": 0,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 2,
-                                "code": "a = 5\nb = 2\nprint(a // b)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "2.5",
-                                                "2",
-                                                "3",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 3,
-                                "code": "val = True\nprint(int(val))",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "True",
-                                                "1",
-                                                "0",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 4,
-                                "code": "s = \"Python\"\nprint(len(s))",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "5",
-                                                "6",
-                                                "7",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 5,
-                                "code": "f = 3.14\ni = int(f)\nprint(type(i))",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "<class 'float'>",
-                                                "<class 'int'>",
-                                                "<class 'str'>",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 6,
-                                "code": "x = 7\ny = \"7\"\nprint(x == y)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "True",
-                                                "False",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 1,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 7,
-                                "code": "a = [1, 2, 3]\nb = a\nb.append(4)\nprint(a)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "[1, 2, 3]",
-                                                "[1, 2, 3, 4]",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 8,
-                                "code": "x = 10\ny = 3\nprint(x % y)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "3",
-                                                "1",
-                                                "0",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 9,
-                                "code": "x = 5\ny = 2\nprint(x ** y)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "10",
-                                                "25",
-                                                "7",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 10,
-                                "code": "x = \"5\"\ny = int(x) + 2\nz = float(y)\nprint(z)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "7",
-                                                "7.0",
-                                                "5.0",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 11,
-                                "code": "s = \"Hello\"\nprint(s[1])",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "H",
-                                                "e",
-                                                "l",
-                                                "o"
-                                ],
-                                "correct": 1,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 12,
-                                "code": "l = [1, 2, 3, 4]\nprint(l[0:2])",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "[1, 2]",
-                                                "[1, 2, 3]",
-                                                "[2, 3]",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 13,
-                                "code": "s = \"Python\"\nprint(s.upper())",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Python",
-                                                "python",
-                                                "PYTHON",
-                                                "Erreur"
-                                ],
-                                "correct": 2,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 14,
-                                "code": "l = ['a', 'b', 'c']\nl.append('d')\nprint(l)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "['a', 'b', 'c']",
-                                                "['a', 'b', 'c', 'd']",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 1,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 15,
-                                "code": "s = \"Bonjour le monde\"\nprint(s.split(' '))",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "['Bonjour', 'le', 'monde']",
-                                                "['Bonjour le monde']",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 16,
-                                "code": "l = [10, 20, 30]\nl.insert(1, 15)\nprint(l)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "[10, 20, 15, 30]",
-                                                "[10, 15, 20, 30]",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 1,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 17,
-                                "code": "s = \"Hello World\"\nprint(s[::-1])",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "dlroW olleH",
-                                                "Hello World",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 18,
-                                "code": "l = [1, 2, 3, 4, 5]\nprint(l[1::2])",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "[2, 4]",
-                                                "[1, 3, 5]",
-                                                "[2, 3, 4]",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 19,
-                                "code": "s = \"Python est génial\"\nprint(s.replace('génial', 'super'))",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Python est génial",
-                                                "Python est super",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 20,
-                                "code": "l = [1, 2, 3]\nl.pop()\nprint(l)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "[1, 2, 3]",
-                                                "[1, 2]",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 21,
-                                "code": "s = \"abcde\"\nprint(s[1:4:2])",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "bd",
-                                                "ace",
-                                                "bce",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 22,
-                                "code": "l = ['pomme', 'banane', 'cerise']\nl.remove('banane')\nprint(l)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "['pomme', 'cerise']",
-                                                "['pomme', 'banane']",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 23,
-                                "code": "s = \"  Python  \"\nprint(s.strip())",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Python",
-                                                "  Python",
-                                                "Python  ",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 24,
-                                "code": "l = [[1, 2], [3, 4]]\nprint(l[0][1])",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "1",
-                                                "2",
-                                                "3",
-                                                "4"
-                                ],
-                                "correct": 1,
-                                "points": 2,
-                                "difficulty": "Difficile"
-                },
-                {
-                                "id": 25,
-                                "code": "s = \"hello\"\nprint(s.find('l'))",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "0",
-                                                "1",
-                                                "2",
-                                                "-1"
-                                ],
-                                "correct": 2,
-                                "points": 2,
-                                "difficulty": "Difficile"
-                },
-                {
-                                "id": 26,
-                                "code": "x = 10\nif x > 5:\n    print(\"Grand\")\nelse:\n    print(\"Petit\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Grand",
-                                                "Petit",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 27,
-                                "code": "age = 18\nif age >= 18:\n    print(\"Majeur\")\nelse:\n    print(\"Mineur\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Majeur",
-                                                "Mineur",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 28,
-                                "code": "temp = 25\nif temp > 30:\n    print(\"Chaud\")\nelif temp < 20:\n    print(\"Froid\")\nelse:\n    print(\"Modéré\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Chaud",
-                                                "Froid",
-                                                "Modéré",
-                                                "Erreur"
-                                ],
-                                "correct": 2,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 29,
-                                "code": "a = 5\nb = 10\nif a > 0 and b > 0:\n    print(\"Positif\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Positif",
-                                                "Erreur",
-                                                "None",
-                                                "Rien"
-                                ],
-                                "correct": 0,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 30,
-                                "code": "x = 0\nif x:\n    print(\"Vrai\")\nelse:\n    print(\"Faux\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Vrai",
-                                                "Faux",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 1,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 31,
-                                "code": "s = \"Python\"\nif 'y' in s:\n    print(\"Trouvé\")\nelse:\n    print(\"Non trouvé\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Trouvé",
-                                                "Non trouvé",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 32,
-                                "code": "num = 7\nresult = \"Pair\" if num % 2 == 0 else \"Impair\"\nprint(result)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Pair",
-                                                "Impair",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 33,
-                                "code": "x = 10\ny = 20\nif x > y:\n    print(\"X est plus grand\")\nelif y > x:\n    print(\"Y est plus grand\")\nelse:\n    print(\"Égal\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "X est plus grand",
-                                                "Y est plus grand",
-                                                "Égal",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 34,
-                                "code": "a = 1\nb = 2\nc = 3\nif a > b or b > c:\n    print(\"OK\")\nelse:\n    print(\"KO\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "OK",
-                                                "KO",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 35,
-                                "code": "score = 85\nif score >= 90:\n    grade = \"A\"\nelif score >= 80:\n    grade = \"B\"\nelif score >= 70:\n    grade = \"C\"\nelse:\n    grade = \"D\"\nprint(grade)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "A",
-                                                "B",
-                                                "C",
-                                                "D"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 36,
-                                "code": "x = 5\nif x > 3:\n    if x < 7:\n        print(\"Entre 3 et 7\")\n    else:\n        print(\"Plus grand que 7\")\nelse:\n    print(\"Plus petit que 3\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Entre 3 et 7",
-                                                "Plus grand que 7",
-                                                "Plus petit que 3",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 37,
-                                "code": "val = [1, 2]\nif val:\n    print(\"Liste non vide\")\nelse:\n    print(\"Liste vide\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Liste non vide",
-                                                "Liste vide",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 38,
-                                "code": "s = \"\"\nif not s:\n    print(\"Chaîne vide\")\nelse:\n    print(\"Chaîne non vide\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Chaîne vide",
-                                                "Chaîne non vide",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 39,
-                                "code": "x = 10\ny = 5\nz = 15\nif x > y and x < z:\n    print(\"Condition 1\")\nelif x == 10 or y == 5:\n    print(\"Condition 2\")\nelse:\n    print(\"Condition 3\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Condition 1",
-                                                "Condition 2",
-                                                "Condition 3",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 2,
-                                "difficulty": "Difficile"
-                },
-                {
-                                "id": 40,
-                                "code": "l = [1, 2, 3]\nif 2 in l:\n    print(\"Trouvé\")\nelse:\n    print(\"Non trouvé\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Trouvé",
-                                                "Non trouvé",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 2,
-                                "difficulty": "Difficile"
-                },
-                {
-                                "id": 41,
-                                "code": "for i in range(3):\n    print(i)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "0\n1\n2",
-                                                "1\n2\n3",
-                                                "0\n1\n2\n3",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 42,
-                                "code": "s = 0\nfor i in [1, 2, 3]:\n    s += i\nprint(s)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "3",
-                                                "6",
-                                                "0",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 43,
-                                "code": "for char in \"abc\":\n    print(char, end=\"\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "abc",
-                                                "a b c",
-                                                "a\nb\nc",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 44,
-                                "code": "count = 0\nfor i in range(1, 5):\n    if i % 2 == 0:\n        count += 1\nprint(count)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "1",
-                                                "2",
-                                                "3",
-                                                "4"
-                                ],
-                                "correct": 1,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 45,
-                                "code": "l = [10, 20, 30]\nfor x in l:\n    print(x // 10, end=\"\")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "123",
-                                                "1 2 3",
-                                                "102030",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 46,
-                                "code": "for i in range(5, 0, -1):\n    print(i, end=\" \")",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "5 4 3 2 1",
-                                                "1 2 3 4 5",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 47,
-                                "code": "result = 1\nfor i in range(1, 4):\n    result *= i\nprint(result)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "3",
-                                                "6",
-                                                "9",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 48,
-                                "code": "words = ['apple', 'banana']\nlengths = []\nfor w in words:\n    lengths.append(len(w))\nprint(lengths)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "[5, 6]",
-                                                "['apple', 'banana']",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 49,
-                                "code": "count = 0\nfor _ in range(4):\n    count += 1\nprint(count)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "3",
-                                                "4",
-                                                "0",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 50,
-                                "code": "for i in range(2):\n    for j in range(2):\n        print(i, j)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "0 0\n0 1\n1 0\n1 1",
-                                                "0 0\n1 1",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 51,
-                                "code": "list1 = [1, 2]\nlist2 = [3, 4]\nfor x in list1:\n    for y in list2:\n        print(x + y)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "4\n5\n5\n6",
-                                                "4\n6",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 52,
-                                "code": "s = \"programming\"\nvowels = \"aeiou\"\ncount = 0\nfor char in s:\n    if char in vowels:\n        count += 1\nprint(count)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "3",
-                                                "4",
-                                                "5",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 53,
-                                "code": "nums = [1, 2, 3]\nfor i in range(len(nums)):\n    nums[i] *= 2\nprint(nums)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "[2, 4, 6]",
-                                                "[1, 2, 3]",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 54,
-                                "code": "nums = [1, 2, 3, 4, 5]\nsum_even = 0\nfor n in nums:\n    if n % 2 == 0:\n        sum_even += n\nprint(sum_even)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "6",
-                                                "9",
-                                                "15",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 55,
-                                "code": "matrix = [[1, 2], [3, 4]]\nflat_list = []\nfor row in matrix:\n    for item in row:\n        flat_list.append(item)\nprint(flat_list)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "[1, 2, 3, 4]",
-                                                "[[1, 2], [3, 4]]",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 2,
-                                "difficulty": "Difficile"
-                },
-                {
-                                "id": 56,
-                                "code": "text = \"level\"\nis_palindrome = True\nfor i in range(len(text) // 2):\n    if text[i] != text[len(text) - 1 - i]:\n        is_palindrome = False\n        break\nprint(is_palindrome)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "True",
-                                                "False",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 2,
-                                "difficulty": "Difficile"
-                },
-                {
-                                "id": 57,
-                                "code": "numbers = [1, 2, 3, 4, 5]\nnew_numbers = [n * 2 for n in numbers if n % 2 == 0]\nprint(new_numbers)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "[2, 4, 6, 8, 10]",
-                                                "[4, 8]",
-                                                "[2, 6, 10]",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 2,
-                                "difficulty": "Difficile"
-                },
-                {
-                                "id": 58,
-                                "code": "count = 0\nfor i in range(3):\n    for j in range(i + 1):\n        count += 1\nprint(count)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "3",
-                                                "6",
-                                                "9",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 2.25,
-                                "difficulty": "Très Difficile"
-                },
-                {
-                                "id": 59,
-                                "code": "data = [1, 2, 3]\nresult = []\nfor x in data:\n    if x == 2:\n        continue\n    result.append(x)\nprint(result)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "[1, 2, 3]",
-                                                "[1, 3]",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 1,
-                                "points": 2.25,
-                                "difficulty": "Très Difficile"
-                },
-                {
-                                "id": 60,
-                                "code": "items = ['a', 'b', 'c']\nfor i in range(len(items)):\n    print(i, items[i])",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "0 a\n1 b\n2 c",
-                                                "a\nb\nc",
-                                                "0: a\n1: b\n2: c",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 2.25,
-                                "difficulty": "Très Difficile"
-                },
-                {
-                                "id": 61,
-                                "code": "i = 0\nwhile i < 3:\n    print(i)\n    i += 1",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "0\n1\n2",
-                                                "1\n2\n3",
-                                                "0\n1\n2\n3",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 62,
-                                "code": "count = 5\nwhile count > 0:\n    print(\"Hello\")\n    count -= 1",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Hello (5 fois)",
-                                                "Hello (4 fois)",
-                                                "Boucle infinie",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 63,
-                                "code": "x = 1\nwhile x < 5:\n    x *= 2\nprint(x)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "4",
-                                                "5",
-                                                "8",
-                                                "Erreur"
-                                ],
-                                "correct": 2,
-                                "points": 1,
-                                "difficulty": "Facile"
-                },
-                {
-                                "id": 64,
-                                "code": "i = 0\nwhile True:\n    print(i)\n    i += 1\n    if i == 2:\n        break",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "0\n1",
-                                                "0\n1\n2",
-                                                "Boucle infinie",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 65,
-                                "code": "num = 10\nsum_val = 0\nwhile num > 0:\n    sum_val += num\n    num -= 2\nprint(sum_val)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "30",
-                                                "25",
-                                                "20",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 66,
-                                "code": "s = \"Python\"\nidx = 0\nwhile idx < len(s):\n    print(s[idx], end=\"\")\n    idx += 1",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "Python",
-                                                "P y t h o n",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.25,
-                                "difficulty": "Assez Facile"
-                },
-                {
-                                "id": 67,
-                                "code": "i = 0\nwhile i < 5:\n    i += 1\n    if i == 3:\n        continue\n    print(i)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "1\n2\n3\n4\n5",
-                                                "1\n2\n4\n5",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 68,
-                                "code": "a = 1\nb = 10\nwhile a < b:\n    a += 1\n    b -= 1\nprint(a, b)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "5 6",
-                                                "6 5",
-                                                "5 5",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 69,
-                                "code": "total = 0\ncount = 0\nwhile count < 3:\n    total += (count + 1)\n    count += 1\nprint(total)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "3",
-                                                "6",
-                                                "10",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 70,
-                                "code": "flag = True\nnum = 0\nwhile flag:\n    num += 1\n    if num > 2:\n        flag = False\nprint(num)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "2",
-                                                "3",
-                                                "4",
-                                                "Erreur"
-                                ],
-                                "correct": 1,
-                                "points": 1.5,
-                                "difficulty": "Moyen"
-                },
-                {
-                                "id": 71,
-                                "code": "x = 10\ny = 0\nwhile x > y:\n    print(x - y)\n    x -= 1\n    y += 1",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "10\n8\n6\n4\n2",
-                                                "10\n8\n6\n4\n2\n0",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 72,
-                                "code": "data = [1, 2, 3, 4]\nidx = 0\nwhile idx < len(data):\n    if data[idx] % 2 == 0:\n        print(data[idx])\n    idx += 1",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "2\n4",
-                                                "1\n3",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 73,
-                                "code": "i = 1\nwhile i * i < 10:\n    print(i * i)\n    i += 1",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "1\n4\n9",
-                                                "1\n4\n9\n16",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 74,
-                                "code": "count = 0\nwhile count < 5:\n    if count == 2:\n        count += 1\n        continue\n    print(count)\n    count += 1",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "0\n1\n2\n3\n4",
-                                                "0\n1\n3\n4",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 1,
-                                "points": 1.75,
-                                "difficulty": "Assez Difficile"
-                },
-                {
-                                "id": 75,
-                                "code": "s = \"abc\"\nidx = 0\nwhile idx < len(s):\n    if s[idx] == 'b':\n        break\n    print(s[idx])\n    idx += 1",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "a",
-                                                "a\nb",
-                                                "abc",
-                                                "Erreur"
-                                ],
-                                "correct": 0,
-                                "points": 2,
-                                "difficulty": "Difficile"
-                },
-                {
-                                "id": 76,
-                                "code": "x = 1\nwhile x < 10:\n    x += 1\n    if x % 3 == 0:\n        print(x)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "3\n6\n9",
-                                                "3\n6\n9\n12",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 2,
-                                "difficulty": "Difficile"
-                },
-                {
-                                "id": 77,
-                                "code": "i = 0\nj = 5\nwhile i < j:\n    print(i + j)\n    i += 1\n    j -= 1",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "5\n5\n5",
-                                                "5\n6\n7",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 2,
-                                "difficulty": "Difficile"
-                },
-                {
-                                "id": 78,
-                                "code": "n = 4\nfact = 1\nwhile n > 0:\n    fact *= n\n    n -= 1\nprint(fact)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "4",
-                                                "12",
-                                                "24",
-                                                "Erreur"
-                                ],
-                                "correct": 2,
-                                "points": 2.25,
-                                "difficulty": "Très Difficile"
-                },
-                {
-                                "id": 79,
-                                "code": "a = 0\nb = 1\ncount = 0\nwhile count < 5:\n    print(a, end=\" \")\n    next_fib = a + b\n    a = b\n    b = next_fib\n    count += 1",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "0 1 1 2 3",
-                                                "0 1 1 2 3 5",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 2.25,
-                                "difficulty": "Très Difficile"
-                },
-                {
-                                "id": 80,
-                                "code": "x = 10\nwhile x > 0:\n    x -= 3\n    if x < 5 and x > 0:\n        print(x)",
-                                "question": "Quelle est la sortie ?",
-                                "options": [
-                                                "4\n1",
-                                                "7\n4\n1",
-                                                "Erreur",
-                                                "None"
-                                ],
-                                "correct": 0,
-                                "points": 2.25,
-                                "difficulty": "Très Difficile"
-                }
-]
-        };
+const swalTheme = { background:'#131922', color:'#eef2f8', confirmButtonColor:'#4f8cf7', cancelButtonColor:'#232b38' };
 
-        function AdminDashboard() {
-            const [isAuthenticated, setIsAuthenticated] = useState(false);
-            const [username, setUsername] = useState('');
-            const [password, setPassword] = useState('');
-            const [results, setResults] = useState([]);
-            const [activeSessions, setActiveSessions] = useState([]);
-            const [selectedStudent, setSelectedStudent] = useState(null);
-            const [showDetailedAnswers, setShowDetailedAnswers] = useState(false);
-            const [filterStatus, setFilterStatus] = useState('all');
-            const [filterClasse, setFilterClasse] = useState('all');
-            const [sidebarOpen, setSidebarOpen] = useState(true);
+function AdminDashboard() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [results, setResults] = useState([]);
+    const [activeSessions, setActiveSessions] = useState([]);
+    const [selectedStudent, setSelectedStudent] = useState(null);
+    const [showDetailedAnswers, setShowDetailedAnswers] = useState(false);
+    const [resultFilter, setResultFilter] = useState('all');
+    const [filterStatus, setFilterStatus] = useState('all');
+    const [filterClasse, setFilterClasse] = useState('all');
+    const [sidebarOpen, setSidebarOpen] = useState(true);
 
-            useEffect(() => {
-                if (isAuthenticated) {
-                    const u1 = db.collection('results').orderBy('timestamp','desc').onSnapshot(snap => {
-                        setResults(snap.docs.map(d => ({ id:d.id, ...d.data() })));
-                    });
-                    const u2 = db.collection('quiz_sessions').where('status','in',['started']).onSnapshot(snap => {
-                        setActiveSessions(snap.docs.map(d => ({ id:d.id, ...d.data() })));
-                    });
-                    return () => { u1(); u2(); };
-                }
-            }, [isAuthenticated]);
-
-            const handleLogin = () => {
-                if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-                    setIsAuthenticated(true);
-                    Swal.fire({ icon:'success', title:'Connexion réussie', text:'Bienvenue dans le tableau de bord', timer:2000, showConfirmButton:false });
-                } else {
-                    Swal.fire({ icon:'error', title:'Identifiants incorrects', text:"Vérifiez vos identifiants" });
-                }
-            };
-
-            const handleLogout = () => {
-                Swal.fire({ icon:'question', title:'Déconnexion', text:'Voulez-vous vous déconnecter ?', showCancelButton:true, confirmButtonText:'Oui', cancelButtonText:'Annuler' })
-                    .then(r => { if (r.isConfirmed) { setIsAuthenticated(false); setUsername(''); setPassword(''); } });
-            };
-
-            const exportToCSV = () => {
-                const headers = ['Nom','Classe','Note/20','Pourcentage','Bonnes réponses','Total','Points','Max points','Triche','Pénalité','Date'];
-                const rows = results.map(r => [r.etudiant,r.classe,r.note,r.pourcentage+'%',r.correct,r.total,r.points,r.maxPoints,r.tentativesTriche,r.penalite||0,r.dateTest]);
-                const csv = '\uFEFF' + [headers,...rows].map(row=>row.join(',')).join('\n');
-                const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a'); a.href=url; a.download=`resultats_quiz_${new Date().toISOString().split('T')[0]}.csv`; a.click();
-            };
-
-            const clearAllResults = async () => {
-                const r = await Swal.fire({
-                    icon:'warning', title:'Attention !',
-                    html:`<p class="text-lg font-semibold mb-2">Êtes-vous sûr ?</p><p class="text-gray-600">Suppression de <strong>${results.length} résultats</strong></p><p class="text-red-600 text-sm mt-2">Action irréversible !</p>`,
-                    showCancelButton:true, confirmButtonText:'Oui, supprimer tout', cancelButtonText:'Annuler', confirmButtonColor:'#ef4444'
-                });
-                if (r.isConfirmed) {
-                    try {
-                        const batch = db.batch();
-                        const snap = await db.collection('results').get();
-                        snap.docs.forEach(d => batch.delete(d.ref));
-                        await batch.commit();
-                        Swal.fire({ icon:'success', title:'Supprimé !', text:'Tous les résultats ont été effacés', timer:2000, showConfirmButton:false });
-                    } catch(e) { Swal.fire({ icon:'error', title:'Erreur', text:'Impossible de supprimer les résultats' }); }
-                }
-            };
-
-            const calculateStats = () => {
-                if (results.length === 0) return { total:0, moyenne:0, tauxReussite:0, tentativesTriche:0 };
-                const total = results.length;
-                const moyenne = (results.reduce((acc,r) => acc+parseFloat(r.note),0)/total).toFixed(2);
-                const admis = results.filter(r => parseFloat(r.note) >= 10).length;
-                const tauxReussite = ((admis/total)*100).toFixed(2);
-                const tentativesTriche = results.reduce((acc,r) => acc+(r.tentativesTriche||0),0);
-                return { total, moyenne, tauxReussite, tentativesTriche };
-            };
-
-            const filteredResults = results.filter(r => {
-                const sm = filterStatus==='all'||(filterStatus==='admis'&&parseFloat(r.note)>=10)||(filterStatus==='echec'&&parseFloat(r.note)<10)||(filterStatus==='triche'&&r.tentativesTriche>0);
-                const cm = filterClasse==='all'||r.classe===filterClasse;
-                return sm && cm;
+    useEffect(() => {
+        if (isAuthenticated) {
+            const u1 = db.collection('results').orderBy('timestamp','desc').onSnapshot(snap => {
+                setResults(snap.docs.map(d => ({ id:d.id, ...d.data() })));
             });
+            const u2 = db.collection('quiz_sessions').where('status','in',['started']).onSnapshot(snap => {
+                setActiveSessions(snap.docs.map(d => ({ id:d.id, ...d.data() })));
+            });
+            return () => { u1(); u2(); };
+        }
+    }, [isAuthenticated]);
 
-            // ── CONNEXION ────────────────────────────────────────────────────────────
-            if (!isAuthenticated) {
-                return (
-                    <div className="gradient-bg min-h-screen flex items-center justify-center p-4">
-                        <div className="glass-effect rounded-3xl shadow-2xl p-8 md:p-12 max-w-md w-full">
-                            <div className="text-center mb-8">
-                                <div className="inline-flex items-center justify-center w-24 h-24 bg-white bg-opacity-20 rounded-full mb-6 float-animation">
-                                    <i className="fas fa-shield-alt text-5xl text-white"></i>
-                                </div>
-                                <h1 className="text-4xl font-bold text-white mb-3">Administration</h1>
-                                <p className="text-white text-opacity-90 text-lg">Quiz Python - ISI Keur Massar</p>
+    const handleLogin = () => {
+        if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+            setIsAuthenticated(true);
+            Swal.fire({ ...swalTheme, icon:'success', title:'Connexion réussie', text:'Bienvenue dans la console', timer:1800, showConfirmButton:false });
+        } else {
+            Swal.fire({ ...swalTheme, icon:'error', title:'Identifiants incorrects', text:"Vérifiez vos identifiants" });
+        }
+    };
+
+    const handleLogout = () => {
+        Swal.fire({ ...swalTheme, icon:'question', title:'Déconnexion', text:'Voulez-vous vous déconnecter ?', showCancelButton:true, confirmButtonText:'Oui', cancelButtonText:'Annuler' })
+            .then(r => { if (r.isConfirmed) { setIsAuthenticated(false); setUsername(''); setPassword(''); } });
+    };
+
+    const exportToCSV = () => {
+        const headers = ['Nom','Classe','Note/20','Pourcentage','Bonnes réponses','Total','Points','Max points','Triche','Pénalité','Date'];
+        const rows = results.map(r => [r.etudiant,r.classe,r.note,r.pourcentage+'%',r.correct,r.total,r.points,r.maxPoints,r.tentativesTriche,r.penalite||0,r.dateTest]);
+        const csv = '\uFEFF' + [headers,...rows].map(row=>row.join(',')).join('\n');
+        const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href=url; a.download=`resultats_quiz_${new Date().toISOString().split('T')[0]}.csv`; a.click();
+    };
+
+    const clearAllResults = async () => {
+        const r = await Swal.fire({
+            ...swalTheme, icon:'warning', title:'Attention !',
+            html:`<p class="text-base font-semibold mb-2" style="color:#eef2f8">Êtes-vous sûr ?</p><p style="color:#a9b3c4">Suppression de <strong>${results.length} résultats</strong></p><p style="color:#ff6b6b" class="text-sm mt-2">Action irréversible !</p>`,
+            showCancelButton:true, confirmButtonText:'Oui, supprimer tout', cancelButtonText:'Annuler', confirmButtonColor:'#ff6b6b'
+        });
+        if (r.isConfirmed) {
+            try {
+                const batch = db.batch();
+                const snap = await db.collection('results').get();
+                snap.docs.forEach(d => batch.delete(d.ref));
+                await batch.commit();
+                Swal.fire({ ...swalTheme, icon:'success', title:'Supprimé !', text:'Tous les résultats ont été effacés', timer:2000, showConfirmButton:false });
+            } catch(e) { Swal.fire({ ...swalTheme, icon:'error', title:'Erreur', text:'Impossible de supprimer les résultats' }); }
+        }
+    };
+
+    const calculateStats = () => {
+        if (results.length === 0) return { total:0, moyenne:0, tauxReussite:0, tentativesTriche:0 };
+        const total = results.length;
+        const moyenne = (results.reduce((acc,r) => acc+parseFloat(r.note),0)/total).toFixed(2);
+        const admis = results.filter(r => parseFloat(r.note) >= 10).length;
+        const tauxReussite = ((admis/total)*100).toFixed(2);
+        const tentativesTriche = results.reduce((acc,r) => acc+(r.tentativesTriche||0),0);
+        return { total, moyenne, tauxReussite, tentativesTriche };
+    };
+
+    const filteredResults = results.filter(r => {
+        const sm = filterStatus==='all'||(filterStatus==='admis'&&parseFloat(r.note)>=10)||(filterStatus==='echec'&&parseFloat(r.note)<10)||(filterStatus==='triche'&&r.tentativesTriche>0);
+        const cm = filterClasse==='all'||r.classe===filterClasse;
+        return sm && cm;
+    });
+
+    // ── CONNEXION ────────────────────────────────────────────────
+    if (!isAuthenticated) {
+        return (
+            <div className="min-h-screen flex items-center justify-center p-4">
+                <div className="ide-card w-full max-w-md fade-up overflow-hidden">
+                    <div className="px-5 py-3.5 flex items-center gap-2" style={{background:'var(--ink-700)', borderBottom:'1px solid var(--line)'}}>
+                        <span className="traffic" style={{background:'#ff6b6b'}}></span>
+                        <span className="traffic" style={{background:'#ffc94d'}}></span>
+                        <span className="traffic" style={{background:'#57d38c'}}></span>
+                        <span className="font-mono text-xs ml-3" style={{color:'var(--text-dim)'}}>admin_login.py</span>
+                    </div>
+                    <div className="p-8">
+                        <div className="text-center mb-7">
+                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 p-2" style={{background:'#f4f6fb', border:'1px solid var(--line)'}}>
+                                <img src="isi_logo.png" alt="ISI Keur Massar" className="w-full h-full object-contain" />
                             </div>
-                            <div className="space-y-5">
-                                <div>
-                                    <label className="block text-white text-sm font-semibold mb-2"><i className="fas fa-user mr-2"></i>Nom d'utilisateur</label>
-                                    <input type="text" value={username} onChange={e=>setUsername(e.target.value)} onKeyPress={e=>e.key==='Enter'&&handleLogin()}
-                                        className="w-full px-4 py-3 bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-xl text-white placeholder-white placeholder-opacity-60 focus:outline-none focus:border-opacity-60 transition"
-                                        placeholder="Identifiant" />
-                                </div>
-                                <div>
-                                    <label className="block text-white text-sm font-semibold mb-2"><i className="fas fa-lock mr-2"></i>Mot de passe</label>
-                                    <input type="password" value={password} onChange={e=>setPassword(e.target.value)} onKeyPress={e=>e.key==='Enter'&&handleLogin()}
-                                        className="w-full px-4 py-3 bg-white bg-opacity-20 border-2 border-white border-opacity-30 rounded-xl text-white placeholder-white placeholder-opacity-60 focus:outline-none focus:border-opacity-60 transition"
-                                        placeholder="Mot de passe" />
-                                </div>
-                                <button onClick={handleLogin} className="w-full bg-white text-indigo-600 py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transform hover:scale-105 transition-all duration-300 shadow-xl pulse-glow">
-                                    <i className="fas fa-sign-in-alt mr-2"></i>Se connecter
-                                </button>
+                            <h1 className="font-display text-2xl font-bold" style={{color:'var(--text-hi)'}}>Console Admin</h1>
+                            <p className="font-mono text-xs mt-1" style={{color:'var(--text-dim)'}}>Quiz Python — ISI Keur Massar</p>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block font-mono text-xs mb-1.5" style={{color:'var(--text-dim)'}}><i className="fas fa-user mr-1.5"></i>utilisateur</label>
+                                <input type="text" value={username} onChange={e=>setUsername(e.target.value)} onKeyPress={e=>e.key==='Enter'&&handleLogin()}
+                                    className="field w-full px-4 py-3 rounded-lg text-sm" placeholder="identifiant" />
                             </div>
-                            <div className="mt-8 pt-6 border-t border-white border-opacity-20 text-center">
-                                <a href="index.html" className="text-white text-opacity-70 hover:text-opacity-100 transition-colors inline-flex items-center">
-                                    <i className="fas fa-arrow-left mr-2"></i>Retour au quiz
-                                </a>
+                            <div>
+                                <label className="block font-mono text-xs mb-1.5" style={{color:'var(--text-dim)'}}><i className="fas fa-lock mr-1.5"></i>mot de passe</label>
+                                <input type="password" value={password} onChange={e=>setPassword(e.target.value)} onKeyPress={e=>e.key==='Enter'&&handleLogin()}
+                                    className="field w-full px-4 py-3 rounded-lg text-sm" placeholder="mot de passe" />
+                            </div>
+                            <button onClick={handleLogin} className="btn-primary w-full py-3.5 rounded-lg text-sm flex items-center justify-center gap-2">
+                                <i className="fas fa-right-to-bracket"></i>Se connecter
+                            </button>
+                        </div>
+                        <div className="mt-6 pt-5 text-center" style={{borderTop:'1px solid var(--line)'}}>
+                            <a href="index.html" className="font-mono text-xs hover:underline" style={{color:'var(--text-dim)'}}><i className="fas fa-arrow-left mr-1"></i>retour au quiz</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const stats = calculateStats();
+
+    // ── TABLEAU DE BORD ──────────────────────────────────────────
+    return (
+        <div className="flex min-h-screen">
+            <div className={`${sidebarOpen?'w-64':'w-20'} sidebar-desktop transition-all duration-300 fixed h-full z-20`} style={{background:'var(--ink-800)', borderRight:'1px solid var(--line)'}}>
+                <div className="p-5">
+                    <div className="flex items-center justify-between mb-8">
+                        {sidebarOpen ? (
+                            <div className="flex items-center gap-2.5">
+                                <div className="w-9 h-9 rounded-lg flex items-center justify-center p-1 flex-shrink-0" style={{background:'#f4f6fb', border:'1px solid var(--line)'}}>
+                                    <img src="isi_logo.png" alt="ISI Keur Massar" className="w-full h-full object-contain" />
+                                </div>
+                                <div>
+                                    <p className="font-display font-bold text-lg leading-tight" style={{color:'var(--text-hi)'}}>Console</p>
+                                    <p className="font-mono text-[11px]" style={{color:'var(--text-dim)'}}>ISI Keur Massar</p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="w-9 h-9 rounded-lg flex items-center justify-center p-1" style={{background:'#f4f6fb', border:'1px solid var(--line)'}}>
+                                <img src="isi_logo.png" alt="ISI Keur Massar" className="w-full h-full object-contain" />
+                            </div>
+                        )}
+                        <button onClick={()=>setSidebarOpen(!sidebarOpen)} className="p-2 rounded-lg btn-ghost">
+                            <i className={`fas fa-${sidebarOpen?'angles-left':'angles-right'} text-sm`}></i>
+                        </button>
+                    </div>
+                    <nav className="space-y-1.5 font-mono text-sm">
+                        <div className="nav-item active px-3.5 py-2.5 rounded-lg flex items-center gap-3" style={{color:'var(--text-hi)'}}>
+                            <i className="fas fa-chart-line w-4" style={{color:'var(--py-blue)'}}></i>{sidebarOpen&&<span>statistiques</span>}
+                        </div>
+                        <div onClick={exportToCSV} className="nav-item px-3.5 py-2.5 rounded-lg flex items-center gap-3" style={{color:'var(--text-mid)'}}>
+                            <i className="fas fa-file-export w-4"></i>{sidebarOpen&&<span>exporter_csv()</span>}
+                        </div>
+                        <div onClick={clearAllResults} className="nav-item px-3.5 py-2.5 rounded-lg flex items-center gap-3" style={{color:'var(--text-mid)'}}>
+                            <i className="fas fa-trash w-4"></i>{sidebarOpen&&<span>effacer_tout()</span>}
+                        </div>
+                        <div onClick={handleLogout} className="nav-item px-3.5 py-2.5 rounded-lg flex items-center gap-3" style={{color:'#ff6b6b'}}>
+                            <i className="fas fa-right-from-bracket w-4"></i>{sidebarOpen&&<span>deconnexion()</span>}
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+            <div className={`flex-1 ${sidebarOpen?'lg:ml-64':'lg:ml-20'} transition-all duration-300`}>
+                <main className="p-4 md:p-8">
+                    <div className="mb-7 flex items-center justify-between flex-wrap gap-3">
+                        <div>
+                            <h1 className="font-display text-2xl md:text-3xl font-bold" style={{color:'var(--text-hi)'}}>Tableau de Bord</h1>
+                            <p className="font-mono text-xs mt-1" style={{color:'var(--text-dim)'}}>Quiz Python ISI Keur Massar — gestion des résultats</p>
+                        </div>
+                        <div className="flex items-center gap-2 font-mono text-xs">
+                            <span className="pulse-dot inline-block w-2 h-2 rounded-full" style={{background:'var(--ok)'}}></span>
+                            <span style={{color:'var(--text-dim)'}}>connecté en temps réel</span>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        {[
+                            {label:'Total étudiants', value:stats.total, icon:'fa-users', color:'var(--py-blue)'},
+                            {label:'Moyenne générale', value:stats.moyenne, icon:'fa-chart-line', color:'var(--ok)'},
+                            {label:'Taux de réussite', value:stats.tauxReussite+'%', icon:'fa-percent', color:'var(--purple)'},
+                            {label:'Tentatives triche', value:stats.tentativesTriche, icon:'fa-triangle-exclamation', color:'var(--bad)'},
+                        ].map((s,i) => (
+                            <div key={i} className="ide-card p-5">
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{background:'var(--ink-900)', border:'1px solid var(--line)'}}>
+                                        <i className={`fas ${s.icon}`} style={{color:s.color}}></i>
+                                    </div>
+                                    <span className="font-display text-2xl font-bold" style={{color:'var(--text-hi)'}}>{s.value}</span>
+                                </div>
+                                <h3 className="font-mono text-[11px]" style={{color:'var(--text-dim)'}}>{s.label}</h3>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+                        <div className="ide-card p-5">
+                            <h3 className="font-mono text-xs mb-4" style={{color:'var(--text-dim)'}}><i className="fas fa-graduation-cap mr-2" style={{color:'var(--py-blue)'}}></i>PAR CLASSE</h3>
+                            <div className="space-y-2 max-h-48 overflow-y-auto">
+                                {CLASSES.map(c => (
+                                    <div key={c} className="flex justify-between items-center font-mono text-sm">
+                                        <span style={{color:'var(--text-mid)'}}>{c}</span>
+                                        <span className="font-bold" style={{color:'var(--py-blue)'}}>{results.filter(r=>r.classe===c).length}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="ide-card p-5">
+                            <h3 className="font-mono text-xs mb-4" style={{color:'var(--text-dim)'}}><i className="fas fa-trophy mr-2" style={{color:'var(--py-yellow)'}}></i>RÉSULTATS</h3>
+                            <div className="space-y-3 font-mono text-sm">
+                                <div className="flex justify-between items-center"><span style={{color:'var(--text-mid)'}}>Admis (≥10)</span><span className="font-bold" style={{color:'var(--ok)'}}>{results.filter(r=>parseFloat(r.note)>=10).length}</span></div>
+                                <div className="flex justify-between items-center"><span style={{color:'var(--text-mid)'}}>Échec (&lt;10)</span><span className="font-bold" style={{color:'var(--bad)'}}>{results.filter(r=>parseFloat(r.note)<10).length}</span></div>
+                            </div>
+                        </div>
+                        <div className="ide-card p-5">
+                            <h3 className="font-mono text-xs mb-4" style={{color:'var(--text-dim)'}}><i className="fas fa-star mr-2" style={{color:'var(--purple)'}}></i>PERFORMANCES</h3>
+                            <div className="space-y-3 font-mono text-sm">
+                                <div className="flex justify-between items-center"><span style={{color:'var(--text-mid)'}}>Note max</span><span className="font-bold" style={{color:'var(--ok)'}}>{results.length>0?Math.max(...results.map(r=>parseFloat(r.note))).toFixed(2):'0'}/20</span></div>
+                                <div className="flex justify-between items-center"><span style={{color:'var(--text-mid)'}}>Note min</span><span className="font-bold" style={{color:'var(--bad)'}}>{results.length>0?Math.min(...results.map(r=>parseFloat(r.note))).toFixed(2):'0'}/20</span></div>
                             </div>
                         </div>
                     </div>
-                );
-            }
 
-            const stats = calculateStats();
-
-            // ── TABLEAU DE BORD ──────────────────────────────────────────────────────
-            return (
-                <div className="flex min-h-screen bg-gray-50">
-                    {/* SIDEBAR */}
-                    <div className={`${sidebarOpen?'w-64':'w-20'} bg-gradient-to-b from-indigo-800 to-purple-900 text-white transition-all duration-300 fixed h-full z-10 shadow-2xl`}>
-                        <div className="p-6">
-                            <div className="flex items-center justify-between mb-8">
-                                {sidebarOpen && <div><h2 className="text-2xl font-bold">Admin</h2><p className="text-white text-opacity-70 text-sm">ISI Keur Massar</p></div>}
-                                <button onClick={()=>setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-white hover:bg-opacity-10 rounded-lg transition">
-                                    <i className={`fas fa-${sidebarOpen?'times':'bars'} text-xl`}></i>
-                                </button>
-                            </div>
-                            <nav className="space-y-2">
-                                <div className="px-4 py-3 bg-white bg-opacity-20 rounded-xl flex items-center space-x-3 cursor-pointer hover:bg-opacity-30 transition">
-                                    <i className="fas fa-chart-bar text-xl"></i>{sidebarOpen&&<span className="font-semibold">Statistiques</span>}
-                                </div>
-                                <div className="px-4 py-3 hover:bg-white hover:bg-opacity-10 rounded-xl flex items-center space-x-3 cursor-pointer transition">
-                                    <i className="fas fa-users text-xl"></i>{sidebarOpen&&<span>Sessions actives</span>}
-                                </div>
-                                <div onClick={exportToCSV} className="px-4 py-3 hover:bg-white hover:bg-opacity-10 rounded-xl flex items-center space-x-3 cursor-pointer transition">
-                                    <i className="fas fa-file-export text-xl"></i>{sidebarOpen&&<span>Exporter CSV</span>}
-                                </div>
-                                <div onClick={clearAllResults} className="px-4 py-3 hover:bg-white hover:bg-opacity-10 rounded-xl flex items-center space-x-3 cursor-pointer transition">
-                                    <i className="fas fa-trash text-xl"></i>{sidebarOpen&&<span>Effacer tout</span>}
-                                </div>
-                                <div onClick={handleLogout} className="px-4 py-3 hover:bg-red-500 hover:bg-opacity-20 rounded-xl flex items-center space-x-3 cursor-pointer transition">
-                                    <i className="fas fa-sign-out-alt text-xl"></i>{sidebarOpen&&<span>Déconnexion</span>}
-                                </div>
-                            </nav>
-                        </div>
-                    </div>
-
-                    {/* CONTENU */}
-                    <div className={`flex-1 ${sidebarOpen?'ml-64':'ml-20'} transition-all duration-300`}>
-                        <main className="p-8">
-                            <div className="mb-8">
-                                <h1 className="text-4xl font-bold text-gray-800 mb-2">Tableau de Bord</h1>
-                                <p className="text-gray-600">Quiz Python ISI Keur Massar — Gestion des résultats</p>
-                            </div>
-
-                            {/* STATS PRINCIPALES */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                                {[
-                                    {label:'Total Étudiants', value:stats.total, icon:'fa-users', from:'from-blue-400', to:'to-blue-600'},
-                                    {label:'Moyenne Générale', value:stats.moyenne, icon:'fa-chart-line', from:'from-green-400', to:'to-green-600'},
-                                    {label:'Taux de Réussite', value:stats.tauxReussite+'%', icon:'fa-percentage', from:'from-purple-400', to:'to-purple-600'},
-                                    {label:'Tentatives Triche', value:stats.tentativesTriche, icon:'fa-exclamation-triangle', from:'from-red-400', to:'to-red-600'},
-                                ].map((s,i) => (
-                                    <div key={i} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all transform hover:-translate-y-1">
-                                        <div className="flex items-center justify-between mb-4">
-                                            <div className={`w-14 h-14 bg-gradient-to-br ${s.from} ${s.to} rounded-xl flex items-center justify-center shadow-lg`}>
-                                                <i className={`fas ${s.icon} text-2xl text-white`}></i>
-                                            </div>
-                                            <span className="text-3xl font-bold text-gray-800">{s.value}</span>
+                    {activeSessions.length > 0 && (
+                        <div className="ide-card p-5 mb-6" style={{borderColor:'#245c3c'}}>
+                            <h3 className="font-mono text-sm mb-4 flex items-center" style={{color:'var(--text-hi)'}}>
+                                <span className="pulse-dot inline-block w-2.5 h-2.5 rounded-full mr-3" style={{background:'var(--ok)'}}></span>
+                                sessions_en_cours({activeSessions.length})
+                                <span className="ml-3 chip" style={{color:'var(--ok)',borderColor:'#245c3c',background:'rgba(87,211,140,.1)'}}>EN DIRECT</span>
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                {activeSessions.map(s => (
+                                    <div key={s.id} className="rounded-xl p-4" style={{background:'var(--ink-900)', borderLeft:'3px solid var(--ok)'}}>
+                                        <div className="flex items-center mb-2">
+                                            <div className="w-9 h-9 rounded-full flex items-center justify-center mr-3" style={{background:'var(--py-blue-dim)'}}><i className="fas fa-user text-xs" style={{color:'#dfeaff'}}></i></div>
+                                            <div><p className="font-semibold text-sm" style={{color:'var(--text-hi)'}}>{s.etudiant}</p><p className="font-mono text-[11px]" style={{color:'var(--text-dim)'}}>{s.classe}</p></div>
                                         </div>
-                                        <h3 className="text-gray-600 font-semibold">{s.label}</h3>
+                                        <div className="flex justify-between font-mono text-xs">
+                                            <span style={{color:'var(--text-dim)'}}>Q {s.currentQuestion}/70</span>
+                                            {s.tabSwitches>0&&<span className="chip" style={{color:'#ff6b6b',borderColor:'#7a2b2b',background:'rgba(255,107,107,.1)'}}>{s.tabSwitches} ⚠</span>}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="ide-card p-5 mb-5">
+                        <h3 className="font-mono text-xs mb-4" style={{color:'var(--text-dim)'}}>FILTRES</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block font-mono text-[11px] mb-2" style={{color:'var(--text-dim)'}}>statut</label>
+                                <div className="flex flex-wrap gap-2">
+                                    {['all','admis','echec','triche'].map(s => (
+                                        <button key={s} onClick={()=>setFilterStatus(s)} className="px-3.5 py-1.5 rounded-lg font-mono text-xs border transition-all"
+                                            style={filterStatus===s ? {background:'var(--py-blue)', color:'#fff', borderColor:'#5c96fb'} : {background:'var(--ink-900)', color:'var(--text-mid)', borderColor:'var(--line)'}}>
+                                            {s==='all'?'tous':s==='admis'?'admis':s==='echec'?'échec':'triche'}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block font-mono text-[11px] mb-2" style={{color:'var(--text-dim)'}}>classe</label>
+                                <div className="flex flex-wrap gap-2">
+                                    <button onClick={()=>setFilterClasse('all')} className="px-3.5 py-1.5 rounded-lg font-mono text-xs border transition-all"
+                                        style={filterClasse==='all' ? {background:'var(--py-blue)', color:'#fff', borderColor:'#5c96fb'} : {background:'var(--ink-900)', color:'var(--text-mid)', borderColor:'var(--line)'}}>toutes</button>
+                                    {CLASSES.map(c => (
+                                        <button key={c} onClick={()=>setFilterClasse(c)} className="px-3.5 py-1.5 rounded-lg font-mono text-xs border transition-all"
+                                            style={filterClasse===c ? {background:'var(--py-blue)', color:'#fff', borderColor:'#5c96fb'} : {background:'var(--ink-900)', color:'var(--text-mid)', borderColor:'var(--line)'}}>{c}</button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="ide-card overflow-hidden">
+                        <div className="px-5 py-4 flex items-center justify-between" style={{background:'var(--ink-700)', borderBottom:'1px solid var(--line)'}}>
+                            <h3 className="font-mono text-sm" style={{color:'var(--text-hi)'}}><i className="fas fa-table mr-2" style={{color:'var(--py-blue)'}}></i>résultats_étudiants ({filteredResults.length})</h3>
+                        </div>
+                        {filteredResults.length === 0 ? (
+                            <div className="p-14 text-center">
+                                <i className="fas fa-inbox text-5xl mb-4" style={{color:'var(--text-dim)'}}></i>
+                                <p className="font-mono text-sm" style={{color:'var(--text-mid)'}}>Aucun résultat disponible</p>
+                                <p className="font-mono text-xs mt-2" style={{color:'var(--text-dim)'}}>Les résultats apparaîtront ici après soumission des quiz</p>
+                            </div>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full console-table">
+                                    <thead><tr>{['Étudiant','Classe','Note','Performance','Surveillance','Date','Actions'].map((h,i) => <th key={i}>{h}</th>)}</tr></thead>
+                                    <tbody>
+                                        {filteredResults.map((result,index) => (
+                                            <tr key={index}>
+                                                <td>
+                                                    <div className="flex items-center">
+                                                        <div className="w-9 h-9 rounded-full flex items-center justify-center mr-3" style={{background:'var(--py-blue-dim)'}}><i className="fas fa-user text-xs" style={{color:'#dfeaff'}}></i></div>
+                                                        <span className="font-medium text-sm" style={{color:'var(--text-hi)'}}>{result.etudiant}</span>
+                                                    </div>
+                                                </td>
+                                                <td><span className="chip" style={{color:'var(--py-blue)',borderColor:'var(--py-blue-dim)',background:'rgba(79,140,247,.1)'}}>{result.classe}</span></td>
+                                                <td>
+                                                    <div className="font-display text-lg font-bold" style={{color: parseFloat(result.note)>=10?'var(--ok)':'var(--bad)'}}>{result.note}/20</div>
+                                                    <div className="font-mono text-[11px]" style={{color:'var(--text-dim)'}}>{result.correct}/{result.total} bonnes</div>
+                                                </td>
+                                                <td>
+                                                    <div className="w-28">
+                                                        <div className="w-full h-2 rounded-full overflow-hidden progress-track">
+                                                            <div className="h-full rounded-full" style={{width:`${result.pourcentage}%`, background:'linear-gradient(90deg,#4f8cf7,#57d38c)'}}></div>
+                                                        </div>
+                                                        <div className="font-mono text-[10px] mt-1" style={{color:'var(--text-dim)'}}>{result.pourcentage}%</div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {result.tentativesTriche>0
+                                                        ? <span className="font-mono text-xs font-bold" style={{color:'var(--bad)'}}><i className="fas fa-triangle-exclamation mr-1"></i>{result.tentativesTriche} fois</span>
+                                                        : <span className="font-mono text-xs" style={{color:'var(--ok)'}}><i className="fas fa-check mr-1"></i>aucune</span>}
+                                                </td>
+                                                <td className="font-mono text-xs" style={{color:'var(--text-dim)'}}><i className="far fa-clock mr-1"></i>{result.dateTest}</td>
+                                                <td>
+                                                    <button onClick={()=>setSelectedStudent(result)} className="font-mono text-xs font-bold hover:underline" style={{color:'var(--py-blue)'}}>
+                                                        <i className="fas fa-eye mr-1"></i>détails
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
+                </main>
+            </div>
+
+            {selectedStudent && (
+                <div className="fixed inset-0 flex items-center justify-center p-3 md:p-4 z-50" style={{background:'rgba(5,7,11,.75)', backdropFilter:'blur(4px)'}}>
+                    <div className="ide-card max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+                        <div className="px-5 md:px-6 py-4 flex justify-between items-start flex-shrink-0" style={{background:'var(--ink-700)', borderBottom:'1px solid var(--line)'}}>
+                            <div>
+                                <h2 className="font-display text-xl md:text-2xl font-bold" style={{color:'var(--text-hi)'}}>{selectedStudent.etudiant}</h2>
+                                <p className="font-mono text-xs mt-1" style={{color:'var(--text-dim)'}}>{selectedStudent.classe}</p>
+                            </div>
+                            <button onClick={()=>{setSelectedStudent(null);setShowDetailedAnswers(false);}} className="btn-ghost w-9 h-9 rounded-lg flex items-center justify-center">
+                                <i className="fas fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div className="p-5 md:p-7 overflow-y-auto">
+                            <div className="text-center mb-7">
+                                <div className="inline-flex items-baseline justify-center gap-1 rounded-2xl px-8 py-5" style={{background: parseFloat(selectedStudent.note)>=10 ? 'rgba(87,211,140,.12)' : 'rgba(255,107,107,.12)', border: `1px solid ${parseFloat(selectedStudent.note)>=10?'#245c3c':'#7a2b2b'}`}}>
+                                    <span className="font-display text-5xl md:text-6xl font-bold" style={{color: parseFloat(selectedStudent.note)>=10?'var(--ok)':'var(--bad)'}}>{selectedStudent.note}</span>
+                                    <span className="text-2xl" style={{color:'var(--text-dim)'}}>/20</span>
+                                </div>
+                                <p className="font-mono text-sm mt-3" style={{color:'var(--text-mid)'}}>{selectedStudent.correct} / {selectedStudent.total} réponses correctes</p>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-7">
+                                {[
+                                    {label:'Réussite', value:selectedStudent.pourcentage+'%', color:'var(--py-blue)'},
+                                    {label:'Correctes', value:selectedStudent.correct, color:'var(--ok)'},
+                                    {label:'Durée', value:selectedStudent.duree||'N/A', color:'var(--purple)'},
+                                    {label:'Triches', value:selectedStudent.tentativesTriche, color:'var(--bad)'},
+                                ].map((s,i) => (
+                                    <div key={i} className="rounded-xl p-4 text-center" style={{background:'var(--ink-900)', border:'1px solid var(--line)'}}>
+                                        <div className="font-display text-xl font-bold" style={{color:s.color}}>{s.value}</div>
+                                        <div className="font-mono text-[10px] mt-1" style={{color:'var(--text-dim)'}}>{s.label}</div>
                                     </div>
                                 ))}
                             </div>
 
-                            {/* STATS DÉTAILLÉES */}
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                                <div className="bg-white rounded-2xl shadow-lg p-6">
-                                    <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center"><i className="fas fa-graduation-cap mr-2 text-indigo-500"></i>Par Classe</h3>
-                                    <div className="space-y-2 max-h-48 overflow-y-auto">
-                                        {CLASSES.map(c => (
-                                            <div key={c} className="flex justify-between items-center">
-                                                <span className="text-gray-600 text-sm">{c}</span>
-                                                <span className="font-bold text-indigo-600">{results.filter(r=>r.classe===c).length}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="bg-white rounded-2xl shadow-lg p-6">
-                                    <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center"><i className="fas fa-trophy mr-2 text-yellow-500"></i>Résultats</h3>
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between items-center"><span className="text-gray-600">Admis (≥10)</span><span className="font-bold text-green-600">{results.filter(r=>parseFloat(r.note)>=10).length}</span></div>
-                                        <div className="flex justify-between items-center"><span className="text-gray-600">Échec (&lt;10)</span><span className="font-bold text-red-600">{results.filter(r=>parseFloat(r.note)<10).length}</span></div>
-                                    </div>
-                                </div>
-                                <div className="bg-white rounded-2xl shadow-lg p-6">
-                                    <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center"><i className="fas fa-star mr-2 text-purple-500"></i>Performances</h3>
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between items-center"><span className="text-gray-600">Note max</span><span className="font-bold text-green-600">{results.length>0?Math.max(...results.map(r=>parseFloat(r.note))).toFixed(2):'0'}/20</span></div>
-                                        <div className="flex justify-between items-center"><span className="text-gray-600">Note min</span><span className="font-bold text-red-600">{results.length>0?Math.min(...results.map(r=>parseFloat(r.note))).toFixed(2):'0'}/20</span></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* SESSIONS ACTIVES */}
-                            {activeSessions.length > 0 && (
-                                <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl shadow-lg p-6 mb-8 border-2 border-green-200">
-                                    <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                                        <span className="relative flex h-3 w-3 mr-3">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                                        </span>
-                                        Sessions en cours ({activeSessions.length})
-                                        <span className="ml-3 text-sm bg-green-500 text-white px-3 py-1 rounded-full">EN DIRECT</span>
-                                    </h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {activeSessions.map(s => (
-                                            <div key={s.id} className="bg-white rounded-xl p-4 shadow border-l-4 border-green-500">
-                                                <div className="flex items-center mb-2">
-                                                    <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mr-3"><i className="fas fa-user text-white"></i></div>
-                                                    <div><p className="font-bold text-gray-800">{s.etudiant}</p><p className="text-sm text-gray-600">{s.classe}</p></div>
-                                                </div>
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-gray-600">Question {s.currentQuestion}/50</span>
-                                                    {s.tabSwitches>0&&<span className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs font-bold">{s.tabSwitches} ⚠️</span>}
-                                                </div>
-                                                <span className="inline-flex items-center text-xs text-green-600 font-semibold mt-2">
-                                                    <span className="pulse-dot w-2 h-2 bg-green-500 rounded-full mr-2"></span>En cours
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* FILTRES */}
-                            <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-                                <h3 className="text-lg font-bold text-gray-800 mb-4">Filtres</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Par Statut</label>
+                            {showDetailedAnswers && selectedStudent.detailsReponses && (() => {
+                                const correct = selectedStudent.detailsReponses.filter(r=>r.estCorrecte);
+                                const incorrect = selectedStudent.detailsReponses.filter(r=>!r.estCorrecte&&r.reponse!==-1);
+                                const unanswered = selectedStudent.detailsReponses.filter(r=>r.reponse===-1);
+                                const lists = {all:selectedStudent.detailsReponses, ok:correct, fail:incorrect, skip:unanswered};
+                                const list = lists[resultFilter] || lists.all;
+                                return (
+                                    <div className="space-y-3 mb-4">
                                         <div className="flex flex-wrap gap-2">
-                                            {['all','admis','echec','triche'].map(s => (
-                                                <button key={s} onClick={()=>setFilterStatus(s)}
-                                                    className={`px-4 py-2 rounded-xl font-semibold transition-all ${filterStatus===s?'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg':'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
-                                                    {s==='all'?'Tous':s==='admis'?'Admis':s==='echec'?'Échec':'Triche'}
-                                                </button>
+                                            {[{k:'all',label:`Toutes (${selectedStudent.detailsReponses.length})`},{k:'ok',label:`Réussies (${correct.length})`},{k:'fail',label:`Échouées (${incorrect.length})`},{k:'skip',label:`Ignorées (${unanswered.length})`}].map(f => (
+                                                <button key={f.k} onClick={()=>setResultFilter(f.k)} className="px-3.5 py-1.5 rounded-full font-mono text-xs border transition-all"
+                                                    style={resultFilter===f.k ? {background:'var(--py-blue)', color:'#fff', borderColor:'#5c96fb'} : {background:'var(--ink-900)', color:'var(--text-dim)', borderColor:'var(--line)'}}>{f.label}</button>
                                             ))}
                                         </div>
+                                        {list.map(detail => {
+                                            const skipped = detail.reponse === -1;
+                                            const cls = skipped ? 'assert-skip' : detail.estCorrecte ? 'assert-ok' : 'assert-fail';
+                                            return (
+                                                <div key={detail.question} className={`rounded-xl p-4 ${cls}`} style={{background:'var(--ink-900)'}}>
+                                                    <div className="flex justify-between items-center mb-2">
+                                                        <span className="font-mono text-xs" style={{color:'var(--text-dim)'}}>test_question_{detail.question}</span>
+                                                        <span className="font-mono text-xs font-bold" style={{color: skipped?'var(--text-dim)':detail.estCorrecte?'var(--ok)':'var(--bad)'}}>
+                                                            {skipped ? 'SKIPPED' : detail.estCorrecte ? `PASSED +${detail.points}pt` : 'FAILED'}
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-sm mb-2" style={{color:'var(--text-mid)'}}>{detail.questionText}</p>
+                                                    <div className="rounded-lg p-3 mb-2 overflow-x-auto" style={{background:'var(--ink-950)'}}>
+                                                        <pre className="font-mono text-xs" style={{color:'var(--text-hi)'}}>{detail.code}</pre>
+                                                    </div>
+                                                    <div className="font-mono text-xs space-y-1">
+                                                        {!skipped && <div style={{color: detail.estCorrecte?'var(--ok)':'var(--bad)'}}>votre réponse → {detail.reponseText}</div>}
+                                                        {!detail.estCorrecte && <div style={{color:'var(--ok)'}}>attendu → {detail.correctText}</div>}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Par Classe</label>
-                                        <div className="flex flex-wrap gap-2">
-                                            <button onClick={()=>setFilterClasse('all')} className={`px-4 py-2 rounded-xl font-semibold transition-all ${filterClasse==='all'?'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg':'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>Toutes</button>
-                                            {CLASSES.map(c => (
-                                                <button key={c} onClick={()=>setFilterClasse(c)}
-                                                    className={`px-4 py-2 rounded-xl font-semibold transition-all ${filterClasse===c?'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg':'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
-                                                    {c}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                );
+                            })()}
 
-                            {/* TABLEAU */}
-                            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                                <div className="p-6 bg-gradient-to-r from-indigo-500 to-purple-600">
-                                    <h3 className="text-2xl font-bold text-white flex items-center"><i className="fas fa-table mr-3"></i>Résultats des Étudiants ({filteredResults.length})</h3>
-                                </div>
-                                {filteredResults.length === 0 ? (
-                                    <div className="p-12 text-center">
-                                        <i className="fas fa-inbox text-6xl text-gray-300 mb-4"></i>
-                                        <p className="text-xl text-gray-500 font-semibold">Aucun résultat disponible</p>
-                                        <p className="text-gray-400 mt-2">Les résultats apparaîtront ici après soumission des quiz</p>
-                                    </div>
-                                ) : (
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full">
-                                            <thead className="bg-gray-50 sticky top-0">
-                                                <tr>
-                                                    {['Étudiant','Classe','Note','Performance','Surveillance','Date','Actions'].map((h,i) => (
-                                                        <th key={i} className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">{h}</th>
-                                                    ))}
-                                                </tr>
-                                            </thead>
-                                            <tbody className="bg-white divide-y divide-gray-200">
-                                                {filteredResults.map((result,index) => (
-                                                    <tr key={index} className="hover:bg-indigo-50 transition-all">
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <div className="flex items-center">
-                                                                <div className="w-10 h-10 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-full flex items-center justify-center mr-3 shadow-md"><i className="fas fa-user text-white"></i></div>
-                                                                <div className="font-semibold text-gray-800">{result.etudiant}</div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <span className="px-3 py-1 inline-flex text-sm font-bold rounded-full bg-indigo-100 text-indigo-700">{result.classe}</span>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <div className={`text-2xl font-bold ${parseFloat(result.note)>=10?'text-green-600':'text-red-600'}`}>{result.note}/20</div>
-                                                            <div className="text-xs text-gray-500">{result.correct}/{result.total} bonnes</div>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <div className="w-32">
-                                                                <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                                                                    <div className="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full" style={{width:`${result.pourcentage}%`}}></div>
-                                                                </div>
-                                                                <div className="text-xs font-semibold text-gray-700 mt-1">{result.pourcentage}%</div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            {result.tentativesTriche>0
-                                                                ? <div className="flex items-center text-red-600 font-bold"><i className="fas fa-exclamation-triangle mr-2"></i>{result.tentativesTriche} fois</div>
-                                                                : <span className="text-green-600 font-semibold flex items-center"><i className="fas fa-check-circle mr-2"></i>Aucune</span>}
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><i className="far fa-clock mr-1"></i>{result.dateTest}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                                            <button onClick={()=>setSelectedStudent(result)} className="text-indigo-600 hover:text-indigo-800 font-bold flex items-center hover:underline">
-                                                                <i className="fas fa-eye mr-2"></i>Détails
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                )}
-                            </div>
-                        </main>
-                    </div>
-
-                    {/* MODAL DÉTAILS */}
-                    {selectedStudent && (
-                        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50">
-                            <div className="bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden">
-                                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6">
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <h2 className="text-3xl font-bold mb-1">{selectedStudent.etudiant}</h2>
-                                            <p className="text-white text-opacity-90">{selectedStudent.classe}</p>
-                                        </div>
-                                        <button onClick={()=>{setSelectedStudent(null);setShowDetailedAnswers(false);}} className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition">
-                                            <i className="fas fa-times text-2xl"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="p-8 overflow-y-auto" style={{maxHeight:'calc(90vh - 120px)'}}>
-                                    <div className="text-center mb-8">
-                                        <div className={`inline-block ${parseFloat(selectedStudent.note)>=10?'bg-gradient-to-br from-green-500 to-emerald-600':'bg-gradient-to-br from-red-500 to-orange-600'} rounded-2xl p-6 shadow-2xl mb-4`}>
-                                            <div className="flex items-baseline justify-center gap-2">
-                                                <span className="text-7xl font-bold text-white">{selectedStudent.note}</span>
-                                                <span className="text-4xl text-white opacity-90">/20</span>
-                                            </div>
-                                        </div>
-                                        <p className="text-gray-600 text-lg">{selectedStudent.correct} / {selectedStudent.total} réponses correctes</p>
-                                    </div>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                                        {[
-                                            {label:'Réussite', value:selectedStudent.pourcentage+'%', color:'blue'},
-                                            {label:'Correctes', value:selectedStudent.correct, color:'green'},
-                                            {label:'Durée', value:selectedStudent.duree||'N/A', color:'purple'},
-                                            {label:'Triches', value:selectedStudent.tentativesTriche, color:'red'},
-                                        ].map((s,i) => (
-                                            <div key={i} className={`bg-gradient-to-br from-${s.color}-50 to-${s.color}-100 p-5 rounded-2xl text-center border-2 border-${s.color}-200`}>
-                                                <div className={`text-3xl font-bold text-${s.color}-600 mb-1`}>{s.value}</div>
-                                                <div className="text-sm text-gray-700 font-semibold">{s.label}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    {showDetailedAnswers && selectedStudent.detailsReponses && (
-                                        <div className="space-y-6 mb-8">
-                                            <h4 className="text-2xl font-bold text-gray-800 flex items-center"><i className="fas fa-list-ul mr-3 text-indigo-500"></i>Analyse Détaillée</h4>
-                                            {(() => {
-                                                const correct = selectedStudent.detailsReponses.filter(r=>r.estCorrecte);
-                                                const incorrect = selectedStudent.detailsReponses.filter(r=>!r.estCorrecte&&r.reponse!==-1);
-                                                const unanswered = selectedStudent.detailsReponses.filter(r=>r.reponse===-1);
-                                                const renderCard = (detail, type) => {
-                                                    const q = QUIZ_CONFIG.questions.find(quest=>quest.id===detail.question);
-                                                    const colors = {correct:'green', incorrect:'red', unanswered:'gray'};
-                                                    const c = colors[type];
-                                                    return (
-                                                        <div key={detail.question} className={`bg-white rounded-xl p-4 border-l-4 border-${c}-500`}>
-                                                            <div className="flex justify-between items-start mb-2">
-                                                                <span className="font-semibold text-gray-800">Question {detail.question}</span>
-                                                                <span className={`bg-${c}-500 text-white px-3 py-1 rounded-full text-sm font-bold`}>{type==='correct'?`+${detail.points} pts`:'0 pts'}</span>
-                                                            </div>
-                                                            {q && (<>
-                                                                <p className="text-sm text-gray-700 mb-2">{q.question}</p>
-                                                                <div className="bg-gray-900 rounded-lg p-3 mb-2"><pre className="text-green-400 text-xs overflow-x-auto">{q.code}</pre></div>
-                                                                {type==='correct'&&<div className="text-sm text-green-600 flex items-center"><i className="fas fa-check mr-2"></i><span><strong>Votre réponse :</strong> {detail.reponseText}</span></div>}
-                                                                {type==='incorrect'&&<div className="space-y-1 text-sm">
-                                                                    <div className="flex items-center text-red-600"><i className="fas fa-times mr-2"></i><span><strong>Votre réponse :</strong> {detail.reponseText}</span></div>
-                                                                    <div className="flex items-center text-green-600"><i className="fas fa-check mr-2"></i><span><strong>Bonne réponse :</strong> {detail.correctText}</span></div>
-                                                                </div>}
-                                                                {type==='unanswered'&&<div className="text-sm text-green-600 flex items-center"><i className="fas fa-check mr-2"></i><span><strong>Bonne réponse :</strong> {detail.correctText}</span></div>}
-                                                            </>)}
-                                                        </div>
-                                                    );
-                                                };
-                                                return (<>
-                                                    {correct.length>0&&<div className="bg-green-50 rounded-2xl p-6 border-2 border-green-200">
-                                                        <h5 className="text-xl font-bold text-green-700 mb-4 flex items-center"><i className="fas fa-check-circle mr-2"></i>Correctes ({correct.length})</h5>
-                                                        <div className="space-y-3">{correct.map(d=>renderCard(d,'correct'))}</div>
-                                                    </div>}
-                                                    {incorrect.length>0&&<div className="bg-red-50 rounded-2xl p-6 border-2 border-red-200">
-                                                        <h5 className="text-xl font-bold text-red-700 mb-4 flex items-center"><i className="fas fa-times-circle mr-2"></i>Incorrectes ({incorrect.length})</h5>
-                                                        <div className="space-y-3">{incorrect.map(d=>renderCard(d,'incorrect'))}</div>
-                                                    </div>}
-                                                    {unanswered.length>0&&<div className="bg-gray-50 rounded-2xl p-6 border-2 border-gray-200">
-                                                        <h5 className="text-xl font-bold text-gray-700 mb-4 flex items-center"><i className="fas fa-question-circle mr-2"></i>Non Répondues ({unanswered.length})</h5>
-                                                        <div className="space-y-3">{unanswered.map(d=>renderCard(d,'unanswered'))}</div>
-                                                    </div>}
-                                                </>);
-                                            })()}
-                                        </div>
-                                    )}
-
-                                    <div className="flex flex-col sm:flex-row gap-3 mt-6">
-                                        <button onClick={()=>setShowDetailedAnswers(!showDetailedAnswers)}
-                                            className="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-indigo-600 hover:to-purple-700 transition-all shadow-lg flex items-center justify-center">
-                                            <i className={`fas ${showDetailedAnswers?'fa-eye-slash':'fa-chart-bar'} mr-2`}></i>
-                                            {showDetailedAnswers?'Masquer':'Voir'} les détails
-                                        </button>
-                                        <button onClick={() => {
-                                            const rpt = `=== RAPPORT DÉTAILLÉ ===\n\nÉtudiant: ${selectedStudent.etudiant}\nClasse: ${selectedStudent.classe}\nNote: ${selectedStudent.note}/20\nRéussite: ${selectedStudent.pourcentage}%\nRéponses correctes: ${selectedStudent.correct}/${selectedStudent.total}\nDurée: ${selectedStudent.duree}\nTentatives triche: ${selectedStudent.tentativesTriche}\nDate: ${selectedStudent.dateTest}`;
-                                            const blob = new Blob([rpt], {type:'text/plain;charset=utf-8;'});
-                                            const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`rapport_${selectedStudent.etudiant.replace(/\s+/g,'_')}.txt`; a.click();
-                                        }} className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-600 text-white py-4 rounded-xl font-bold text-lg hover:from-blue-600 hover:to-cyan-700 transition-all shadow-lg flex items-center justify-center">
-                                            <i className="fas fa-file-export mr-2"></i>Exporter
-                                        </button>
-                                        <button onClick={()=>{setSelectedStudent(null);setShowDetailedAnswers(false);}} className="px-8 bg-gray-200 text-gray-700 py-4 rounded-xl font-bold text-lg hover:bg-gray-300 transition-all">Fermer</button>
-                                    </div>
-                                </div>
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <button onClick={()=>setShowDetailedAnswers(!showDetailedAnswers)} className="btn-primary flex-1 py-3.5 rounded-lg text-sm flex items-center justify-center gap-2">
+                                    <i className={`fas ${showDetailedAnswers?'fa-eye-slash':'fa-list-check'}`}></i>{showDetailedAnswers?'Masquer':'Voir'} les détails
+                                </button>
+                                <button onClick={() => {
+                                    const rpt = `=== RAPPORT DÉTAILLÉ ===\n\nÉtudiant: ${selectedStudent.etudiant}\nClasse: ${selectedStudent.classe}\nNote: ${selectedStudent.note}/20\nRéussite: ${selectedStudent.pourcentage}%\nRéponses correctes: ${selectedStudent.correct}/${selectedStudent.total}\nDurée: ${selectedStudent.duree}\nTentatives triche: ${selectedStudent.tentativesTriche}\nDate: ${selectedStudent.dateTest}`;
+                                    const blob = new Blob([rpt], {type:'text/plain;charset=utf-8;'});
+                                    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`rapport_${selectedStudent.etudiant.replace(/\s+/g,'_')}.txt`; a.click();
+                                }} className="btn-ghost flex-1 py-3.5 rounded-lg text-sm flex items-center justify-center gap-2">
+                                    <i className="fas fa-file-export"></i>Exporter
+                                </button>
+                                <button onClick={()=>{setSelectedStudent(null);setShowDetailedAnswers(false);}} className="btn-ghost px-7 py-3.5 rounded-lg text-sm">Fermer</button>
                             </div>
                         </div>
-                    )}
+                    </div>
                 </div>
-            );
-        }
+            )}
+        </div>
+    );
+}
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<AdminDashboard />);
-    </script>
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<AdminDashboard />);
+</script>
 </body>
 </html>
