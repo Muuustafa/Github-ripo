@@ -35,13 +35,56 @@
   --bad:#ff6b6b;
   --bad-dim:#4a2020;
   --purple:#b39ddb;
+  --tok-kw:#ff9ecf;
+  --tok-str:#ffc94d;
+  --tok-num:#79e0e6;
+  --tok-fn:#4f8cf7;
+  --tok-def:#b39ddb;
+  --term-bg:#05070a;
+  --term-fg:#7fe3a3;
+  --code-bg:#0a0d13;
   --font-display:'Space Grotesk',sans-serif;
   --font-body:'Inter',sans-serif;
   --font-mono:'JetBrains Mono',monospace;
 }
+html[data-theme="light"]{
+  --ink-950:#eef1f5;
+  --ink-900:#fbfbfd;
+  --ink-800:#ffffff;
+  --ink-700:#f1f3f7;
+  --ink-600:#e7eaf0;
+  --line:#dde1e8;
+  --line-soft:#e9ecf1;
+  --text-hi:#0d1117;
+  --text-mid:#454e63;
+  --text-dim:#7d8698;
+  --py-blue:#2f67d8;
+  --py-yellow-dim:#a9761c;
+  --ok:#1f9d5c;
+  --bad:#e0433f;
+  --purple:#7c5cc4;
+  --tok-kw:#c2367f;
+  --tok-str:#946200;
+  --tok-num:#0d7c8c;
+  --tok-fn:#2f67d8;
+  --tok-def:#6f42c1;
+  --code-bg:#f6f8fa;
+}
+html[data-theme="light"] .building-bar{
+  background-image: repeating-linear-gradient(135deg, var(--py-blue) 0 14px, #b9d0f7 14px 28px);
+}
+html[data-theme="light"] .status-bar{
+  background:linear-gradient(90deg,#3a6fd6,#2f67d8);
+  border-top:1px solid #6fa0f0;
+}
+html[data-theme="light"] .btn-ghost{color:var(--text-hi);}
+html[data-theme="light"] ::-webkit-scrollbar-thumb{background:#c7cdd7;}
+html[data-theme="light"] .caret{background:var(--py-yellow-dim);}
+
 *{box-sizing:border-box;}
 html,body{background:var(--ink-900);}
-body{font-family:var(--font-body);color:var(--text-hi);-webkit-font-smoothing:antialiased;}
+body{font-family:var(--font-body);color:var(--text-hi);-webkit-font-smoothing:antialiased;transition:background-color .25s ease,color .25s ease;}
+.ide-card,.ide-titlebar,.opt-card,.field,.chip,.gutter-line{transition:background-color .25s ease,border-color .25s ease,color .25s ease;}
 ::selection{background:var(--py-blue);color:#fff;}
 ::-webkit-scrollbar{width:10px;height:10px;}
 ::-webkit-scrollbar-track{background:var(--ink-900);}
@@ -138,11 +181,15 @@ body{font-family:var(--font-body);color:var(--text-hi);-webkit-font-smoothing:an
   border:1px solid var(--line);
   letter-spacing:.02em;
 }
-.diff-Facile{color:#57d38c;border-color:#245c3c;background:rgba(87,211,140,.08);}
-.diff-Assez.Facile{color:#57d38c;}
-.diff-Moyen{color:#ffc94d;border-color:#8a6d1f;background:rgba(255,201,77,.08);}
-.diff-Assez.Difficile{color:#ff9f5b;border-color:#8a541f;background:rgba(255,159,91,.08);}
-.diff-Difficile{color:#ff6b6b;border-color:#7a2b2b;background:rgba(255,107,107,.08);}
+.diff-Facile{color:var(--ok);border-color:#245c3c;background:rgba(87,211,140,.08);}
+.diff-AssezFacile{color:var(--ok);border-color:#245c3c;background:rgba(87,211,140,.08);}
+.diff-Moyen{color:var(--py-yellow-dim);border-color:#8a6d1f;background:rgba(255,201,77,.10);}
+.diff-AssezDifficile{color:#c9701e;border-color:#8a541f;background:rgba(255,159,91,.10);}
+.diff-Difficile{color:var(--bad);border-color:#7a2b2b;background:rgba(255,107,107,.10);}
+html[data-theme="light"] .diff-Moyen{color:#946200;border-color:#e4c07a;background:#fdf3df;}
+html[data-theme="light"] .diff-AssezDifficile{color:#b1490b;border-color:#f2c299;background:#fff1e6;}
+html[data-theme="light"] .diff-Facile,html[data-theme="light"] .diff-AssezFacile{color:#15803d;border-color:#a7e3c1;background:#e9f9ef;}
+html[data-theme="light"] .diff-Difficile{color:#b91c1c;border-color:#f3b4b4;background:#fdecec;}
 
 .gutter-line{
   color:var(--text-dim);
@@ -154,12 +201,12 @@ body{font-family:var(--font-body);color:var(--text-hi);-webkit-font-smoothing:an
   border-right:1px solid var(--line-soft);
 }
 
-.tok-kw{color:#ff9ecf;}
-.tok-str{color:var(--py-yellow);}
-.tok-num{color:#79e0e6;}
-.tok-fn{color:var(--py-blue);}
+.tok-kw{color:var(--tok-kw);}
+.tok-str{color:var(--tok-str);}
+.tok-num{color:var(--tok-num);}
+.tok-fn{color:var(--tok-fn);}
 .tok-com{color:var(--text-dim);font-style:italic;}
-.tok-def{color:var(--purple);}
+.tok-def{color:var(--tok-def);}
 
 .opt-card{
   background:var(--ink-700);
@@ -180,11 +227,20 @@ body{font-family:var(--font-body);color:var(--text-hi);-webkit-font-smoothing:an
 }
 
 .terminal-window{
-  background:var(--ink-950);
+  background:var(--term-bg);
   border:1px solid var(--line);
   border-radius:12px;
   box-shadow:0 30px 80px -20px rgba(0,0,0,.7);
 }
+html[data-theme="light"] .terminal-window{box-shadow:0 20px 50px -20px rgba(20,30,50,.25);}
+
+.theme-toggle{
+  width:38px;height:38px;border-radius:10px;
+  background:var(--ink-900);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .18s ease;color:var(--text-mid);
+}
+.theme-toggle:hover{background:var(--ink-600);color:var(--text-hi);transform:translateY(-1px);}
 
 .assert-ok{border-left:3px solid var(--ok);background:rgba(87,211,140,.06);}
 .assert-fail{border-left:3px solid var(--bad);background:rgba(255,107,107,.06);}
@@ -337,7 +393,7 @@ const CATEGORY_FILE = {
 
 const QUIZ_CONFIG = {
     title: "Quiz Python - ISI Keur Massar",
-    duration: 3600,
+    duration: 5400,
     penaltyPerWarning: 2,
     questions: [
     {
@@ -1432,7 +1488,7 @@ function CodeBlock({ code, fileName }) {
                     <i className="fab fa-python mr-1"></i>{fileName || 'exercice.py'}
                 </span>
             </div>
-            <div className="flex" style={{background:'var(--ink-950)'}}>
+            <div className="flex" style={{background:'var(--code-bg)'}}>
                 <div className="py-4">
                     {lines.map((_, i) => <div key={i} className="gutter-line px-3 leading-7">{i+1}</div>)}
                 </div>
@@ -1511,6 +1567,14 @@ function QuickNavigation({ questions, currentQuestion, answers, onQuestionSelect
     );
 }
 
+function ThemeToggle({ theme, onToggle }) {
+    return (
+        <button onClick={onToggle} className="theme-toggle" title={theme==='dark' ? 'Passer en mode clair' : 'Passer en mode sombre'} aria-label="Changer de thème">
+            <i className={`fas ${theme==='dark' ? 'fa-sun' : 'fa-moon'} text-sm`}></i>
+        </button>
+    );
+}
+
 function PythonQuizApp() {
     const [screen, setScreen] = useState('access');
     const [bootDone, setBootDone] = useState(false);
@@ -1527,6 +1591,15 @@ function PythonQuizApp() {
     const [showDetailedResults, setShowDetailedResults] = useState(false);
     const [shuffledQuestions, setShuffledQuestions] = useState([]);
     const [resultFilter, setResultFilter] = useState('all');
+    const [theme, setTheme] = useState(() => {
+        try { return localStorage.getItem('quizTheme') || 'dark'; } catch(e) { return 'dark'; }
+    });
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+        try { localStorage.setItem('quizTheme', theme); } catch(e) {}
+    }, [theme]);
+    const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
 
     useEffect(() => { disableDevTools(); return () => { stopConsoleProtection(); }; }, []);
     useEffect(() => { if (screen === 'quiz') startConsoleProtection(); else stopConsoleProtection(); }, [screen]);
@@ -1718,7 +1791,7 @@ function PythonQuizApp() {
                     </div>
 
                     <div className={`terminal-window overflow-hidden ${accessError?'shake':''}`}>
-                        <div className="flex items-center px-4 py-3" style={{background:'var(--ink-800)', borderBottom:'1px solid var(--line)'}}>
+                        <div className="flex items-center px-4 py-3" style={{background:'#12161d', borderBottom:'1px solid #232a36'}}>
                             <span className="traffic mr-2" style={{background:'#ff6b6b'}}></span>
                             <span className="traffic mr-2" style={{background:'#ffc94d'}}></span>
                             <span className="traffic mr-4" style={{background:'#57d38c'}}></span>
@@ -1750,7 +1823,7 @@ function PythonQuizApp() {
 
                     <div className="mt-6 flex items-center justify-center gap-5 font-mono text-xs" style={{color:'var(--text-dim)'}}>
                         <span><i className="fas fa-shield-halved mr-1.5" style={{color:'var(--ok)'}}></i>Sécurisé</span>
-                        <span><i className="far fa-clock mr-1.5" style={{color:'var(--py-yellow)'}}></i>1h</span>
+                        <span><i className="far fa-clock mr-1.5" style={{color:'var(--py-yellow)'}}></i>1h30</span>
                         <span><i className="fas fa-code mr-1.5" style={{color:'var(--py-blue)'}}></i>70 questions</span>
                     </div>
                 </div>
@@ -1779,7 +1852,7 @@ function PythonQuizApp() {
                             </div>
                             <h1 className="font-display text-2xl font-bold" style={{color:'var(--text-hi)'}}>{QUIZ_CONFIG.title}</h1>
                             <p className="font-mono text-xs mt-2" style={{color:'var(--text-dim)'}}>
-                                <i className="far fa-clock mr-1"></i>1h &nbsp;·&nbsp; <i className="fas fa-code mr-1"></i>70 questions
+                                <i className="far fa-clock mr-1"></i>1h30 &nbsp;·&nbsp; <i className="fas fa-code mr-1"></i>70 questions
                             </p>
                         </div>
 
@@ -1876,13 +1949,14 @@ function PythonQuizApp() {
                                     <i className={`far fa-clock ${timeLeft<600?'':''}`} style={{color: timeLeft<600?'#ff6b6b':'var(--py-blue)'}}></i>
                                     <span className="font-mono font-bold text-sm" style={{color: timeLeft<600?'#ff6b6b':'var(--text-hi)'}}>{formatTime(timeLeft)}</span>
                                 </div>
+                                <ThemeToggle theme={theme} onToggle={toggleTheme} />
                             </div>
                         </div>
                         <div className="px-4 md:px-6 pt-3 pb-3.5" style={{background:'var(--ink-800)', borderTop:'1px solid var(--line-soft)'}}>
                             <div className="flex items-center justify-between mb-2 font-mono text-[11px]" style={{color:'var(--text-dim)'}}>
                                 <span>Question {currentQuestion+1} / {questionsToUse.length}</span>
                                 <div className="flex items-center gap-2">
-                                    <span className={`chip diff-${question.difficulty.replace(' ','.')}`}>{question.difficulty}</span>
+                                    <span className={`chip diff-${question.difficulty.replace(/\s+/g,'')}`}>{question.difficulty}</span>
                                     <span className="chip" style={{color:'var(--purple)',borderColor:'#4a3f6b',background:'rgba(179,157,219,.08)'}}>{question.points} pt</span>
                                 </div>
                             </div>
@@ -1960,8 +2034,13 @@ function PythonQuizApp() {
             <div className="min-h-screen py-6 md:py-10 px-3 md:px-4">
                 <div className="max-w-4xl mx-auto space-y-5">
 
+                    <div className="flex items-center justify-between fade-up">
+                        <p className="font-mono text-xs" style={{color:'var(--text-dim)'}}>Résultats de l'examen</p>
+                        <ThemeToggle theme={theme} onToggle={toggleTheme} />
+                    </div>
+
                     <div className="terminal-window overflow-hidden fade-up">
-                        <div className="flex items-center px-4 py-3" style={{background:'var(--ink-800)', borderBottom:'1px solid var(--line)'}}>
+                        <div className="flex items-center px-4 py-3" style={{background:'#12161d', borderBottom:'1px solid #232a36'}}>
                             <span className="traffic mr-2" style={{background:'#ff6b6b'}}></span>
                             <span className="traffic mr-2" style={{background:'#ffc94d'}}></span>
                             <span className="traffic mr-4" style={{background:'#57d38c'}}></span>
@@ -2039,7 +2118,7 @@ function PythonQuizApp() {
                                             </span>
                                         </div>
                                         <p className="text-sm mb-3" style={{color:'var(--text-mid)'}}>{q.question}</p>
-                                        <div className="rounded-lg p-3 mb-3 overflow-x-auto" style={{background:'var(--ink-950)'}}>
+                                        <div className="rounded-lg p-3 mb-3 overflow-x-auto" style={{background:'var(--code-bg)'}}>
                                             <pre className="font-mono text-xs" style={{color:'var(--text-hi)'}}>{q.code}</pre>
                                         </div>
                                         <div className="font-mono text-xs space-y-1">
