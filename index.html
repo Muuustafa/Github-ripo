@@ -275,7 +275,7 @@ const hashCode = async (code) => {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 };
 
-const ACCESS_CODE_HASH   = "d9c7abd2f526dde65e7cf401a11fa19e17d1c45909cb13510693098e67c370f4";
+const ACCESS_CODE_HASH   = "428821350e9691491f616b754cd8315fb86d797ab35d843479e732ef90665324";
 const RECOVERY_CODE_HASH = "ac6e794e704cdbfeb77d2dabac243ba2b6f9753086795adc2ad74abdb1c5885a";
 const EXIT_CODE_HASH     = "a0e486a510c445a37782cbf3668202befa153ffbc90188fed58fa91d1464b420";
 
@@ -397,7 +397,22 @@ const QUIZ_CONFIG = {
     penaltyPerWarning: 2,
     questions: [
     {
-        "code": "x = 5\ny = 2.0\nprint(type(x + y))",
+        "code": "x = 7\ny = \"3\"\nprint(x + int(y))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "73",
+            "10",
+            "Erreur",
+            "7.3"
+        ],
+        "correct": 1,
+        "points": 1,
+        "difficulty": "Facile",
+        "category": "Types",
+        "id": 1
+    },
+    {
+        "code": "a = 4.0\nb = 2\nprint(type(a * b))",
         "question": "Quelle est la sortie ?",
         "options": [
             "<class 'int'>",
@@ -409,31 +424,16 @@ const QUIZ_CONFIG = {
         "points": 1,
         "difficulty": "Facile",
         "category": "Types",
-        "id": 1
-    },
-    {
-        "code": "a = \"10\"\nb = int(a) + 5\nprint(b)",
-        "question": "Quelle est la sortie ?",
-        "options": [
-            "105",
-            "15",
-            "Erreur",
-            "10.5"
-        ],
-        "correct": 1,
-        "points": 1,
-        "difficulty": "Facile",
-        "category": "Types",
         "id": 2
     },
     {
-        "code": "x = 3\ny = str(x)\nprint(y + \"0\")",
+        "code": "x = \"100\"\nprint(int(x) // 3)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "30",
-            "3.0",
-            "Erreur",
-            "'30'"
+            "33",
+            "33.3",
+            "34",
+            "Erreur"
         ],
         "correct": 0,
         "points": 1,
@@ -442,7 +442,7 @@ const QUIZ_CONFIG = {
         "id": 3
     },
     {
-        "code": "print(type([]))",
+        "code": "print(type((1, 2)))",
         "question": "Quelle est la sortie ?",
         "options": [
             "<class 'list'>",
@@ -450,19 +450,19 @@ const QUIZ_CONFIG = {
             "<class 'dict'>",
             "Erreur"
         ],
-        "correct": 0,
+        "correct": 1,
         "points": 1,
         "difficulty": "Facile",
         "category": "Types",
         "id": 4
     },
     {
-        "code": "x = True\ny = False\nprint(x + y)",
+        "code": "x = False\ny = True\nprint(x * y)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "TrueFalse",
-            "1",
+            "FalseTrue",
             "0",
+            "1",
             "Erreur"
         ],
         "correct": 1,
@@ -472,12 +472,12 @@ const QUIZ_CONFIG = {
         "id": 5
     },
     {
-        "code": "x = 9\ny = 3.0\nprint(x / y)",
+        "code": "x = 17\ny = 5\nprint(x % y)",
         "question": "Quelle est la sortie ?",
         "options": [
             "3",
-            "3.0",
-            "3.5",
+            "2",
+            "0",
             "Erreur"
         ],
         "correct": 1,
@@ -487,22 +487,7 @@ const QUIZ_CONFIG = {
         "id": 6
     },
     {
-        "code": "print(bool(0))",
-        "question": "Quelle est la sortie ?",
-        "options": [
-            "True",
-            "False",
-            "0",
-            "Erreur"
-        ],
-        "correct": 1,
-        "points": 1,
-        "difficulty": "Facile",
-        "category": "Types",
-        "id": 7
-    },
-    {
-        "code": "print(bool(\"\"))",
+        "code": "print(bool([]))",
         "question": "Quelle est la sortie ?",
         "options": [
             "True",
@@ -514,15 +499,30 @@ const QUIZ_CONFIG = {
         "points": 1,
         "difficulty": "Facile",
         "category": "Types",
+        "id": 7
+    },
+    {
+        "code": "print(bool([0]))",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "True",
+            "False",
+            "None",
+            "Erreur"
+        ],
+        "correct": 0,
+        "points": 1.25,
+        "difficulty": "Assez Facile",
+        "category": "Types",
         "id": 8
     },
     {
-        "code": "x = 5\nprint(str(x) * 3)",
+        "code": "x = 4\nprint(str(x) + str(x))",
         "question": "Quelle est la sortie ?",
         "options": [
-            "15",
-            "555",
-            "5*3",
+            "8",
+            "44",
+            "'4''4'",
             "Erreur"
         ],
         "correct": 1,
@@ -532,26 +532,26 @@ const QUIZ_CONFIG = {
         "id": 9
     },
     {
-        "code": "a = 1\nb = 2\na, b = b, a\nprint(a, b)",
+        "code": "a = 10\nb = 3\na, b = b, a + b\nprint(a, b)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "1 2",
-            "2 1",
-            "Erreur",
-            "None None"
+            "3 13",
+            "13 3",
+            "10 3",
+            "Erreur"
         ],
-        "correct": 1,
+        "correct": 0,
         "points": 1.5,
         "difficulty": "Moyen",
         "category": "Types",
         "id": 10
     },
     {
-        "code": "print(type(3 // 2))",
+        "code": "print(type(10 / 2))",
         "question": "Quelle est la sortie ?",
         "options": [
-            "<class 'float'>",
             "<class 'int'>",
+            "<class 'float'>",
             "<class 'str'>",
             "Erreur"
         ],
@@ -562,27 +562,27 @@ const QUIZ_CONFIG = {
         "id": 11
     },
     {
-        "code": "print(float(\"3.5\") + 1)",
+        "code": "print(int(7.9))",
         "question": "Quelle est la sortie ?",
         "options": [
-            "4.5",
-            "3.51",
-            "Erreur",
-            "'4.5'"
+            "7",
+            "8",
+            "7.9",
+            "Erreur"
         ],
         "correct": 0,
-        "points": 1.25,
-        "difficulty": "Assez Facile",
+        "points": 1,
+        "difficulty": "Facile",
         "category": "Types",
         "id": 12
     },
     {
-        "code": "s = \"Hello\"\nprint(s.lower())",
+        "code": "s = \"WORLD\"\nprint(s.lower())",
         "question": "Quelle est la sortie ?",
         "options": [
-            "Hello",
-            "hello",
-            "HELLO",
+            "WORLD",
+            "world",
+            "World",
             "Erreur"
         ],
         "correct": 1,
@@ -592,12 +592,12 @@ const QUIZ_CONFIG = {
         "id": 13
     },
     {
-        "code": "s = \"hello\"\nprint(s.capitalize())",
+        "code": "s = \"team\"\nprint(s.title())",
         "question": "Quelle est la sortie ?",
         "options": [
-            "hello",
-            "Hello",
-            "HELLO",
+            "team",
+            "Team",
+            "TEAM",
             "Erreur"
         ],
         "correct": 1,
@@ -607,7 +607,7 @@ const QUIZ_CONFIG = {
         "id": 14
     },
     {
-        "code": "s = \"banana\"\nprint(s.count(\"a\"))",
+        "code": "s = \"mississippi\"\nprint(s.count(\"s\"))",
         "question": "Quelle est la sortie ?",
         "options": [
             "2",
@@ -615,19 +615,19 @@ const QUIZ_CONFIG = {
             "4",
             "Erreur"
         ],
-        "correct": 1,
+        "correct": 2,
         "points": 1.25,
         "difficulty": "Assez Facile",
         "category": "Chaînes",
         "id": 15
     },
     {
-        "code": "s = \"  data  \"\nprint(len(s.strip()))",
+        "code": "s = \"   code   \"\nprint(len(s.strip()))",
         "question": "Quelle est la sortie ?",
         "options": [
             "4",
             "6",
-            "8",
+            "10",
             "Erreur"
         ],
         "correct": 0,
@@ -637,11 +637,11 @@ const QUIZ_CONFIG = {
         "id": 16
     },
     {
-        "code": "s = \"Hello,World,Python\"\nprint(s.split(\",\"))",
+        "code": "s = \"a-b-c-d\"\nprint(s.split(\"-\"))",
         "question": "Quelle est la sortie ?",
         "options": [
-            "['Hello', 'World', 'Python']",
-            "['Hello,World,Python']",
+            "['a', 'b', 'c', 'd']",
+            "['a-b-c-d']",
             "Erreur",
             "None"
         ],
@@ -652,12 +652,12 @@ const QUIZ_CONFIG = {
         "id": 17
     },
     {
-        "code": "s = \"-\"\nprint(s.join([\"a\", \"b\", \"c\"]))",
+        "code": "s = \"*\"\nprint(s.join([\"x\", \"y\", \"z\"]))",
         "question": "Quelle est la sortie ?",
         "options": [
-            "a-b-c",
-            "abc",
-            "a-b-c-",
+            "x*y*z",
+            "xyz",
+            "x*y*z*",
             "Erreur"
         ],
         "correct": 0,
@@ -667,7 +667,7 @@ const QUIZ_CONFIG = {
         "id": 18
     },
     {
-        "code": "s = \"python\"\nprint(s.startswith(\"py\"))",
+        "code": "s = \"coding\"\nprint(s.startswith(\"cod\"))",
         "question": "Quelle est la sortie ?",
         "options": [
             "True",
@@ -682,7 +682,7 @@ const QUIZ_CONFIG = {
         "id": 19
     },
     {
-        "code": "s = \"python\"\nprint(s.endswith(\"on\"))",
+        "code": "s = \"coding\"\nprint(s.endswith(\"ing\"))",
         "question": "Quelle est la sortie ?",
         "options": [
             "True",
@@ -697,12 +697,12 @@ const QUIZ_CONFIG = {
         "id": 20
     },
     {
-        "code": "s = \"Hello\"\nprint(s.replace(\"l\", \"L\"))",
+        "code": "s = \"banana\"\nprint(s.replace(\"a\", \"o\"))",
         "question": "Quelle est la sortie ?",
         "options": [
-            "Hello",
-            "HeLLo",
-            "HELLo",
+            "banana",
+            "bonono",
+            "bonana",
             "Erreur"
         ],
         "correct": 1,
@@ -712,12 +712,12 @@ const QUIZ_CONFIG = {
         "id": 21
     },
     {
-        "code": "s = \"abc\"\nprint(s + s)",
+        "code": "s = \"hi\"\nprint(s * 3)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "abc",
-            "abcabc",
-            "aabbcc",
+            "hi3",
+            "hihihi",
+            "hi hi hi",
             "Erreur"
         ],
         "correct": 1,
@@ -727,22 +727,7 @@ const QUIZ_CONFIG = {
         "id": 22
     },
     {
-        "code": "s = \"Data123\"\nprint(s.isalpha())",
-        "question": "Quelle est la sortie ?",
-        "options": [
-            "True",
-            "False",
-            "Erreur",
-            "None"
-        ],
-        "correct": 1,
-        "points": 1.5,
-        "difficulty": "Moyen",
-        "category": "Chaînes",
-        "id": 23
-    },
-    {
-        "code": "s = \"12345\"\nprint(s.isdigit())",
+        "code": "s = \"Python3\"\nprint(s.isalnum())",
         "question": "Quelle est la sortie ?",
         "options": [
             "True",
@@ -751,18 +736,33 @@ const QUIZ_CONFIG = {
             "None"
         ],
         "correct": 0,
+        "points": 1.5,
+        "difficulty": "Moyen",
+        "category": "Chaînes",
+        "id": 23
+    },
+    {
+        "code": "s = \"abc\"\nprint(s.isupper())",
+        "question": "Quelle est la sortie ?",
+        "options": [
+            "True",
+            "False",
+            "Erreur",
+            "None"
+        ],
+        "correct": 1,
         "points": 1.25,
         "difficulty": "Assez Facile",
         "category": "Chaînes",
         "id": 24
     },
     {
-        "code": "s = \"Bonjour\"\nprint(s[2:5])",
+        "code": "s = \"Programming\"\nprint(s[3:7])",
         "question": "Quelle est la sortie ?",
         "options": [
-            "njo",
-            "onj",
-            "njou",
+            "gram",
+            "gramm",
+            "ogra",
             "Erreur"
         ],
         "correct": 0,
@@ -772,12 +772,12 @@ const QUIZ_CONFIG = {
         "id": 25
     },
     {
-        "code": "s = \"Python\"\nprint(s.index(\"t\"))",
+        "code": "s = \"computer\"\nprint(s.index(\"p\"))",
         "question": "Quelle est la sortie ?",
         "options": [
-            "1",
             "2",
             "3",
+            "4",
             "Erreur"
         ],
         "correct": 1,
@@ -787,12 +787,12 @@ const QUIZ_CONFIG = {
         "id": 26
     },
     {
-        "code": "s = \"  Python  \"\nprint(s.strip().upper())",
+        "code": "s = \" Data Science \"\nprint(s.strip().lower())",
         "question": "Quelle est la sortie ?",
         "options": [
-            "PYTHON",
-            "  PYTHON  ",
-            "Python",
+            "data science",
+            " data science ",
+            "Data Science",
             "Erreur"
         ],
         "correct": 0,
@@ -802,26 +802,26 @@ const QUIZ_CONFIG = {
         "id": 27
     },
     {
-        "code": "s = \"apple,banana\"\nprint(len(s.split(\",\")))",
+        "code": "s = \"one:two:three\"\nprint(len(s.split(\":\")))",
         "question": "Quelle est la sortie ?",
         "options": [
             "1",
             "2",
-            "12",
+            "3",
             "Erreur"
         ],
-        "correct": 1,
+        "correct": 2,
         "points": 1.5,
         "difficulty": "Moyen",
         "category": "Chaînes",
         "id": 28
     },
     {
-        "code": "l = [1, 2, 3]\nl.extend([4, 5])\nprint(l)",
+        "code": "l = [1, 2]\nl.extend([3])\nprint(l)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[1, 2, 3, [4, 5]]",
-            "[1, 2, 3, 4, 5]",
+            "[1, 2, [3]]",
+            "[1, 2, 3]",
             "Erreur",
             "None"
         ],
@@ -832,12 +832,12 @@ const QUIZ_CONFIG = {
         "id": 29
     },
     {
-        "code": "l = [3, 1, 2]\nl.sort()\nprint(l)",
+        "code": "l = [4, 2, 9, 1]\nl.sort()\nprint(l)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[3, 1, 2]",
-            "[1, 2, 3]",
-            "[3, 2, 1]",
+            "[4, 2, 9, 1]",
+            "[1, 2, 4, 9]",
+            "[9, 4, 2, 1]",
             "Erreur"
         ],
         "correct": 1,
@@ -847,11 +847,11 @@ const QUIZ_CONFIG = {
         "id": 30
     },
     {
-        "code": "l = [1, 2, 3]\nl.reverse()\nprint(l)",
+        "code": "l = [\"a\", \"b\"]\nl.reverse()\nprint(l)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[1, 2, 3]",
-            "[3, 2, 1]",
+            "['a', 'b']",
+            "['b', 'a']",
             "Erreur",
             "None"
         ],
@@ -862,12 +862,12 @@ const QUIZ_CONFIG = {
         "id": 31
     },
     {
-        "code": "l = [1, 2, 3, 2]\nprint(l.count(2))",
+        "code": "l = [1, 1, 2, 1]\nprint(l.count(1))",
         "question": "Quelle est la sortie ?",
         "options": [
-            "1",
             "2",
             "3",
+            "4",
             "Erreur"
         ],
         "correct": 1,
@@ -877,7 +877,7 @@ const QUIZ_CONFIG = {
         "id": 32
     },
     {
-        "code": "l = [10, 20, 30]\nprint(l.index(20))",
+        "code": "l = [5, 15, 25]\nprint(l.index(25))",
         "question": "Quelle est la sortie ?",
         "options": [
             "0",
@@ -885,20 +885,20 @@ const QUIZ_CONFIG = {
             "2",
             "Erreur"
         ],
-        "correct": 1,
+        "correct": 2,
         "points": 1.25,
         "difficulty": "Assez Facile",
         "category": "Listes",
         "id": 33
     },
     {
-        "code": "l = [1, 2] + [3, 4]\nprint(l)",
+        "code": "l = [1] + [2, 3]\nprint(l)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[1, 2, 3, 4]",
-            "[[1, 2], [3, 4]]",
+            "[1, 2, 3]",
+            "[1, [2, 3]]",
             "Erreur",
-            "[4, 6]"
+            "[3, 3]"
         ],
         "correct": 0,
         "points": 1.5,
@@ -907,42 +907,42 @@ const QUIZ_CONFIG = {
         "id": 34
     },
     {
-        "code": "l = [1, 2, 3]\nprint(max(l))",
+        "code": "l = [4, 8, 2]\nprint(max(l))",
         "question": "Quelle est la sortie ?",
         "options": [
-            "1",
+            "4",
+            "8",
             "2",
-            "3",
             "Erreur"
         ],
-        "correct": 2,
+        "correct": 1,
         "points": 1,
         "difficulty": "Facile",
         "category": "Listes",
         "id": 35
     },
     {
-        "code": "l = [1, 2, 3]\nprint(min(l))",
+        "code": "l = [4, 8, 2]\nprint(min(l))",
         "question": "Quelle est la sortie ?",
         "options": [
-            "1",
+            "4",
+            "8",
             "2",
-            "3",
             "Erreur"
         ],
-        "correct": 0,
+        "correct": 2,
         "points": 1,
         "difficulty": "Facile",
         "category": "Listes",
         "id": 36
     },
     {
-        "code": "l = [1, 2, 3]\nprint(sum(l))",
+        "code": "l = [2, 4, 6]\nprint(sum(l))",
         "question": "Quelle est la sortie ?",
         "options": [
-            "3",
+            "10",
+            "12",
             "6",
-            "0",
             "Erreur"
         ],
         "correct": 1,
@@ -952,12 +952,12 @@ const QUIZ_CONFIG = {
         "id": 37
     },
     {
-        "code": "l = ['a', 'b', 'c']\nprint(len(l))",
+        "code": "l = [10, 20, 30, 40]\nprint(len(l))",
         "question": "Quelle est la sortie ?",
         "options": [
-            "2",
             "3",
             "4",
+            "5",
             "Erreur"
         ],
         "correct": 1,
@@ -967,11 +967,11 @@ const QUIZ_CONFIG = {
         "id": 38
     },
     {
-        "code": "l = [1, 2, 3]\nl[1] = 20\nprint(l)",
+        "code": "l = [1, 2, 3]\nl[0] = 100\nprint(l)",
         "question": "Quelle est la sortie ?",
         "options": [
             "[1, 2, 3]",
-            "[1, 20, 3]",
+            "[100, 2, 3]",
             "Erreur",
             "None"
         ],
@@ -982,12 +982,12 @@ const QUIZ_CONFIG = {
         "id": 39
     },
     {
-        "code": "l = []\nl.append(1)\nl.append(2)\nprint(l)",
+        "code": "l = []\nl.append('a')\nl.append('b')\nprint(l)",
         "question": "Quelle est la sortie ?",
         "options": [
             "[]",
-            "[1, 2]",
-            "[2, 1]",
+            "['a', 'b']",
+            "['b', 'a']",
             "Erreur"
         ],
         "correct": 1,
@@ -997,7 +997,7 @@ const QUIZ_CONFIG = {
         "id": 40
     },
     {
-        "code": "l = [1, [2, 3], 4]\nprint(len(l))",
+        "code": "l = [1, [2], 3]\nprint(len(l))",
         "question": "Quelle est la sortie ?",
         "options": [
             "2",
@@ -1012,11 +1012,11 @@ const QUIZ_CONFIG = {
         "id": 41
     },
     {
-        "code": "l = [5, 3, 8, 1]\nl.sort(reverse=True)\nprint(l)",
+        "code": "l = [9, 1, 4]\nl.sort(reverse=True)\nprint(l)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[1, 3, 5, 8]",
-            "[8, 5, 3, 1]",
+            "[1, 4, 9]",
+            "[9, 4, 1]",
             "Erreur",
             "None"
         ],
@@ -1027,12 +1027,12 @@ const QUIZ_CONFIG = {
         "id": 42
     },
     {
-        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[2:5])",
+        "code": "l = [10, 20, 30, 40, 50, 60]\nprint(l[1:4])",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[2, 3, 4]",
-            "[2, 3, 4, 5]",
-            "[1, 2, 3]",
+            "[20, 30, 40]",
+            "[10, 20, 30]",
+            "[20, 30, 40, 50]",
             "Erreur"
         ],
         "correct": 0,
@@ -1042,12 +1042,12 @@ const QUIZ_CONFIG = {
         "id": 43
     },
     {
-        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[:3])",
+        "code": "l = [10, 20, 30, 40, 50, 60]\nprint(l[:2])",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[0, 1, 2]",
-            "[0, 1, 2, 3]",
-            "[1, 2, 3]",
+            "[10, 20]",
+            "[10, 20, 30]",
+            "[20, 30]",
             "Erreur"
         ],
         "correct": 0,
@@ -1057,26 +1057,26 @@ const QUIZ_CONFIG = {
         "id": 44
     },
     {
-        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[3:])",
+        "code": "l = [10, 20, 30, 40, 50, 60]\nprint(l[4:])",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[3, 4, 5]",
-            "[3, 4]",
-            "[0, 1, 2]",
+            "[40, 50, 60]",
+            "[50, 60]",
+            "[10, 20, 30, 40]",
             "Erreur"
         ],
-        "correct": 0,
+        "correct": 1,
         "points": 1.25,
         "difficulty": "Assez Facile",
         "category": "Slicing",
         "id": 45
     },
     {
-        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[:])",
+        "code": "l = [10, 20, 30, 40, 50, 60]\nprint(l[:])",
         "question": "Quelle est la sortie ?",
         "options": [
             "[]",
-            "[0, 1, 2, 3, 4, 5]",
+            "[10, 20, 30, 40, 50, 60]",
             "None",
             "Erreur"
         ],
@@ -1087,12 +1087,12 @@ const QUIZ_CONFIG = {
         "id": 46
     },
     {
-        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[-2:])",
+        "code": "l = [10, 20, 30, 40, 50, 60]\nprint(l[-3:])",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[4, 5]",
-            "[5]",
-            "[0, 1]",
+            "[40, 50, 60]",
+            "[50, 60]",
+            "[10, 20, 30]",
             "Erreur"
         ],
         "correct": 0,
@@ -1102,12 +1102,12 @@ const QUIZ_CONFIG = {
         "id": 47
     },
     {
-        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[:-2])",
+        "code": "l = [10, 20, 30, 40, 50, 60]\nprint(l[:-3])",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[0, 1, 2, 3]",
-            "[4, 5]",
-            "[0, 1, 2]",
+            "[10, 20, 30]",
+            "[40, 50, 60]",
+            "[10, 20]",
             "Erreur"
         ],
         "correct": 0,
@@ -1117,12 +1117,12 @@ const QUIZ_CONFIG = {
         "id": 48
     },
     {
-        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[::2])",
+        "code": "l = [10, 20, 30, 40, 50, 60]\nprint(l[::3])",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[0, 2, 4]",
-            "[1, 3, 5]",
-            "[0, 1, 2]",
+            "[10, 40]",
+            "[10, 30, 50]",
+            "[20, 50]",
             "Erreur"
         ],
         "correct": 0,
@@ -1132,11 +1132,11 @@ const QUIZ_CONFIG = {
         "id": 49
     },
     {
-        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[::-1])",
+        "code": "l = [10, 20, 30, 40, 50, 60]\nprint(l[::-1])",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[0, 1, 2, 3, 4, 5]",
-            "[5, 4, 3, 2, 1, 0]",
+            "[10, 20, 30, 40, 50, 60]",
+            "[60, 50, 40, 30, 20, 10]",
             "Erreur",
             "None"
         ],
@@ -1147,12 +1147,12 @@ const QUIZ_CONFIG = {
         "id": 50
     },
     {
-        "code": "l = [0, 1, 2, 3, 4, 5]\nprint(l[1:5:2])",
+        "code": "l = [10, 20, 30, 40, 50, 60]\nprint(l[0:6:2])",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[1, 3]",
-            "[1, 2, 3, 4]",
-            "[1, 3, 5]",
+            "[10, 30, 50]",
+            "[20, 40, 60]",
+            "[10, 20, 30]",
             "Erreur"
         ],
         "correct": 0,
@@ -1162,12 +1162,12 @@ const QUIZ_CONFIG = {
         "id": 51
     },
     {
-        "code": "l = [10, 20, 30, 40, 50]\nprint(l[-3:-1])",
+        "code": "l = [1, 2, 3, 4, 5]\nprint(l[-4:-2])",
         "question": "Quelle est la sortie ?",
         "options": [
-            "[30, 40]",
-            "[20, 30, 40]",
-            "[40, 50]",
+            "[2, 3]",
+            "[1, 2]",
+            "[3, 4]",
             "Erreur"
         ],
         "correct": 0,
@@ -1177,12 +1177,12 @@ const QUIZ_CONFIG = {
         "id": 52
     },
     {
-        "code": "for i in range(4):\n    print(i, end=\" \")",
+        "code": "for i in range(5):\n    print(i, end=\" \")",
         "question": "Quelle est la sortie ?",
         "options": [
-            "0 1 2 3",
-            "1 2 3 4",
             "0 1 2 3 4",
+            "1 2 3 4 5",
+            "0 1 2 3 4 5",
             "Erreur"
         ],
         "correct": 0,
@@ -1192,11 +1192,11 @@ const QUIZ_CONFIG = {
         "id": 53
     },
     {
-        "code": "total = 0\nfor i in range(1, 6):\n    total += i\nprint(total)",
+        "code": "total = 0\nfor i in range(2, 7):\n    total += i\nprint(total)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "10",
             "15",
+            "20",
             "21",
             "Erreur"
         ],
@@ -1207,12 +1207,12 @@ const QUIZ_CONFIG = {
         "id": 54
     },
     {
-        "code": "for i in range(2, 10, 3):\n    print(i)",
+        "code": "for i in range(1, 10, 4):\n    print(i)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "2\n5\n8",
-            "2\n4\n6\n8",
-            "2\n5\n8\n11",
+            "1\n5\n9",
+            "1\n4\n7",
+            "1\n5\n9\n13",
             "Erreur"
         ],
         "correct": 0,
@@ -1222,12 +1222,12 @@ const QUIZ_CONFIG = {
         "id": 55
     },
     {
-        "code": "l = ['x', 'y', 'z']\nfor i, v in enumerate(l):\n    print(i, v)",
+        "code": "l = ['p', 'q']\nfor i, v in enumerate(l):\n    print(i, v)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "0 x\n1 y\n2 z",
-            "x\ny\nz",
-            "1 x\n2 y\n3 z",
+            "0 p\n1 q",
+            "p\nq",
+            "1 p\n2 q",
             "Erreur"
         ],
         "correct": 0,
@@ -1237,12 +1237,12 @@ const QUIZ_CONFIG = {
         "id": 56
     },
     {
-        "code": "s = \"abc\"\nfor c in s:\n    print(c.upper(), end=\"\")",
+        "code": "s = \"xyz\"\nfor c in s:\n    print(c.upper(), end=\"\")",
         "question": "Quelle est la sortie ?",
         "options": [
-            "abc",
-            "ABC",
-            "A B C",
+            "xyz",
+            "XYZ",
+            "X Y Z",
             "Erreur"
         ],
         "correct": 1,
@@ -1252,12 +1252,12 @@ const QUIZ_CONFIG = {
         "id": 57
     },
     {
-        "code": "count = 0\nfor i in range(10):\n    if i % 3 == 0:\n        count += 1\nprint(count)",
+        "code": "count = 0\nfor i in range(12):\n    if i % 4 == 0:\n        count += 1\nprint(count)",
         "question": "Quelle est la sortie ?",
         "options": [
+            "2",
             "3",
             "4",
-            "10",
             "Erreur"
         ],
         "correct": 1,
@@ -1267,12 +1267,12 @@ const QUIZ_CONFIG = {
         "id": 58
     },
     {
-        "code": "l = [1, 2, 3]\nfor x in l:\n    print(x * x, end=\" \")",
+        "code": "l = [2, 3, 4]\nfor x in l:\n    print(x + 1, end=\" \")",
         "question": "Quelle est la sortie ?",
         "options": [
+            "2 3 4",
+            "3 4 5",
             "1 2 3",
-            "1 4 9",
-            "2 4 6",
             "Erreur"
         ],
         "correct": 1,
@@ -1282,27 +1282,27 @@ const QUIZ_CONFIG = {
         "id": 59
     },
     {
-        "code": "for i in range(3):\n    print(\"Python\")",
+        "code": "for i in range(2):\n    print(\"Hi\")",
         "question": "Quelle est la sortie ?",
         "options": [
-            "Python",
-            "Python\nPython",
-            "Python\nPython\nPython",
+            "Hi",
+            "Hi\nHi",
+            "Hi\nHi\nHi",
             "Erreur"
         ],
-        "correct": 2,
+        "correct": 1,
         "points": 1,
         "difficulty": "Facile",
         "category": "Boucle for",
         "id": 60
     },
     {
-        "code": "words = [\"cat\", \"dog\", \"bird\"]\nfor w in words:\n    print(len(w), end=\" \")",
+        "code": "words = [\"go\", \"run\", \"jump\"]\nfor w in words:\n    print(len(w), end=\" \")",
         "question": "Quelle est la sortie ?",
         "options": [
-            "3 3 4",
-            "3 3 3",
-            "cat dog bird",
+            "2 3 4",
+            "2 3 3",
+            "go run jump",
             "Erreur"
         ],
         "correct": 0,
@@ -1312,12 +1312,12 @@ const QUIZ_CONFIG = {
         "id": 61
     },
     {
-        "code": "total = 1\nfor i in range(1, 5):\n    total *= i\nprint(total)",
+        "code": "total = 1\nfor i in range(1, 6):\n    total *= i\nprint(total)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "10",
             "24",
-            "20",
+            "120",
+            "720",
             "Erreur"
         ],
         "correct": 1,
@@ -1327,12 +1327,12 @@ const QUIZ_CONFIG = {
         "id": 62
     },
     {
-        "code": "i = 1\nwhile i <= 5:\n    print(i, end=\" \")\n    i += 1",
+        "code": "i = 1\nwhile i <= 6:\n    print(i, end=\" \")\n    i += 1",
         "question": "Quelle est la sortie ?",
         "options": [
-            "1 2 3 4",
             "1 2 3 4 5",
-            "0 1 2 3 4",
+            "1 2 3 4 5 6",
+            "0 1 2 3 4 5",
             "Erreur"
         ],
         "correct": 1,
@@ -1342,12 +1342,12 @@ const QUIZ_CONFIG = {
         "id": 63
     },
     {
-        "code": "n = 20\ncount = 0\nwhile n > 0:\n    n = n // 2\n    count += 1\nprint(count)",
+        "code": "n = 50\ncount = 0\nwhile n > 0:\n    n = n // 3\n    count += 1\nprint(count)",
         "question": "Quelle est la sortie ?",
         "options": [
+            "3",
             "4",
             "5",
-            "6",
             "Erreur"
         ],
         "correct": 1,
@@ -1357,27 +1357,27 @@ const QUIZ_CONFIG = {
         "id": 64
     },
     {
-        "code": "i = 0\ns = 0\nwhile i < 5:\n    s += i\n    i += 1\nprint(s)",
+        "code": "i = 0\ns = 0\nwhile i < 6:\n    s += i\n    i += 1\nprint(s)",
         "question": "Quelle est la sortie ?",
         "options": [
             "10",
             "15",
-            "5",
+            "21",
             "Erreur"
         ],
-        "correct": 0,
+        "correct": 1,
         "points": 1.5,
         "difficulty": "Moyen",
         "category": "Boucle while",
         "id": 65
     },
     {
-        "code": "x = 100\nwhile x > 1:\n    x -= 10\nprint(x)",
+        "code": "x = 60\nwhile x > 1:\n    x -= 15\nprint(x)",
         "question": "Quelle est la sortie ?",
         "options": [
             "0",
-            "1",
-            "10",
+            "-5",
+            "15",
             "Erreur"
         ],
         "correct": 0,
@@ -1387,12 +1387,12 @@ const QUIZ_CONFIG = {
         "id": 66
     },
     {
-        "code": "i = 1\nwhile i < 20:\n    i *= 3\nprint(i)",
+        "code": "i = 1\nwhile i < 30:\n    i *= 2\nprint(i)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "9",
-            "27",
-            "18",
+            "16",
+            "32",
+            "30",
             "Erreur"
         ],
         "correct": 1,
@@ -1402,12 +1402,12 @@ const QUIZ_CONFIG = {
         "id": 67
     },
     {
-        "code": "count = 0\ni = 10\nwhile i >= 0:\n    if i % 2 == 0:\n        count += 1\n    i -= 1\nprint(count)",
+        "code": "count = 0\ni = 8\nwhile i >= 0:\n    if i % 2 == 0:\n        count += 1\n    i -= 1\nprint(count)",
         "question": "Quelle est la sortie ?",
         "options": [
+            "4",
             "5",
-            "6",
-            "10",
+            "8",
             "Erreur"
         ],
         "correct": 1,
@@ -1417,12 +1417,12 @@ const QUIZ_CONFIG = {
         "id": 68
     },
     {
-        "code": "s = \"\"\ni = 0\nwhile i < 4:\n    s += str(i)\n    i += 1\nprint(s)",
+        "code": "s = \"\"\ni = 0\nwhile i < 5:\n    s += str(i)\n    i += 1\nprint(s)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "0123",
             "01234",
-            "0 1 2 3",
+            "012345",
+            "0 1 2 3 4",
             "Erreur"
         ],
         "correct": 0,
@@ -1432,12 +1432,12 @@ const QUIZ_CONFIG = {
         "id": 69
     },
     {
-        "code": "x = 1\ny = 1\nwhile x < 50:\n    x = x + y\n    y += 1\nprint(x)",
+        "code": "x = 2\ny = 1\nwhile x < 40:\n    x = x + y\n    y += 1\nprint(x)",
         "question": "Quelle est la sortie ?",
         "options": [
-            "46",
-            "56",
-            "50",
+            "38",
+            "47",
+            "40",
             "Erreur"
         ],
         "correct": 1,
@@ -1575,6 +1575,114 @@ function ThemeToggle({ theme, onToggle }) {
     );
 }
 
+function Fireworks({ onComplete }) {
+    const canvasRef = useRef(null);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        let W = canvas.width = window.innerWidth;
+        let H = canvas.height = window.innerHeight;
+        const handleResize = () => { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; };
+        window.addEventListener('resize', handleResize);
+
+        const colors = ['#4f8cf7', '#ffc94d', '#57d38c', '#b39ddb', '#ff6b6b', '#79e0e6'];
+        let particles = [];
+        let rockets = [];
+        const gravity = 0.05;
+
+        function spawnRocket() {
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            rockets.push({
+                x: W * (0.15 + Math.random() * 0.7),
+                y: H,
+                targetY: H * (0.15 + Math.random() * 0.35),
+                vy: -(9 + Math.random() * 3),
+                color
+            });
+        }
+
+        function explode(x, y, color) {
+            const count = 46 + Math.floor(Math.random() * 20);
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2 * i) / count + Math.random() * 0.2;
+                const speed = 2 + Math.random() * 3.5;
+                particles.push({
+                    x, y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    alpha: 1,
+                    color,
+                    size: 1.5 + Math.random() * 1.8
+                });
+            }
+        }
+
+        let launchCount = 0;
+        const maxLaunches = 6;
+        const launchTimer = setInterval(() => {
+            if (launchCount >= maxLaunches) { clearInterval(launchTimer); return; }
+            spawnRocket();
+            launchCount++;
+        }, 420);
+
+        let running = true;
+        const startTime = Date.now();
+        let rafId = null;
+
+        function tick() {
+            if (!running) return;
+            ctx.clearRect(0, 0, W, H);
+
+            for (let i = rockets.length - 1; i >= 0; i--) {
+                const r = rockets[i];
+                r.y += r.vy;
+                r.vy += gravity * 0.6;
+                ctx.beginPath();
+                ctx.arc(r.x, r.y, 2.2, 0, Math.PI * 2);
+                ctx.fillStyle = r.color;
+                ctx.fill();
+                if (r.y <= r.targetY || r.vy >= 0) {
+                    explode(r.x, r.y, r.color);
+                    rockets.splice(i, 1);
+                }
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.vy += gravity;
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.012;
+                if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = Math.max(p.alpha, 0);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+
+            if (Date.now() - startTime > 5200 && particles.length === 0 && rockets.length === 0) {
+                running = false;
+                onComplete && onComplete();
+                return;
+            }
+            rafId = requestAnimationFrame(tick);
+        }
+        tick();
+
+        return () => {
+            running = false;
+            clearInterval(launchTimer);
+            if (rafId) cancelAnimationFrame(rafId);
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    return <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, zIndex: 60, pointerEvents: 'none' }} />;
+}
+
 function PythonQuizApp() {
     const [screen, setScreen] = useState('access');
     const [bootDone, setBootDone] = useState(false);
@@ -1591,6 +1699,8 @@ function PythonQuizApp() {
     const [showDetailedResults, setShowDetailedResults] = useState(false);
     const [shuffledQuestions, setShuffledQuestions] = useState([]);
     const [resultFilter, setResultFilter] = useState('all');
+    const [showFireworks, setShowFireworks] = useState(false);
+    const fireworksTriggered = useRef(false);
     const [theme, setTheme] = useState(() => {
         try { return localStorage.getItem('quizTheme') || 'dark'; } catch(e) { return 'dark'; }
     });
@@ -1751,6 +1861,10 @@ function PythonQuizApp() {
     const handleSubmitQuiz = async () => {
         setScreen('results');
         const results = calculateScore();
+        if (!fireworksTriggered.current && parseFloat(results.noteSur20) >= 10) {
+            fireworksTriggered.current = true;
+            setShowFireworks(true);
+        }
         const questionsToUse = shuffledQuestions.length > 0 ? shuffledQuestions : QUIZ_CONFIG.questions;
         const exportData = {
             etudiant:`${studentInfo.prenom} ${studentInfo.nom}`, classe:studentInfo.classe,
@@ -2033,6 +2147,7 @@ function PythonQuizApp() {
 
         return (
             <div className="min-h-screen py-6 md:py-10 px-3 md:px-4">
+                {showFireworks && <Fireworks onComplete={() => setShowFireworks(false)} />}
                 <div className="max-w-4xl mx-auto space-y-5">
 
                     <div className="flex items-center justify-between fade-up">
